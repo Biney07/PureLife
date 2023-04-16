@@ -1,0 +1,78 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Pure_Life.Data;
+using Pure_Life.Models;
+using Pure_Life.ViewModels;
+
+namespace Pure_Life.Controllers
+{
+	public class AccountController : Controller
+	{
+		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly ApplicationDbContext _context;
+	
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
+		{
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_context = context;
+			
+		}
+
+		public IActionResult Login()
+		{
+			if (!User.Identity.IsAuthenticated)
+			{
+
+				return View(new LoginViewModel());
+			}
+			return View("~/Views/Home/Index.cshtml");
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> Login(LoginViewModel loginVM)
+		{
+			if (!ModelState.IsValid) return View(loginVM);
+
+			var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
+			if (user != null)
+			{
+				var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+				if (passwordCheck)
+				{
+					var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+					if (result.Succeeded)
+					{
+
+						var role = await _userManager.GetRolesAsync(user);
+						if (role.Contains("ADMIN"))
+						{
+							return RedirectToAction("Index", "Admin");
+						}
+						else 
+						{
+							return RedirectToAction("Index", "Home");
+						}
+						
+
+
+					}
+				}
+				TempData["Error"] = "Wrong credentials. Please, try again!";
+				return View(loginVM);
+			}
+
+
+			TempData["Error"] = "Wrong credentials. Please, try again!";
+			return View(loginVM);
+		}
+
+
+		public IActionResult Index()
+		{
+			return View();
+		}
+	}
+}
