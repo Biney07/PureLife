@@ -1,18 +1,55 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+/*.navbar {
+    
+    top: 0;
+    z-index: 2;
+    height: 100%;
+    background-color: #D4E5F9;
+    display: flex;
+    align-items: flex-start;
+    padding-left: 27px;
+}
+.container-fluid {
+z-index:0;
+}*/
+
+.lightblue {
+    background-color: #D4E5F9;
+}
+
+.darkblue {
+    color: #1c3484;
+}
+
+.nav-link {
+    font-size: 17px;
+    padding-left: 0px !important;
+    display: flex;
+    align-items: center;
+}
+.ikona {
+    width: 2em;
+    height: 2em;
+}
+.logopurelife {
+    width:180px;
+}
+/**/
