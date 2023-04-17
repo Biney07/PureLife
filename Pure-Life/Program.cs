@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Pure_Life.Data;
 using Pure_Life.Helpers;
 using Pure_Life.Models;
 using Pure_Life.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+});
 builder.Services.AddScoped<ImageService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -43,7 +49,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
-
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 app.UseAuthentication();
 
 app.UseAuthorization();
