@@ -28,6 +28,7 @@ namespace Pure_Life.Controllers
 				return View(new LoginViewModel());
 			}
 			return View("~/Views/Home/Index.cshtml");
+			
 		}
 
 
