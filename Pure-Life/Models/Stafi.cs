@@ -12,6 +12,8 @@ namespace Pure_Life.Models
         public DateTime? DataLindjes { get; set; }
         public string? NrLincences { get; set; }
         public string? NrTel { get; set; }
+        public string PictureUrl { get; set; }
+        public string PublicId { get; set; }
         public int RoletId { get; set; }
         [ForeignKey("RoletId")]
         public int? ShtetiId { get; set; }
