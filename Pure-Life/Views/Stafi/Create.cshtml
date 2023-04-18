@@ -55,8 +55,10 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ShtetiId">Shteti</label>
-                <select asp-for="ShtetiId" class="form-control" asp-items="Model.ShtetiOptions"></select>
+             @*   <label asp-for="ShtetiId">Shteti</label>
+                <select asp-for="ShtetiId" class="form-control" asp-items="Model.ShtetiOptions"></select>*@
+                <label class="control-label">Shteti</label>
+                <select asp-for="ShtetiId" class="form-control" asp-items="ViewBag.ShtetiId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Qyteti" class="control-label"></label>
@@ -64,14 +66,18 @@
                 <span asp-validation-for="Qyteti" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RoletId">Rolet</label>
-                <select asp-for="RoletId" class="form-control" asp-items="Model.RoletOptions"></select>
+               @* <label asp-for="RoletId">Rolet</label>
+                <select asp-for="RoletId" class="form-control" asp-items="Model.RoletOptions"></select>*@
+                    <label class="control-label">Rolet</label>
+                <select asp-for="RoletId" class="form-control" asp-items="ViewBag.RoletId"></select>
             </div>
 
            
             <div class="form-group">
-                <label asp-for="LemiaId">Lemia</label>
-                <select asp-for="LemiaId" class="form-control" asp-items="Model.LemiaOptions"></select>
+              @*  <label asp-for="LemiaId">Lemia</label>
+                <select asp-for="LemiaId" class="form-control" asp-items="Model.LemiaOptions"></select>*@
+                  <label class="control-label">Lemia</label>
+                <select asp-for="LemiaId" class="form-control" asp-items="ViewBag.LemiaId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -83,29 +89,13 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+      
+        
             <div class="form-group">
-                <label asp-for="InsertedFrom" class="control-label"></label>
-                <input asp-for="InsertedFrom" class="form-control" />
-                <span asp-validation-for="InsertedFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsertedDate" class="control-label"></label>
-                <input asp-for="InsertedDate" class="form-control" />
-                <span asp-validation-for="InsertedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedFrom" class="control-label"></label>
-                <input asp-for="ModifiedFrom" class="form-control" />
-                <span asp-validation-for="ModifiedFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NacionalitetiId">Nacionaliteti</label>
-                <select asp-for="NacionalitetiId" class="form-control" asp-items="Model.NacionalitetiOptions"></select>
+               @* <label asp-for="NacionalitetiId">Nacionaliteti</label>
+                <select asp-for="NacionalitetiId" class="form-control" asp-items="Model.NacionalitetiOptions"></select>*@
+                <label class="control-label">Nacionaliteti</label>
+                <select asp-for="NacionalitetiId" class="form-control" asp-items="ViewBag.NacionalitetiId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

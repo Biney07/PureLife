@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +19,18 @@ namespace Pure_Life.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ImageService _imageService;
         private readonly IMapper _mapper;
+        private readonly IAccountService _accountService;
+        private readonly ICurrentUser _currentUser;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper)
+        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _imageService = imageService;
             _mapper = mapper;
+            _accountService = accountService;
+            _currentUser = currentUser;
+            _userManager = userManager;
         }
 
         // GET: Stafi
@@ -65,15 +72,20 @@ namespace Pure_Life.Controllers
         // GET: Stafi/Create
         public IActionResult Create()
         {
-            var viewModel = new StafiViewModel
-            {
-                LemiaOptions = new SelectList(_context.Lemia.ToList(), "Id", "Emri"),
-                NacionalitetiOptions = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri"),
-                RoletOptions = new SelectList(_context.Rolet.ToList(), "Id", "Emri"),
-                ShtetiOptions = new SelectList(_context.Shteti.ToList(), "Id", "Emri"),
-            };
-
-            return View(viewModel);
+            /*var viewModel = new StafiViewModel
+            {*/
+                /*  LemiaOptions = new SelectList(_context.Lemia.ToList(), "Id", "Emri"),
+				  NacionalitetiOptions = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri"),
+				  RoletOptions = new SelectList(_context.Rolet.ToList(), "Id", "Emri"),
+				  ShtetiOptions = new SelectList(_context.Shteti.ToList(), "Id", "Emri"),*/
+                ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
+                ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
+                ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
+            ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
+            /*	};*/
+            /*
+                        return View(viewModel);*/
+            return View();
         }
 
         // POST: Stafi/Create
@@ -83,16 +95,26 @@ namespace Pure_Life.Controllers
         {
 
             var stafi = _mapper.Map<Stafi>(viewModel);
+            stafi.EmailZyrtar = viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower() + "@purelife.net";
 
+            var user = _currentUser.GetCurrentUserName();
             if (viewModel.PictureUrl != null)
             {
                 var result = await _imageService.AddPhotoAsync(viewModel.PictureUrl);
                 stafi.PictureUrl = result.Url.ToString();
                 stafi.PublicId = result.PublicId;
-            }
+                stafi.InsertedFrom = user;
+                stafi.InsertedDate= DateTime.Now;
+                stafi.ModifiedDate = null;
+                stafi.ModifiedFrom = null;
 
-            _context.Add(stafi);
-            await _context.SaveChangesAsync();
+            }
+            if (ModelState.IsValid)
+            {
+                await _accountService.RegistersStaf(stafi);
+                _context.Add(stafi);
+                await _context.SaveChangesAsync();
+            }
 
 
 
