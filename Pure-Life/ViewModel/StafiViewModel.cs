@@ -18,14 +18,10 @@ public class StafiViewModel
     public int? NacionalitetiId { get; set; }
     public int LemiaId { get; set; }
     public string Email { get; set; }
+   
     public string Password { get; set; }
-    public string InsertedFrom { get; set; }
-    public DateTime InsertedDate { get; set; }
-    public DateTime? ModifiedDate { get; set; }
-    public string? ModifiedFrom { get; set; }
+   
+
     public IFormFile PictureUrl { get; set; }
-    public SelectList LemiaOptions { get; set; }
-    public SelectList NacionalitetiOptions { get; set; }
-    public SelectList RoletOptions { get; set; }
-    public SelectList ShtetiOptions { get; set; }
+
 }

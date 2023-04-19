@@ -355,6 +355,10 @@ namespace Pure_Life.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailZyrtar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Emri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

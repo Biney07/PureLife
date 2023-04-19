@@ -25,6 +25,8 @@ namespace Pure_Life.Models
         public int LemiaId { get; set; }
         [ForeignKey("LemiaId")]
         public string Email { get; set; }
+        public string EmailZyrtar { get; set; }
+
         public string Password { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
