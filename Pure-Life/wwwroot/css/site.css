@@ -31,7 +31,7 @@ body {
 z-index:0;
 }*/
 
-.lightblue {
+/*.lightblue {
     background-color: #D4E5F9;
 }
 
@@ -48,8 +48,36 @@ z-index:0;
 .ikona {
     width: 2em;
     height: 2em;
-}
+}*/
 .logopurelife {
-    width:180px;
+    width:160px;
+    padding-right:20px;
 }
-/**/
+.smallnavlogomobile {
+    width: 35px;
+}
+.dropdown-menu-dark .dropdown-item {
+    font-size: 10px;
+    color: #0a3765;
+}
+
+
+.menu-links-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.profile-dropdown-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-grow: 1;
+    margin-top: auto;
+}
+
+.dropdown-menu {
+    min-width: 0;
+}
+
+/*/**/
