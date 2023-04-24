@@ -16,6 +16,37 @@ html {
 body {
     margin-bottom: 60px;
 }
+.badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.4rem;
+}
+
+.badge-light-info {
+    color: #0dcaf0;
+    background-color: #e7f8fc;
+}
+
+.badge-light-primary {
+    color: #3f6ad8;
+    background-color: #e2e3f7;
+}
+
+.fs-7 {
+    font-size: 0.875rem;
+}
+
+.gs-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 /*.navbar {
     

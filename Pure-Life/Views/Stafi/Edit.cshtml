@@ -1,163 +1,174 @@
-﻿@model Pure_Life.Models.Stafi
+﻿@model Stafi
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="card card-custom">
+	<div class="card-header">
+		<h3 class="card-title">
+			Shto stafin
+		</h3>
+	</div>
+	<!--begin::Form-->
+	<form asp-action="Edit" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<input type="hidden" asp-for="Id" />
+		<div class="card-body">
 
-<hr />
+			<div class="form-group">
+				<label>File Browser</label>
+				<div></div>
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" asp-for="PictureUrl" id="customFile" />
+					<label class="custom-file-label" for="customFile">@Model.PictureUrl</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="NrLeternjoftimit" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-text-input" asp-for="NrLeternjoftimit" class="form-control" />
+					<span asp-validation-for="NrLeternjoftimit" class="text-danger"></span>
+				</div>
+			</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
 
-            <div class="form-group">
-                <label asp-for="NrLeternjoftimit" class="control-label"></label>
-                <input asp-for="NrLeternjoftimit" class="form-control" />
-                <span asp-validation-for="NrLeternjoftimit" class="text-danger"></span>
-            </div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Emri" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-search-input" asp-for="Emri" class="form-control" disabled />
+					<span asp-validation-for="Emri" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Mbiemri" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-search-input" asp-for="Mbiemri" class="form-control" />
+					<span asp-validation-for="Mbiemri" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Gjinia">Gjinia</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
 
-            <div class="form-group">
-                <label asp-for="Emri" class="control-label"></label>
-                <input asp-for="Emri" class="form-control" />
-                <span asp-validation-for="Emri" class="text-danger"></span>
-            </div>
+					<select class="form-control selectpicker" asp-for="Gjinia">
+						<option value="">Zgjedh</option>
+						<option value="M">M</option>
+						<option value="F">F</option>
+					</select>
 
-            <div class="form-group">
-                <label asp-for="Mbiemri" class="control-label"></label>
-                <input asp-for="Mbiemri" class="form-control" />
-                <span asp-validation-for="Mbiemri" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Gjinia" class="control-label"></label>
-                                <select asp-for="Gjinia" class="form-control">
-                    <option value="">Select Gender</option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                </select>
-                <span asp-validation-for="Gjinia" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="DataLindjes" class="control-label"></label>
-                <input asp-for="DataLindjes" class="form-control" />
-                <span asp-validation-for="DataLindjes" class="text-danger"></span>
-            </div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Data e lindjes</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
+						<input type="text" class="form-control datetimepicker-input" placeholder="Select date & time" data-target="#kt_datetimepicker_1" asp-for="DataLindjes" />
+						<div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
+							<span class="input-group-text">
+								<i class="ki ki-calendar"></i>
+							</span>
+						</div>
+						<span asp-validation-for="DataLindjes" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="EmailZyrtar" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-text-input" asp-for="EmailZyrtar" class="form-control" disabled />
+					<span asp-validation-for="EmailZyrtar" class="text-danger"></span>
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label asp-for="NrLincences" class="control-label"></label>
-                <input asp-for="NrLincences" class="form-control" />
-                <span asp-validation-for="NrLincences" class="text-danger"></span>
-            </div>
+			<div class="form-group row">
+				<label asp-for="NrLincences" class="col-2 col-form-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-email-input" asp-for="NrLincences" />
+					<span asp-validation-for="NrLincences" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label asp-for="NrTel" class="col-2 col-form-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" placeholder="1-(555)-555-5555" id="example-email-input" asp-for="NrTel" />
+					<span asp-validation-for="NrTel" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Shteti</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select asp-for="ShtetiId" class="form-control" asp-items="ViewBag.ShtetiId"></select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label asp-for="Qyteti" class="col-2 col-form-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-email-input" asp-for="Qyteti" />
+					<span asp-validation-for="Qyteti" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Nacionaliteti</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select asp-for="NacionalitetiId" class="form-control" asp-items="ViewBag.NacionalitetiId"></select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Roli</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select asp-for="RoletId" class="form-control" asp-items="ViewBag.RoletId"></select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Lemia</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select asp-for="LemiaId" class="form-control" asp-items="ViewBag.LemiaId"></select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Email" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-text-input" asp-for="Email" class="form-control" disabled/>
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group row" style="display:none;">
+				<label for="example-password-input" class="col-2 col-form-label" >Password</label>
+				<div class="col-10">
+					<input class="form-control" type="text" asp-for="Password" id="example-password-input" />
+				</div>
+			</div>
+			<div class="form-group row" style="display:none;">
+				<label for="example-password-input" class="col-2 col-form-label" >Confirm Password</label>
+				<div class="col-10">
+					<input class="form-control" type="text" asp-for="ConfirmPassword" id="example-password-input" />
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label asp-for="NrTel" class="control-label"></label>
-                <input asp-for="NrTel" class="form-control" />
-                <span asp-validation-for="NrTel" class="text-danger"></span>
-            </div>
+		</div>
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-2">
+				</div>
+				<div class="col-10">
+					<div class="form-group" style="display:flex;flex-direction:row;justify-content:end;">
+						<input type="submit" value="Update" class="btn btn-primary me-4" />
+						<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+					</div>
 
-            <div class="form-group">
-                <label asp-for="PictureUrl" class="control-label"></label>
-                <input asp-for="PictureUrl" class="form-control" />
-                <span asp-validation-for="PictureUrl" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PublicId" class="control-label"></label>
-                <input asp-for="PublicId" class="form-control" />
-                <span asp-validation-for="PublicId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RoletId" class="control-label"></label>
-                <select asp-for="RoletId" asp-items="@(new SelectList(ViewBag.Roles,"Id","Name"))" class="form-control">
-                    <option value="">Select Role</option>
-                </select>
-                <span asp-validation-for="RoletId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ShtetiId" class="control-label"></label>
-                <select asp-for="ShtetiId" asp-items="@(new SelectList(ViewBag.Shtetet,"Id","Emri"))" class="form-control">
-                    <option value="">Select Country</option>
-                </select>
-                <span asp-validation-for="ShtetiId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Qyteti" class="control-label"></label>
-                <input asp-for="Qyteti" class="form-control" />
-                <span asp-validation-for="Qyteti" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="NacionalitetiId" class="control-label"></label>
-                <select asp-for="NacionalitetiId" asp-items="@(new SelectList(ViewBag.Nacionalitetet,"Id","Emri"))" class="form-control">
-                    <option value="">Select Nationality</option>
-                </select>
-                <span asp-validation-for="NacionalitetiId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="LemiaId" class="control-label"></label>
-                <select asp-for="LemiaId" asp-items="@(new SelectList(ViewBag.Lemiat,"Id","Emri"))" class="form-control">
-                    <option value="">Select Department</option>
-                </select>
-                <span asp-validation-for="LemiaId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="InsertedFrom" class="control-label"></label>
-                <input asp-for="InsertedFrom" class="form-control" />
-                <span asp-validation-for="InsertedFrom" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="InsertedDate" class="control-label"></label>
-                <input asp-for="InsertedDate" class="form-control" />
-                <span asp-validation-for="InsertedDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ModifiedFrom" class="control-label"></label>
-                <input asp-for="ModifiedFrom" class="form-control" />
-                <span asp-validation-for="ModifiedFrom" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
-    </div>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
 
 

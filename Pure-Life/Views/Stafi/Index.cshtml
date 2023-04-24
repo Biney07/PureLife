@@ -1,32 +1,273 @@
 ﻿@model IEnumerable<Pure_Life.Models.Stafi>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
+@*
+<h1>Index</h1>
 
-<div class="card p-4 shadow">
-    <h1 class="text-center mb-4">Stafi</h1>
-    <p>
-        <a asp-action="Create" class="btn btn-primary mb-3">Krijo Staf të ri</a>
-    </p>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NrLeternjoftimit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emri)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mbiemri)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gjinia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataLindjes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrLincences)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrTel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PictureUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublicId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qyteti)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailZyrtar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfirmPassword)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsertedFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsertedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lemia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nacionaliteti)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shteti)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rolet)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrLeternjoftimit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Emri)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mbiemri)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gjinia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataLindjes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrLincences)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrTel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PictureUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublicId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qyteti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailZyrtar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfirmPassword)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsertedFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsertedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lemia.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nacionaliteti.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shteti.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rolet.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+*@
+<!--begin::Card-->
+<div class="card card-custom">
+	<div class="card-header flex-wrap py-5">
+		<div class="card-title">
+			<h3 class="card-label">
+				Stafi
+				
+			</h3>
+		</div>
+		<div class="card-toolbar">
+			<!--begin::Dropdown-->
+			
+			<!--end::Dropdown-->
+			<!--begin::Button-->
+			<a asp-action="Create" class="btn btn-primary font-weight-bolder">
+				<span class="svg-icon svg-icon-md">
+					<!--begin::Svg Icon | path:~/media/svg/icons/Design/Flatten.svg-->
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect x="0" y="0" width="24" height="24" />
+							<circle fill="#000000" cx="9" cy="15" r="6" />
+							<path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+						</g>
+					</svg><!--end::Svg Icon-->
+				</span>	Krijo
+			</a>
+			<!--end::Button-->
+		</div>
+	</div>
+	<div class="card-body">
+		<!--begin: Datatable-->
+		<table class="table table-separate table-head-custom table-checkable" id="kt_datatable">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th></th>
+					<th>Staf</th>
+					<th>Specializimi</th>
+					<th>Nr. Licences</th>
+					<th>Roli</th>
+					<th>Gjinia</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
 
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img class="card-img-top" src="@item.PictureUrl" alt="Foto e @item.Emri @item.Mbiemri">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Emri @item.Mbiemri</h5>
-                        <p class="card-text">@item.Lemia.Emri</p>
-                    </div>
-                    <div class="card-footer">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+			<tbody>
+				@{
+					int row = 1;
+					foreach (var item in Model)
+					{
+						<tr>
+							<td>1</td>
+							<td>
+								<div class="symbol symbol-50 flex-shrink-0">
+									<img src=@item.PictureUrl alt="photo" style="width:100px;height:50px;transition:transform 0.2s ease-in-out;image-rendering: pixelated;" onmouseover="this.style.transform='scale(2.7)'" onmouseout="this.style.transform='scale(1)'">
+
+								</div>
+							</td>
+
+							<td>
+								<div style="display:flex;flex-direction:row;flex-wrap:wrap;font-size:13px;">
+									<div class="me-2">
+										<p>@item.Emri</p>
+									</div>
+									<div>
+										<p>@item.Mbiemri</p>
+									</div>
+								</div>
+								<div>
+									<p>@item.Email</p>
+								</div>
+							</td>
+							<td>@item.Lemia.Emri</td>
+							<td>@item.NrLincences</td>
+							<td>
+								@if (item.RoletId == 1)
+								{
+									<span class="badge badge-light-info fs-7 gs-0">@item.Rolet.Emri</span>
+								}
+								else if (item.RoletId == 2)
+								{
+									<span class="badge badge-light-primary fs-7 gs-0">@item.Rolet.Emri</span>
+								}
+							</td>
+							<td>@item.Gjinia</td>
+							<td nowrap="" style="">
+								
+									<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" >
+										<i class="la la-cog"></i>
+									</a>
+								
+							
+								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Edit details">
+									<i class="la la-edit"></i>
+								</a>
+								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Delete">
+									<i class="la la-trash"></i>
+								</a>
+							</td>
+						</tr>
+					}
+				}
+
+			</tbody>
+
+		</table>
+		<!--end: Datatable-->
+	</div>
 </div>
+
+<!--end::Card-->

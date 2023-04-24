@@ -227,7 +227,9 @@
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                                    <li><form asp-controller="Account" asp-action="Logout">
+                                            <button class="dropdown-item">Sign out</button>
+                                    </form></li>
                                     </ul>
                              
                             </div>
