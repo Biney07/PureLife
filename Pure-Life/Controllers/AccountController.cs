@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
 using Pure_Life.ViewModels;
 
 namespace Pure_Life.Controllers
@@ -12,6 +13,7 @@ namespace Pure_Life.Controllers
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly ApplicationDbContext _context;
 	
+
 		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
 		{
 			_userManager = userManager;
@@ -40,7 +42,8 @@ namespace Pure_Life.Controllers
 			var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
 			if (user != null)
 			{
-				var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+			  var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+				
 				if (passwordCheck)
 				{
 					var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
@@ -70,6 +73,12 @@ namespace Pure_Life.Controllers
 			return View(loginVM);
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction("Login", "Account");
+		}
 
 		public IActionResult Index()
 		{

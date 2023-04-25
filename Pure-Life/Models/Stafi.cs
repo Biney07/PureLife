@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.CodeAnalysis.Scripting;
+using Pure_Life.Services;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace Pure_Life.Models
 {
@@ -26,9 +30,17 @@ namespace Pure_Life.Models
         [ForeignKey("LemiaId")]
         public string Email { get; set; }
         public string EmailZyrtar { get; set; }
+		[Required]
+		[DataType(DataType.Password)]
+		public string Password { get; set; }
 
-        public string Password { get; set; }
-        public string InsertedFrom { get; set; }
+		[Display(Name = "Confirm password")]
+		[Required(ErrorMessage = "Confirm password is required")]
+		[DataType(DataType.Password)]
+
+		[Compare("Password", ErrorMessage = "Passwords do not match")]
+		public string ConfirmPassword { get; set; }
+		public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiedFrom { get; set; }

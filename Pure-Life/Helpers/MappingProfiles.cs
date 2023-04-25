@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Pure_Life.Models;
-using Pure_Life.ViewModel;
+using Pure_Life.ViewModel.Stafi;
 
 namespace Pure_Life.Helpers
 {
@@ -8,7 +8,7 @@ namespace Pure_Life.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<StafiViewModel, Stafi>();
+            CreateMap<AddStafiViewModel, Stafi>();
          
 
 

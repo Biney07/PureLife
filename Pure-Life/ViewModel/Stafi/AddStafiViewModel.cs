@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
-namespace Pure_Life.ViewModel;
+namespace Pure_Life.ViewModel.Stafi;
 
-public class StafiViewModel
+public class AddStafiViewModel
 {
     public int Id { get; set; }
     public string? NrLeternjoftimit { get; set; }
@@ -18,9 +20,18 @@ public class StafiViewModel
     public int? NacionalitetiId { get; set; }
     public int LemiaId { get; set; }
     public string Email { get; set; }
-   
+
+    [Required]
+    [DataType(DataType.Password)]
     public string Password { get; set; }
-   
+
+    [Display(Name = "Confirm password")]
+    [Required(ErrorMessage = "Confirm password is required")]
+    [DataType(DataType.Password)]
+
+    [Compare("Password", ErrorMessage = "Passwords do not match")]
+    public string ConfirmPassword { get; set; }
+
 
     public IFormFile PictureUrl { get; set; }
 

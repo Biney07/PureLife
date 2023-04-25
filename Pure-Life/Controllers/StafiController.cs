@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
-using Pure_Life.ViewModel;
+using Pure_Life.ViewModel.Stafi;
 
 namespace Pure_Life.Controllers
 {
@@ -91,7 +91,7 @@ namespace Pure_Life.Controllers
         // POST: Stafi/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StafiViewModel viewModel)
+        public async Task<IActionResult> Create(AddStafiViewModel viewModel)
         {
 
             var stafi = _mapper.Map<Stafi>(viewModel);
@@ -119,14 +119,210 @@ namespace Pure_Life.Controllers
 
 
 
-            return View(viewModel);
+            return RedirectToAction("Index");
         }
-       
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if(id==null || _context.Stafi==null)
+            {
+                return NotFound();
+            }
+			ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
+			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
+			ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
+			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
+
+            var stafi = await _context.Stafi.FindAsync(id);
+           
+            if (stafi==null)
+            {
+                return NotFound();
+            }
+             return View(stafi);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+
+		/*     public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] EditStafiViewModel stafiVM)
+			 {
+
+				 if (id != stafiVM.Id)
+				 {
+					 return NotFound();
+				 }
+				 var staff = _context.Stafi.Where(x => x.Id == id).FirstOrDefault();
 
 
 
-    // GET: Stafi/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+				*//* var stafiUpdated = new Stafi();
+	 *//*
+				 var user = _currentUser.GetCurrentUserName();
+			*//*     if (stafiVM.PictureUrl != null)
+				 {*//*
+					 var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
+					  var stafiUpdated = new Stafi()
+					   {
+						 Id = staff.Id,
+						 PictureUrl = result.Url.ToString(),
+						 PublicId = result.PublicId,
+						 NrLeternjoftimit = stafiVM.NrLeternjoftimit,
+						 Emri = staff.Emri,
+						 Mbiemri = stafiVM.Mbiemri,
+						 Gjinia = staff.Gjinia,
+						 DataLindjes = stafiVM.DataLindjes,
+						 NrLincences = stafiVM.NrLincences,
+						 NrTel = stafiVM.NrTel,
+						 Email = staff.Email,
+						 EmailZyrtar = staff.EmailZyrtar,
+						 RoletId = stafiVM.RoletId,
+						 ShtetiId = stafiVM.ShtetiId,
+						 Qyteti = stafiVM.Qyteti,
+						 NacionalitetiId = stafiVM.NacionalitetiId,
+						 LemiaId = stafiVM.LemiaId,
+						 Password = stafiVM.Password,
+						 ConfirmPassword = stafiVM.ConfirmPassword,
+						 InsertedFrom = staff.InsertedFrom,
+						 InsertedDate = staff.InsertedDate,
+						 ModifiedDate = DateTime.Now,
+						 ModifiedFrom = user
+					 };
+
+				 *//*}
+	 *//*
+				 try
+				 {
+
+					 _context.Update(stafiUpdated);
+
+					 await _context.SaveChangesAsync();
+				 }
+				 catch (DbUpdateConcurrencyException)
+				 {
+					 if (!StafiExists(stafiUpdated.Id))
+					 {
+						 return NotFound();
+					 }
+					 else
+					 {
+						 throw;
+					 }
+				 }
+				 return RedirectToAction(nameof(Index));
+
+			 }*/
+
+		public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] EditStafiViewModel stafiVM)
+		{
+			if (id != stafiVM.Id)
+			{
+				return NotFound();
+			}
+
+			var staff = _context.Stafi.Where(x => x.Id == id).FirstOrDefault();
+
+			// Detach the already tracked instance of Stafi
+			_context.Entry(staff).State = EntityState.Detached;
+
+			var user = _currentUser.GetCurrentUserName();
+			var stafiUpdated = new Stafi();
+			if (stafiVM.PictureUrl != null)
+			{
+				var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
+
+				 stafiUpdated = new Stafi()
+				{
+					Id = staff.Id,
+					PictureUrl = result.Url.ToString(),
+					PublicId = result.PublicId,
+					NrLeternjoftimit = stafiVM.NrLeternjoftimit,
+					Emri = staff.Emri,
+					Mbiemri = stafiVM.Mbiemri,
+					Gjinia = stafiVM.Gjinia,
+					DataLindjes = stafiVM.DataLindjes,
+					NrLincences = stafiVM.NrLincences,
+					NrTel = stafiVM.NrTel,
+					Email = staff.Email,
+					EmailZyrtar = staff.EmailZyrtar,
+					RoletId = stafiVM.RoletId,
+					ShtetiId = stafiVM.ShtetiId,
+					Qyteti = stafiVM.Qyteti,
+					NacionalitetiId = stafiVM.NacionalitetiId,
+					LemiaId = stafiVM.LemiaId,
+					Password = stafiVM.Password,
+					ConfirmPassword = stafiVM.ConfirmPassword,
+					InsertedFrom = staff.InsertedFrom,
+					InsertedDate = staff.InsertedDate,
+					ModifiedDate = DateTime.Now,
+					ModifiedFrom = user
+				};
+			}
+			try
+			{
+				_context.Update(stafiUpdated);
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!StafiExists(stafiUpdated.Id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return RedirectToAction(nameof(Index));
+		}
+
+
+		/*[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] Stafi stafi)
+		{
+			if (id != stafi.Id)
+			{
+				return NotFound();
+			}
+            var st = new Stafi()
+            {
+                
+            }
+			if (ModelState.IsValid)
+			{
+                
+				try
+				{
+					_context.Update(stafi);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!StafiExists(stafi.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return RedirectToAction(nameof(Index));
+			}
+			ViewData["LemiaId"] = new SelectList(_context.Lemia, "Id", "Id", stafi.LemiaId);
+			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti, "Id", "Id", stafi.NacionalitetiId);
+			ViewData["RoletId"] = new SelectList(_context.Rolet, "Id", "Id", stafi.RoletId);
+			ViewData["ShtetiId"] = new SelectList(_context.Shteti, "Id", "Id", stafi.ShtetiId);
+			return View(stafi);
+		}
+*/
+
+
+		// GET: Stafi/Delete/5
+		public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
         {
@@ -168,10 +364,33 @@ namespace Pure_Life.Controllers
             }
 
             _context.Stafi.Remove(stafi);
-            await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
+			var user = await _userManager.FindByEmailAsync(stafi.Email);
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User cannot be found";
+				return View("NotFound");
+			}
+			else
+			{
+				var result = await _userManager.DeleteAsync(user);
+				if (result.Succeeded)
+				{
+					return RedirectToAction(nameof(Index));
+				}
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+			}
+		
 
             return RedirectToAction(nameof(Index));
         }
+		private bool StafiExists(int id)
+		{
+			return _context.Stafi.Any(e => e.Id == id);
+		}
 
-    }
+	}
 }
