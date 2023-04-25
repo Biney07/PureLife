@@ -20,7 +20,7 @@
       </li>
     </router-link>
 
-    <router-link
+    <!-- <router-link
       to="/builder"
       v-slot="{ href, navigate, isActive, isExactActive }"
     >
@@ -38,7 +38,7 @@
           <span class="menu-text">Layout Builder</span>
         </a>
       </li>
-    </router-link>
+    </router-link> -->
 
     <li class="menu-section">
       <h4 class="menu-text">Components</h4>
