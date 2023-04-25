@@ -19,7 +19,7 @@
       </li>
     </router-link>
 
-    <router-link
+    <!-- <router-link
       to="/builder"
       v-slot="{ href, navigate, isActive, isExactActive }"
     >
@@ -36,7 +36,7 @@
           <span class="menu-text"> Builder </span>
         </a>
       </li>
-    </router-link>
+    </router-link> -->
 
     <li
       aria-haspopup="true"
