@@ -30,10 +30,10 @@ namespace Pure_Life.APIControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Stafi>>> GetStafi()
         {
-          if (_context.Stafi == null)
-          {
-              return NotFound();
-          }
+            if (_context.Stafi == null)
+            {
+                return NotFound();
+            }
             return await _context.Stafi.ToListAsync();
         }
 
@@ -41,10 +41,10 @@ namespace Pure_Life.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Stafi>> GetStafi(int id)
         {
-          if (_context.Stafi == null)
-          {
-              return NotFound();
-          }
+            if (_context.Stafi == null)
+            {
+                return NotFound();
+            }
             var stafi = await _context.Stafi.FindAsync(id);
 
             if (stafi == null)
@@ -91,80 +91,56 @@ namespace Pure_Life.APIControllers
         [HttpPost]
         public async Task<ActionResult<Stafi>> PostStafi(Stafi stafi)
         {
-          if (_context.Stafi == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Stafi'  is null.");
-          }
+            if (_context.Stafi == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Stafi'  is null.");
+            }
             _context.Stafi.Add(stafi);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStafi", new { id = stafi.Id }, stafi);
         }
 
-		
-		[HttpPost("{email}/{password}")]
-		public async Task<ActionResult<Stafi>> GetStafiByEmailAndPassword(string email, string password)
-		{
-            var stafi = new Stafi();
-			if (email == null || password == null)
-			{
-				return Problem("Email or password is null.");
-			}
-
-			var user = await _userManager.FindByEmailAsync(email);
-            
-			if (user == null)
-			{
-				return NotFound();
-            }
-            else
+        [HttpGet("getall")]
+        public async Task<ActionResult<IEnumerable<Stafi>>> GetAllStafi()
+        {
+            var stafiList = await _context.Stafi.ToListAsync();
+            if (stafiList == null || !stafiList.Any())
             {
-				var passwordCheck = await _userManager.CheckPasswordAsync(user, password);
-				if (!passwordCheck)
-				{
-					return NotFound();
-				}
-				else
-				{
-					stafi = await _context.Stafi.FirstOrDefaultAsync(x => x.Email == user.Email);
-				}
+                return NotFound("No Stafi found.");
+            }
+            return stafiList;
+        }
 
-			}
+        [HttpPost("login")]
+        public async Task<ActionResult<Stafi>> GetStafiByEmailAndPassword([FromBody] LoginViewModel request)
+        {
+            if (string.IsNullOrEmpty(request.EmailAddress) || string.IsNullOrEmpty(request.Password))
+            {
+                return Problem("Email or password is null.");
+            }
 
+            var user = await _context.Stafi.FirstOrDefaultAsync(x => x.EmailZyrtar == request.EmailAddress);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
 
+            // Directly compare the password from the user object and the request
+            if (user.Password != request.Password)
+            {
+                return NotFound("Incorrect password.");
+            }
 
-			var staf = new Stafi
-			{
-				Id = stafi.Id,
-				NrLeternjoftimit = stafi.NrLeternjoftimit,
-				Emri = stafi.Emri,
-				Mbiemri = stafi.Mbiemri,
-				Gjinia = stafi.Gjinia,
-				DataLindjes = stafi.DataLindjes,
-				NrLincences = stafi.NrLincences,
-				NrTel = stafi.NrTel,
-				PictureUrl = stafi.PictureUrl,
-				PublicId = stafi.PublicId,
-				RoletId = stafi.RoletId,
-				ShtetiId = stafi.ShtetiId,
-				Qyteti = stafi.Qyteti,
-				NacionalitetiId = stafi.NacionalitetiId,
-				LemiaId = stafi.LemiaId,
-				Email = stafi.Email,
-				EmailZyrtar = stafi.EmailZyrtar,
-				InsertedFrom = stafi.InsertedFrom,
-				InsertedDate = stafi.InsertedDate,
-				ModifiedFrom = stafi.ModifiedFrom,
-				ModifiedDate = stafi.ModifiedDate
-			};
-
-			return staf;
-
-		}
+            // Return the found user object
+            return user;
+        }
 
 
-		// DELETE: api/StafiAPI/5
-		[HttpDelete("{id}")]
+
+
+        // DELETE: api/StafiAPI/5
+        [HttpDelete("deleteStafi")]
         public async Task<IActionResult> DeleteStafi(int id)
         {
             if (_context.Stafi == null)
