@@ -1,37 +1,32 @@
 <template>
-  <router-view></router-view>
+  <div id="app">
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </nav>
+    <router-view/>
+  </div>
 </template>
 
-<style lang="scss">
-// 3rd party plugins css
-@import "~bootstrap-vue/dist/bootstrap-vue.css";
-@import "~perfect-scrollbar/css/perfect-scrollbar.css";
-@import "~socicon/css/socicon.css";
-@import "~@fortawesome/fontawesome-free/css/all.css";
-@import "~line-awesome/dist/line-awesome/css/line-awesome.css";
-@import "assets/plugins/flaticon/flaticon.css";
-@import "assets/plugins/flaticon2/flaticon.css";
-@import "assets/plugins/keenthemes-icons/font/ki.css";
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
 
-// Main demo style scss
-@import "assets/sass/style.vue";
+nav {
+  padding: 30px;
+}
 
-// Check documentation for RTL css
-// Update HTML with RTL attribute at public/index.html
-/*@import "assets/css/style.vue.rtl";*/
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+}
 </style>
-
-<script>
-import { OVERRIDE_LAYOUT_CONFIG } from "@/core/services/store/config.module";
-
-export default {
-  name: "MetronicVue",
-  mounted() {
-    /**
-     * this is to override the layout config using saved data from localStorage
-     * remove this to use config only from static json (@/core/config/layout.config.json)
-     */
-    this.$store.dispatch(OVERRIDE_LAYOUT_CONFIG);
-  }
-};
-</script>
