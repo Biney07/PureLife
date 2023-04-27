@@ -7,11 +7,21 @@ using Pure_Life.Helpers;
 using Pure_Life.Models;
 using Pure_Life.Services;
 using Swashbuckle.AspNetCore.Swagger;
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                     policy =>
+                     {
+                         policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+                     });
+});
+
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -57,6 +67,8 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthentication();
 
 app.UseAuthorization();
