@@ -2,21 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
+using Pure_Life.ViewModel.Shteti;
 
 namespace Pure_Life.Controllers
 {
     public class ShtetiController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public ShtetiController(ApplicationDbContext context)
+        private readonly ICurrentUser _currentUser;
+        private readonly IMapper _mapper;
+        public ShtetiController(ApplicationDbContext context,ICurrentUser currentUser,IMapper mapper)
         {
             _context = context;
+            _currentUser = currentUser;
+            _mapper = mapper;
         }
 
         // GET: Shteti
@@ -56,16 +62,34 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Shteti shteti)
+        public async Task<IActionResult> Create(AddShtetiViewModel shtetiVM)
         {
-            ModelState.Remove("Stafi");
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(shteti);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //error exception
+                return View(shtetiVM);
             }
-            return View(shteti);
+
+            var user = _currentUser.GetCurrentUserName();
+            
+            //var shteti = _mapper.Map<Shteti>(shtetiVM);
+
+            var shtetNew = new Shteti()
+            {
+                Emri= shtetiVM.Emri,
+                InsertedFrom = user,
+                InsertedDate = DateTime.Now
+                //ModifiedFrom = null,
+                //ModifiedDate = null
+            };
+
+
+            _context.Add(shtetNew);
+            await _context.SaveChangesAsync();
+
+            //success
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Shteti/Edit/5
@@ -89,18 +113,25 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Shteti shteti)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri")] EditShtetiViewModel shteti)
         {
             if (id != shteti.Id)
             {
                 return NotFound();
             }
-            ModelState.Remove("Stafi");
+
+            var shtetii = _context.Shteti.Where(x => x.Id == id).FirstOrDefault();
+            var user = _currentUser.GetCurrentUserName();
+          
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(shteti);
+                    shtetii.Id = id;
+                    shtetii.Emri = shteti.Emri;
+                    shtetii.ModifiedFrom = user;
+                    shtetii.ModifiedDate = DateTime.Now;
+                    _context.Update(shtetii);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -147,8 +178,11 @@ namespace Pure_Life.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Shteti'  is null.");
             }
             var shteti = await _context.Shteti.FindAsync(id);
+            var stafiShtet = await _context.Stafi.Where(x => x.ShtetiId == shteti.Id).ToListAsync();
             if (shteti != null)
             {
+                _context.Stafi.RemoveRange(stafiShtet);
+                await _context.SaveChangesAsync();
                 _context.Shteti.Remove(shteti);
             }
             

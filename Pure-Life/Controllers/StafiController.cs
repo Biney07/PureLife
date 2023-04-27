@@ -36,12 +36,12 @@ namespace Pure_Life.Controllers
         // GET: Stafi
         public async Task<IActionResult> Index()
         {
-            var stafiList = await _context.Stafi
-                .Include(s => s.Lemia)
-                .Include(s => s.Nacionaliteti)
-                .Include(s => s.Rolet)
-                .Include(s => s.Shteti)
-                .ToListAsync();
+			var stafiList = await _context.Stafi
+				.Include(s => s.Lemia)
+				.Include(s => s.Nacionaliteti)
+				.Include(s => s.Rolet)
+				.Include(s => s.Shteti)
+				.Where(s => s.IsDeleted == false).ToListAsync();
 
             return View(stafiList);
         }
@@ -72,19 +72,11 @@ namespace Pure_Life.Controllers
         // GET: Stafi/Create
         public IActionResult Create()
         {
-            /*var viewModel = new StafiViewModel
-            {*/
-                /*  LemiaOptions = new SelectList(_context.Lemia.ToList(), "Id", "Emri"),
-				  NacionalitetiOptions = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri"),
-				  RoletOptions = new SelectList(_context.Rolet.ToList(), "Id", "Emri"),
-				  ShtetiOptions = new SelectList(_context.Shteti.ToList(), "Id", "Emri"),*/
                 ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
                 ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
                 ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
             ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
-            /*	};*/
-            /*
-                        return View(viewModel);*/
+     
             return View();
         }
 
@@ -95,8 +87,20 @@ namespace Pure_Life.Controllers
         {
 
             var stafi = _mapper.Map<Stafi>(viewModel);
-            stafi.EmailZyrtar = viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower() + "@purelife.net";
 
+            var stafiEmailatZyrtar = _context.Stafi.Where(s => s.EmailZyrtar == (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "")+ "@purelife.net").Count();
+            
+            if (stafiEmailatZyrtar !=0)
+            {
+                var numriRandom = stafiEmailatZyrtar + 1;
+                stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + (numriRandom == 0 ? "" : numriRandom) + "@purelife.net";
+               
+
+            }
+            else
+            {
+              stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + "@purelife.net";
+            }
             var user = _currentUser.GetCurrentUserName();
             if (viewModel.PictureUrl != null)
             {
@@ -105,10 +109,10 @@ namespace Pure_Life.Controllers
                 stafi.PublicId = result.PublicId;
                 stafi.InsertedFrom = user;
                 stafi.InsertedDate= DateTime.Now;
-                stafi.ModifiedDate = null;
-                stafi.ModifiedFrom = null;
+                stafi.IsDeleted= false;
 
             }
+            
             if (ModelState.IsValid)
             {
                 await _accountService.RegistersStaf(stafi);
@@ -145,73 +149,7 @@ namespace Pure_Life.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 
-		/*     public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] EditStafiViewModel stafiVM)
-			 {
-
-				 if (id != stafiVM.Id)
-				 {
-					 return NotFound();
-				 }
-				 var staff = _context.Stafi.Where(x => x.Id == id).FirstOrDefault();
-
-
-
-				*//* var stafiUpdated = new Stafi();
-	 *//*
-				 var user = _currentUser.GetCurrentUserName();
-			*//*     if (stafiVM.PictureUrl != null)
-				 {*//*
-					 var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
-					  var stafiUpdated = new Stafi()
-					   {
-						 Id = staff.Id,
-						 PictureUrl = result.Url.ToString(),
-						 PublicId = result.PublicId,
-						 NrLeternjoftimit = stafiVM.NrLeternjoftimit,
-						 Emri = staff.Emri,
-						 Mbiemri = stafiVM.Mbiemri,
-						 Gjinia = staff.Gjinia,
-						 DataLindjes = stafiVM.DataLindjes,
-						 NrLincences = stafiVM.NrLincences,
-						 NrTel = stafiVM.NrTel,
-						 Email = staff.Email,
-						 EmailZyrtar = staff.EmailZyrtar,
-						 RoletId = stafiVM.RoletId,
-						 ShtetiId = stafiVM.ShtetiId,
-						 Qyteti = stafiVM.Qyteti,
-						 NacionalitetiId = stafiVM.NacionalitetiId,
-						 LemiaId = stafiVM.LemiaId,
-						 Password = stafiVM.Password,
-						 ConfirmPassword = stafiVM.ConfirmPassword,
-						 InsertedFrom = staff.InsertedFrom,
-						 InsertedDate = staff.InsertedDate,
-						 ModifiedDate = DateTime.Now,
-						 ModifiedFrom = user
-					 };
-
-				 *//*}
-	 *//*
-				 try
-				 {
-
-					 _context.Update(stafiUpdated);
-
-					 await _context.SaveChangesAsync();
-				 }
-				 catch (DbUpdateConcurrencyException)
-				 {
-					 if (!StafiExists(stafiUpdated.Id))
-					 {
-						 return NotFound();
-					 }
-					 else
-					 {
-						 throw;
-					 }
-				 }
-				 return RedirectToAction(nameof(Index));
-
-			 }*/
+		
 
 		public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] EditStafiViewModel stafiVM)
 		{
@@ -255,7 +193,8 @@ namespace Pure_Life.Controllers
 					InsertedFrom = staff.InsertedFrom,
 					InsertedDate = staff.InsertedDate,
 					ModifiedDate = DateTime.Now,
-					ModifiedFrom = user
+					ModifiedFrom = user,
+					IsDeleted= staff.IsDeleted,
 				};
 			}
 			try
@@ -279,46 +218,7 @@ namespace Pure_Life.Controllers
 		}
 
 
-		/*[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,NrLeternjoftimit,Emri,Mbiemri,Gjinia,DataLindjes,NrLincences,NrTel,PictureUrl,PublicId,RoletId,ShtetiId,Qyteti,NacionalitetiId,LemiaId,Email,EmailZyrtar,Password,ConfirmPassword,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom")] Stafi stafi)
-		{
-			if (id != stafi.Id)
-			{
-				return NotFound();
-			}
-            var st = new Stafi()
-            {
-                
-            }
-			if (ModelState.IsValid)
-			{
-                
-				try
-				{
-					_context.Update(stafi);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!StafiExists(stafi.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction(nameof(Index));
-			}
-			ViewData["LemiaId"] = new SelectList(_context.Lemia, "Id", "Id", stafi.LemiaId);
-			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti, "Id", "Id", stafi.NacionalitetiId);
-			ViewData["RoletId"] = new SelectList(_context.Rolet, "Id", "Id", stafi.RoletId);
-			ViewData["ShtetiId"] = new SelectList(_context.Shteti, "Id", "Id", stafi.ShtetiId);
-			return View(stafi);
-		}
-*/
+		
 
 
 		// GET: Stafi/Delete/5
@@ -363,7 +263,8 @@ namespace Pure_Life.Controllers
 
             }
 
-            _context.Stafi.Remove(stafi);
+			stafi.IsDeleted= true;
+            
 			await _context.SaveChangesAsync();
 			var user = await _userManager.FindByEmailAsync(stafi.Email);
 			if (user == null)

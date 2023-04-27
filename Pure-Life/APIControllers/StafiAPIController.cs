@@ -101,6 +101,7 @@ namespace Pure_Life.APIControllers
             return CreatedAtAction("GetStafi", new { id = stafi.Id }, stafi);
         }
 
+
         [HttpGet("getall")]
         public async Task<ActionResult<IEnumerable<Stafi>>> GetAllStafi()
         {
@@ -108,6 +109,7 @@ namespace Pure_Life.APIControllers
             if (stafiList == null || !stafiList.Any())
             {
                 return NotFound("No Stafi found.");
+
             }
             return stafiList;
         }

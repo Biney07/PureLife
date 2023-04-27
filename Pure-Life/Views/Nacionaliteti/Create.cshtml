@@ -1,58 +1,53 @@
-﻿@model Pure_Life.Models.Nacionaliteti
+﻿@using Pure_Life.ViewModel.Nacionaliteti;
+@model AddNacionalitetiViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Nacionaliteti</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Emri" class="control-label"></label>
-                <input asp-for="Emri" class="form-control" />
-                <span asp-validation-for="Emri" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsertedFrom" class="control-label"></label>
-                <input asp-for="InsertedFrom" class="form-control" />
-                <span asp-validation-for="InsertedFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsertedDate" class="control-label"></label>
-                <input asp-for="InsertedDate" class="form-control" />
-                <span asp-validation-for="InsertedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedFrom" class="control-label"></label>
-                <input asp-for="ModifiedFrom" class="form-control" />
-                <span asp-validation-for="ModifiedFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="card card-custom">
+	<div class="card-header">
+		<h3 class="card-title">
+			Shto nacionalitetet
+		</h3>
+	</div>
+	<!--begin::Form-->
+	<form asp-action="Create" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="card-body">
+
+
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Emri" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-search-input" asp-for="Emri" class="form-control" />
+					<span asp-validation-for="Emri" class="text-danger"></span>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-2">
+				</div>
+				<div class="col-10">
+					<div class="form-group" style="display:flex;flex-direction:row;justify-content:end;">
+						<input type="submit" value="Create" class="btn btn-primary me-4" />
+						<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
