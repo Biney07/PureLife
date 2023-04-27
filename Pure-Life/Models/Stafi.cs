@@ -44,6 +44,7 @@ namespace Pure_Life.Models
         public DateTime InsertedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiedFrom { get; set; }
+        public bool IsDeleted { get; set; }
 
         public Lemia Lemia { get; set; }
         public Nacionaliteti Nacionaliteti { get; set; }

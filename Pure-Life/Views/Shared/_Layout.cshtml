@@ -1,6 +1,11 @@
 ﻿@inject UserManager<ApplicationUser> UserManager;
 @using Microsoft.AspNetCore.Identity;
 
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var userName = user?.FullName;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,30 +225,34 @@
 
                                     </ul>
                                 </div>
-                                <div class="profile-dropdown-wrapper">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    
+                                    <div class="profile-dropdown-wrapper">
 
-                                    <div class="dropdown" style="padding: 9px 25px;">
+                                        <div class="dropdown" style="padding: 9px 25px;">
 
 
-                                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle darkblue" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="https://github.com/mdo.png" alt="hugenerd" width="23" height="23" class="rounded-circle" style="margin-right: 9px;">
-                                            <span class="menu-text">Albin Saraqi</span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-dark text-small darkblue shadow">
+                                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle darkblue" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img src="~/blank.png" alt="hugenerd" width="23" height="23" class="rounded-circle" style="margin-right: 9px;">
+                                                <span class="menu-text">@userName</span>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-dark text-small darkblue shadow">
 
-                                            <li><a class="dropdown-item" href="#">Profili</a></li>
-                                            <li><a class="dropdown-item" href="#">Aktiviteti</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><form asp-controller="Account" asp-action="Logout">
-                                                    <button class="dropdown-item">Sign out</button>
-                                                </form></li>
-                                        </ul>
+                                                <li><a class="dropdown-item" href="#">Profili</a></li>
+                                                <li><a class="dropdown-item" href="#">Aktiviteti</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><form asp-controller="Account" asp-action="Logout">
+                                                        <button class="dropdown-item">Sign out</button>
+                                                    </form></li>
+                                            </ul>
+
+                                        </div>
 
                                     </div>
-
-                                </div>
+                                }
                             </div>
                             <!--end::Menu Container-->
                         </div>

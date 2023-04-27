@@ -102,7 +102,7 @@ namespace Pure_Life.APIControllers
         }
 
 		
-		[HttpPost("{email}/{password}")]
+		[HttpPost("login/{email}/{password}")]
 		public async Task<ActionResult<Stafi>> GetStafiByEmailAndPassword(string email, string password)
 		{
             var stafi = new Stafi();

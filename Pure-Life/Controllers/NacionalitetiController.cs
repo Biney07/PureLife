@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
+using Pure_Life.ViewModel.Nacionaliteti;
 
 namespace Pure_Life.Controllers
 {
     public class NacionalitetiController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public NacionalitetiController(ApplicationDbContext context)
+        private readonly ICurrentUser _currentUser;
+        public NacionalitetiController(ApplicationDbContext context,ICurrentUser currentUser)
         {
             _context = context;
+            _currentUser = currentUser;
         }
 
         // GET: Nacionalitetis
@@ -56,16 +59,27 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Nacionaliteti nacionaliteti)
+        public async Task<IActionResult> Create(AddNacionalitetiViewModel nacionalitetiVM)
         {
-            ModelState.Remove("Stafi");
-            if (ModelState.IsValid)
+           
+            if (!ModelState.IsValid)
             {
-                _context.Add(nacionaliteti);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(nacionalitetiVM);
             }
-            return View(nacionaliteti);
+            var user = _currentUser.GetCurrentUserName();
+
+            var nacionalitetiNew = new Nacionaliteti()
+            {
+                Emri = nacionalitetiVM.Emri,
+                InsertedFrom = user,
+                InsertedDate = DateTime.Now
+                
+            };
+
+            _context.Add(nacionalitetiNew);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+         
         }
 
         // GET: Nacionalitetis/Edit/5
@@ -89,23 +103,30 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Nacionaliteti nacionaliteti)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri")] EditNacionalitetiViewModel nacionalitetiVM)
         {
-            if (id != nacionaliteti.Id)
+            if (id != nacionalitetiVM.Id)
             {
                 return NotFound();
             }
-            ModelState.Remove("Stafi");
+
+            var nacionalitetii = _context.Nacionaliteti.Where(x => x.Id == id).FirstOrDefault();
+            var user = _currentUser.GetCurrentUserName();
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(nacionaliteti);
+                    nacionalitetii.Id = id;
+                    nacionalitetii.Emri = nacionalitetiVM.Emri;
+                    nacionalitetii.ModifiedFrom = user;
+                    nacionalitetii.ModifiedDate = DateTime.Now;
+                    _context.Update(nacionalitetii);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NacionalitetiExists(nacionaliteti.Id))
+                    if (!NacionalitetiExists(nacionalitetiVM.Id))
                     {
                         return NotFound();
                     }
@@ -116,7 +137,7 @@ namespace Pure_Life.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(nacionaliteti);
+            return View(nacionalitetiVM);
         }
 
         // GET: Nacionalitetis/Delete/5
@@ -147,11 +168,14 @@ namespace Pure_Life.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Nacionaliteti'  is null.");
             }
             var nacionaliteti = await _context.Nacionaliteti.FindAsync(id);
+            var stafiNacionalitet = await _context.Stafi.Where(x => x.NacionalitetiId == nacionaliteti.Id).ToListAsync();
             if (nacionaliteti != null)
             {
+                _context.Stafi.RemoveRange(stafiNacionalitet);
+                await _context.SaveChangesAsync();
                 _context.Nacionaliteti.Remove(nacionaliteti);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
