@@ -112,3 +112,8 @@ z-index:0;
 }
 
 /*/**/
+@media screen and (max-width: 800px) {
+    .baba {
+        margin-left: 200px !important;
+    }
+}

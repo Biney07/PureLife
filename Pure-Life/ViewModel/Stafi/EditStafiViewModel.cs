@@ -35,6 +35,10 @@ namespace Pure_Life.ViewModel.Stafi
 		[Compare("Password", ErrorMessage = "Passwords do not match")]
 		public string ConfirmPassword { get; set; }
 
-		public IFormFile PictureUrl { get; set; }
+		public IFormFile? PictureUrl { get; set; }
+		public bool? IsDeleted { get; internal set; }
+		public DateTime? InsertedDate { get; internal set; }
+		public string? InsertedFrom { get; internal set; }
+		public string? PublicId { get; internal set; }
 	}
 }
