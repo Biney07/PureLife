@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
+using Pure_Life.ViewModel.Lemia;
 
 namespace Pure_Life.Controllers
 {
     public class LemiaController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public LemiaController(ApplicationDbContext context)
+        private readonly ICurrentUser _currentUser;
+        public LemiaController(ApplicationDbContext context,ICurrentUser currentUser)
         {
             _context = context;
+            _currentUser= currentUser;
         }
 
         // GET: Lemias
@@ -56,16 +59,24 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Lemia lemia)
+        public async Task<IActionResult> Create(AddLemiaViewModel lemiaVM)
         {
-            ModelState.Remove("Stafi");
-            if (ModelState.IsValid)
+            var user = _currentUser.GetCurrentUserName();
+      
+            if (!ModelState.IsValid)
             {
-                _context.Add(lemia);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
+                return View(lemiaVM);
             }
-            return View(lemia);
+            var lemiaNew = new Lemia()
+            {
+                Emri = lemiaVM.Emri,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user,
+            };
+            _context.Add(lemiaNew);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Lemias/Edit/5
@@ -89,24 +100,29 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,InsertedFrom,InsertedDate,ModifiedDate,ModifiedFrom,IsDeleted")] Lemia lemia)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,ModifiedDate,ModifiedFrom")] EditLemiaViewModel lemiaVM)
         {
-            if (id != lemia.Id)
+            if (id != lemiaVM.Id)
             {
                 return NotFound();
             }
-            ModelState.Remove("Stafi");
+          var user = _currentUser.GetCurrentUserName(); 
+            var lemiaZgjedhur =await _context.Lemia.Where(x=>x.Id == id).FirstOrDefaultAsync();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(lemia);
+                    lemiaZgjedhur.Id= lemiaVM.Id;
+                    lemiaZgjedhur.Emri=lemiaVM.Emri;
+                    lemiaZgjedhur.ModifiedDate = DateTime.Now;
+                    lemiaZgjedhur.ModifiedFrom= user;
+                    _context.Update(lemiaZgjedhur);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LemiaExists(lemia.Id))
+                    if (!LemiaExists(lemiaVM.Id))
                     {
                         return NotFound();
                     }
@@ -117,7 +133,7 @@ namespace Pure_Life.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(lemia);
+            return View(lemiaVM);
         }
 
         // GET: Lemias/Delete/5
