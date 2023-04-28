@@ -150,6 +150,7 @@ namespace Pure_Life.Controllers
 				Id = stafi.Id,
 				
 				PublicId = stafi.PublicId,
+				imagelink = stafi.PictureUrl,
 				NrLeternjoftimit = stafi.NrLeternjoftimit,
 				Emri = stafi.Emri,
 				Mbiemri = stafi.Mbiemri,

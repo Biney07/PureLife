@@ -22,7 +22,7 @@ namespace Pure_Life.ViewModel.Stafi
 		public int LemiaId { get; set; }
 		public DateTime ModifiedDate { get; set; }
 	    public string ModifiedFrom { get; set; }
-
+		public string? imagelink { get; set; }
 
 		[Required]
 		[DataType(DataType.Password)]
