@@ -1,52 +1,89 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+import * as auth from '../helpers/auth'
+import store from '../store'
+
 import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/Profile'
 import Tables from '@/components/Tables'
 import Maps from '@/components/Maps'
-import BadGateway from '@/components/BadGateway'
+// import BadGateway from '@/components/BadGateway'
+import Login from '../views/auth/Login'
 
+Vue.use(VueRouter)
 
-Vue.use(Router);
-
-export default new Router({
+const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/dashboard',
+      path: '/',
       name: 'Dashboard',
       component: Dashboard,
-      props: { page: 1 },
-      alias: '/'
+      props: {page: 1},
+      meta: { requiresAuth: true }
     },
     {
       path: '/profile',
       name: 'Profile',
-      props: { page: 2 },
-      component: Profile
+      component: Profile,
+      props: {page: 2},
+      meta: { requiresAuth: true }
     },
     {
       path: '/tables',
       name: 'Tables',
-      props: { page: 3 },
-      component: Tables
+      component: Tables,
+      props: {page: 3},
+      meta: { requiresAuth: true }
     },
     {
       path: '/maps',
       name: 'Maps',
-      props: { page: 4 },
-      component: Maps
+      component: Maps,
+      props: {page: 4},
+      meta: { requiresAuth: true }
     },
     {
-      path: '/404',
-      name: 'BadGateway',
-      props: { page: 5 },
-      component: BadGateway
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      props: {page: 6},
+      meta: { requiresAuth: false }
     },
-    {
-      path: '*',
-      props: { page: 5 },
-      redirect: '/404'
-    }
+    // {
+    //   path: '/404',
+    //   name: 'BadGateway',
+    //   component: BadGateway,
+    //   props: {page: 5},
+    //   meta: { requiresAuth: false }
+    // },
+    // {
+    //   path: '*',
+    //   redirect: '/404',
+    //   props: {page: 5},
+    //   meta: { requiresAuth: false }
+    // },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+      const isAuthenticated = checkAuthentication();
+      if (isAuthenticated) {
+          store.commit('storeUser', auth.getUser());
+          next();
+      } else {
+          next('/login');
+      }
+  } else {
+    next();
+  }
+});
+
+function checkAuthentication() {
+    if(auth.userExists()) return true
+    return false;
+}
+
+export default router;
