@@ -1,8 +1,7 @@
-
 <template>
-  <div :class="['flexible-content', {'flexible-content-minimized': minimized}]">
+  <div :style="{ 'padding-left': $route.path.includes('login') ? '0px' : '' }" :class="['flexible-content', {'flexible-content-minimized': minimized}]">
     <!--Navbar-->
-    <mdb-navbar :class="['flexible-navbar white', {'flexible-navbar-minimized white': minimized}]" light position="top" scrolling>
+    <mdb-navbar v-if="user.isAuthenticated" :class="['flexible-navbar white', {'flexible-navbar-minimized white': minimized}]" light position="top" scrolling>
       <mdb-navbar-brand href="https://mdbootstrap.com/docs/vue/" target="_blank">MDB</mdb-navbar-brand>
       <mdb-navbar-toggler>
         <mdb-navbar-nav left>
@@ -37,23 +36,29 @@
     </mdb-navbar>
     <!--/.Navbar-->
     <!-- Sidebar -->
-    <div class="sidebar-fixed position-fixed"
+    <div v-if="user.isAuthenticated" class="sidebar-fixed position-fixed"
        :class="{ 'toggleSidebar': !minimized, 'shrink-sidebar': minimized }"
        @mouseover="minimized = false"
        @mouseleave="minimized = true">
       <a class="logo-wrapper"><img alt="" class="img-fluid" src="./assets/logo-mdb-vue-small.png"/></a>
       <mdb-list-group class="list-group-flush">
         <router-link v-for="(route, index) in routes" :key="index" :to="route.path" @click.native="activeItem = index + 1">
-          <mdb-list-group-item :action="true" :class="{ active: activeItem === index + 1, 'custom-list-group-item': index === 4 }">
+          <mdb-list-group-item v-if="!route.authRequired" :action="true" :class="{ active: activeItem === index + 1, 'custom-list-group-item': index === 4 }">
             <mdb-icon :icon="route.icon" class="mr-3 icon-shrink"/>
             <span>{{ route.name }}</span>
+          </mdb-list-group-item>
+        </router-link>
+        <router-link to="/login" @click.native="signOut">
+          <mdb-list-group-item v-if="user.isAuthenticated" :action="true">
+            <mdb-icon icon="sign-out-alt" class="mr-3 icon-shrink"/>
+            <span>Sign Out</span>
           </mdb-list-group-item>
         </router-link>
       </mdb-list-group>
     </div>
     <!-- /Sidebar  -->
     <main>
-      <div class="mt-5 p-5">
+      <div :class="{'m-5 p-5': !this.$route.path.includes('login')}">
         <router-view></router-view>
       </div>
     </main>
@@ -75,6 +80,8 @@ import {
 
 import routes from './helpers/sidebarRoutes'
 import navbarRoutes from './helpers/navbarRoutes'
+import { mapGetters } from 'vuex'
+
 export default {
   name: "AdminTemplate",
   components: {
@@ -99,10 +106,19 @@ export default {
     },
     navbarRoutes() {
       return navbarRoutes
-    }
+    },
+    ...mapGetters({
+      user: 'getUser'
+    })
   },
-  beforeMount() {
-    this.activeItem = this.$route.matched[0].props.default.page;
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$route)
+    // eslint-disable-next-line no-console
+    console.log(this.store)
+    if(this.$route.matched.length){
+      this.activeItem = this.$route.matched[0].props.default.page;
+    }
   },
   mixins: [waves],
   methods: {
@@ -112,12 +128,15 @@ export default {
     isActive(link) {
       return link === this.$route.path
     },
+    signOut() {
+      this.$store.dispatch('signOut')
+    }
   },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 .navbar-light .navbar-brand {
   margin-left: 15px;
   color: #2196f3 !important;
@@ -126,7 +145,9 @@ export default {
 </style>
 
 <style scoped>
+
 main {
+  font-family: 'Poppins', Helvetica, sans-serif;
   background-color: #ededee;
 }
 
