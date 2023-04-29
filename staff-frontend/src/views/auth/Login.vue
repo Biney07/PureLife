@@ -54,7 +54,6 @@ export default {
   methods: {
     async login() {
       // eslint-disable-next-line no-console
-      console.log('enter')
       try {
         await this.$store.dispatch('loginUser', this.formData)
       } catch (err) {
