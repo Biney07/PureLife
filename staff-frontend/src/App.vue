@@ -112,10 +112,6 @@ export default {
     })
   },
   mounted() {
-    // eslint-disable-next-line no-console
-    console.log(this.$route)
-    // eslint-disable-next-line no-console
-    console.log(this.store)
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
     }

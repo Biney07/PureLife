@@ -20,13 +20,14 @@
           </div>
 
           <!-- Password input -->
-          <div class="form-outline mb-4">
+          <div class="form-outline mb-2">
             <input v-model="formData.password" placeholder="your password" type="password" id="form1Example2" class="form-control" />
             <label class="form-label font-weight-normal" for="form1Example2">Password</label>
           </div>
         </form>
+        <small class="text-danger">{{errorMessage}}</small>
         <!-- Submit and forgot password buttons -->
-          <div class="row mb-4 align-items-center">
+          <div class="row mb-4 mt-2 align-items-center">
             <div class="col">
               <p class="sign-in-button" @click="login">Sign in</p>
             </div>
@@ -48,7 +49,8 @@ export default {
       formData: {
         emailAddress: null,
         password: null
-      }
+      },
+      errorMessage: null,
     }
   },
   methods: {
@@ -59,6 +61,10 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
+        setTimeout(() => {
+          this.errorMessage = ""
+        }, 3000)
+        this.errorMessage = "Unable to login! Please make sure your email and password are correct."
       } finally {
         this.$router.push({ path: '/' })
       }
