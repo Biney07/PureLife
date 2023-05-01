@@ -19,7 +19,7 @@ namespace Pure_Life.ViewModel.Stafi
 		public int? ShtetiId { get; set; }
 		public string? Qyteti { get; set; }
 		public int? NacionalitetiId { get; set; }
-		public int LemiaId { get; set; }
+		public int? LemiaId { get; set; }
 		public DateTime ModifiedDate { get; set; }
 	    public string ModifiedFrom { get; set; }
 		public string? imagelink { get; set; }

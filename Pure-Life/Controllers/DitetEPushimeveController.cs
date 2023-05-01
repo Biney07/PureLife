@@ -7,25 +7,59 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
+using Pure_Life.ViewModel.DitetEPushimeve;
 
 namespace Pure_Life.Controllers
 {
     public class DitetEPushimeveController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public DitetEPushimeveController(ApplicationDbContext context)
+        private readonly ICurrentUser _currentUser;
+        public DitetEPushimeveController(ApplicationDbContext context, ICurrentUser currentUser)
         {
             _context = context;
+            _currentUser= currentUser;
         }
 
         // GET: DitetEPushimeve
+        /*        public async Task<IActionResult> Index()
+                {
+                      return _context.DitetEPushimeve != null ? 
+                                  View(await _context.DitetEPushimeve.ToListAsync()) :
+                                  Problem("Entity set 'ApplicationDbContext.DitetEPushimeve'  is null.");
+                }*/
+
         public async Task<IActionResult> Index()
         {
-              return _context.DitetEPushimeve != null ? 
-                          View(await _context.DitetEPushimeve.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.DitetEPushimeve'  is null.");
+            var pushimeList = await _context.DitetEPushimeve.ToListAsync();
+
+            // Sort the list by DitaEPushimit, but put the items with a DitaEPushimit value
+            // less than DateTime.Now at the end of the list
+            pushimeList = pushimeList.OrderBy(p => DateTime.Compare(p.DitaEPushimit, DateTime.Now) < 0 ? int.MaxValue : DateTime.Compare(p.DitaEPushimit, DateTime.Now))
+                                     .ToList();
+
+            // Find the index of the first item with a DitaEPushimit value equal to DateTime.Now
+            var currentDayIndex = pushimeList.FindIndex(p => DateTime.Compare(p.DitaEPushimit.Date, DateTime.Today) == 0);
+
+            if (currentDayIndex > 0)
+            {
+                // Swap the positions of the first and current day items
+                var temp = pushimeList[0];
+                pushimeList[0] = pushimeList[currentDayIndex];
+                pushimeList[currentDayIndex] = temp;
+            }
+
+            return View(pushimeList);
         }
+
+
+
+
+
+
+
+
 
         // GET: DitetEPushimeve/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -56,15 +90,25 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Festa,DitaEPushimit,InsertedFrom,InsertedDate")] DitetEPushimeve ditetEPushimeve)
+        public async Task<IActionResult> Create(AddPushimiViewModel ditetEPushimeve)
         {
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                _context.Add(ditetEPushimeve);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(ditetEPushimeve);
             }
-            return View(ditetEPushimeve);
+            var user = _currentUser.GetCurrentUserName();
+            var pushimi = new DitetEPushimeve()
+            {
+                Emri=ditetEPushimeve.Emri,
+                Festa = ditetEPushimeve.Festa,
+                DitaEPushimit = ditetEPushimeve.DitaEPushimit,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user
+            };
+            await _context.AddAsync(pushimi);   
+            await _context.SaveChangesAsync();  
+            return RedirectToAction("Index");
         }
 
         // GET: DitetEPushimeve/Edit/5
@@ -88,18 +132,22 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Festa,DitaEPushimit,InsertedFrom,InsertedDate")] DitetEPushimeve ditetEPushimeve)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Festa,DitaEPushimit")] EditPushimiViewModel ditetEPushimeve)
         {
             if (id != ditetEPushimeve.Id)
             {
                 return NotFound();
             }
+            var pushimi = await _context.DitetEPushimeve.FirstOrDefaultAsync(x=>x.Id== id);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(ditetEPushimeve);
+                    pushimi.Emri = ditetEPushimeve.Emri;
+                    pushimi.Festa = ditetEPushimeve.Festa;
+                    pushimi.DitaEPushimit = ditetEPushimeve.DitaEPushimit;
+                    _context.Update(pushimi);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

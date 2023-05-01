@@ -99,8 +99,8 @@
 								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Edit details">
 									<i class="la la-edit"></i>
 								</a>
-								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Delete">
-									<i class="la la-trash"></i>
+								<a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
+									<i class="la la-trash" style="color:white;"></i>
 								</a>
 							</td>
 						</tr>
@@ -115,3 +115,14 @@
 </div>
 
 <!--end::Card-->
+	@Html.Partial("Delete")
+	@section Scripts {
+  <script>
+    $(function() {
+      $('.delete-button').click(function() {
+        var id = $(this).data('id');
+        $('#delete-form').attr('action', '/Stafi/Delete/' + id);
+      });
+    });
+  </script>
+}

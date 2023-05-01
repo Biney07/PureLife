@@ -1,48 +1,80 @@
 ﻿@model Pure_Life.Models.DitetEPushimeve
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "Create";
+
 }
 
-<h1>Create</h1>
+<div class="card card-custom">
+	<div class="card-header">
+		<h3 class="card-title">
+			Shto diten e pushimit
+		</h3>
+	</div>
+	<!--begin::Form-->
+	<form asp-action="Create" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="card-body">
+			<div class="form-group row">
+				<label class="col-2 col-form-label" asp-for="Emri" class="control-label"></label>
+				<div class="col-10">
+					<input class="form-control" type="text" id="example-search-input" asp-for="Emri" class="form-control" />
+					<span asp-validation-for="Emri" class="text-danger"></span>
+				</div>
+			</div>
+				<div class="form-group row">
+				<label class="col-2 col-form-label">Festa</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
+						<input type="text" class="form-control datetimepicker-input" placeholder="Select date & time" data-target="#kt_datetimepicker_1" asp-for="Festa" />
+						<div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
+							<span class="input-group-text">
+								<i class="ki ki-calendar"></i>
+							</span>
+						</div>
+						<span asp-validation-for="Festa" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Dita e pushimit</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<div class="input-group date" id="kt_datetimepicker_2" data-target-input="nearest">
+						<input type="text" class="form-control datetimepicker-input" placeholder="Select date & time" data-target="#kt_datetimepicker_1" asp-for="DitaEPushimit" />
+						<div class="input-group-append" data-target="#kt_datetimepicker_2" data-toggle="datetimepicker">
+							<span class="input-group-text">
+								<i class="ki ki-calendar"></i>
+							</span>
+						</div>
+						<span asp-validation-for="DitaEPushimit" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			
 
-<h4>DitetEPushimeve</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Festa" class="control-label"></label>
-                <input asp-for="Festa" class="form-control" />
-                <span asp-validation-for="Festa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DitaEPushimit" class="control-label"></label>
-                <input asp-for="DitaEPushimit" class="form-control" />
-                <span asp-validation-for="DitaEPushimit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsertedFrom" class="control-label"></label>
-                <input asp-for="InsertedFrom" class="form-control" />
-                <span asp-validation-for="InsertedFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsertedDate" class="control-label"></label>
-                <input asp-for="InsertedDate" class="form-control" />
-                <span asp-validation-for="InsertedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+		</div>
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-2">
+				</div>
+				<div class="col-10">
+					<div class="form-group" style="display:flex;flex-direction:row;justify-content:end;">
+						<input type="submit" value="Create" class="btn btn-primary me-4" />
+						<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+
 }
