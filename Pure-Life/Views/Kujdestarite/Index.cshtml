@@ -99,7 +99,7 @@
 						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-icon" title="Edit details">
 							<i class="la la-edit" style="color:white;"></i>
 						</a>
-						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-icon" title="Delete">
+						<a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
 							<i class="la la-trash" style="color:white;"></i>
 						</a>
 					</td>
@@ -108,6 +108,17 @@
 			}
 		</tbody>
 	</table>
+		@Html.Partial("Delete")
+	@section Scripts {
+  <script>
+    $(function() {
+      $('.delete-button').click(function() {
+        var id = $(this).data('id');
+        $('#delete-form').attr('action', '/Kujdestarite/Delete/' + id);
+      });
+    });
+  </script>
+}
 	@functions {
 		private string GetRowClass(DateTime date)
 		{

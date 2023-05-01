@@ -19,7 +19,6 @@ namespace Pure_Life.Controllers
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_context = context;
-			
 		}
 
 		public IActionResult Login()
