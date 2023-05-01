@@ -26,7 +26,7 @@ namespace Pure_Life.Models
         public string? Qyteti { get; set; }
         public int? NacionalitetiId { get; set; }
         [ForeignKey("NacionalitetiId")]
-        public int LemiaId { get; set; }
+        public int? LemiaId { get; set; }
         [ForeignKey("LemiaId")]
         public string Email { get; set; }
         public string EmailZyrtar { get; set; }
@@ -50,5 +50,7 @@ namespace Pure_Life.Models
         public Nacionaliteti Nacionaliteti { get; set; }
         public Shteti Shteti { get; set; }
         public Rolet Rolet { get; set; }
+        public List<Kujdestarite> Kujdestarite { get;set; }
+       
     }
 }

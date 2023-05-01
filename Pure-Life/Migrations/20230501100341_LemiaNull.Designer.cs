@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pure_Life.Data;
 
@@ -11,9 +12,10 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230501100341_LemiaNull")]
+    partial class LemiaNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,32 +224,6 @@ namespace Pure_Life.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Pure_Life.Models.DitetEPushimeve", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DitaEPushimit")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Festa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InsertedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InsertedFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DitetEPushimeve");
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Kujdestarite", b =>

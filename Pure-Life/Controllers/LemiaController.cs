@@ -163,13 +163,17 @@ namespace Pure_Life.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Lemia'  is null.");
             }
+            var stafi = await _context.Stafi.Where(s=>s.LemiaId== id).FirstOrDefaultAsync();
             var lemia = await _context.Lemia.FindAsync(id);
             if (lemia != null)
             {
+           /*     _context.Stafi.RemoveRange(stafi);*/
                 _context.Lemia.Remove(lemia);
+               
             }
             
             await _context.SaveChangesAsync();
+           /* await _context.SaveChangesAsync();*/
             return RedirectToAction(nameof(Index));
         }
 

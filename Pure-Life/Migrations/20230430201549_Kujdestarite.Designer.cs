@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pure_Life.Data;
 
@@ -11,9 +12,10 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230430201549_Kujdestarite")]
+    partial class Kujdestarite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,32 +226,6 @@ namespace Pure_Life.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Pure_Life.Models.DitetEPushimeve", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DitaEPushimit")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Festa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InsertedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InsertedFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DitetEPushimeve");
-                });
-
             modelBuilder.Entity("Pure_Life.Models.Kujdestarite", b =>
                 {
                     b.Property<int>("Id")
@@ -444,7 +420,7 @@ namespace Pure_Life.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LemiaId")
+                    b.Property<int>("LemiaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Mbiemri")
@@ -556,20 +532,20 @@ namespace Pure_Life.Migrations
 
             modelBuilder.Entity("Pure_Life.Models.Kujdestarite", b =>
                 {
-                    b.HasOne("Pure_Life.Models.Stafi", "Stafi")
+                    b.HasOne("Pure_Life.Models.Stafi", null)
                         .WithMany("Kujdestarite")
                         .HasForeignKey("StafiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Stafi");
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Stafi", b =>
                 {
                     b.HasOne("Pure_Life.Models.Lemia", "Lemia")
                         .WithMany("Stafi")
-                        .HasForeignKey("LemiaId");
+                        .HasForeignKey("LemiaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Pure_Life.Models.Nacionaliteti", "Nacionaliteti")
                         .WithMany("Stafi")
