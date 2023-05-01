@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Pure_Life.Models.DitetEPushimeve>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Festa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DitaEPushimit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsertedFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsertedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Festa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DitaEPushimit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsertedFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsertedDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

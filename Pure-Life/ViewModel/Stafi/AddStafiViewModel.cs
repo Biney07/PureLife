@@ -18,7 +18,7 @@ public class AddStafiViewModel
     public int? ShtetiId { get; set; }
     public string? Qyteti { get; set; }
     public int? NacionalitetiId { get; set; }
-    public int LemiaId { get; set; }
+    public int? LemiaId { get; set; }
     public string Email { get; set; }
 
     [Required]

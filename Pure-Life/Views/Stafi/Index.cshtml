@@ -76,7 +76,7 @@
 									<p>@item.Email</p>
 								</div>
 							</td>
-							<td>@item.Lemia.Emri</td>
+							<td>@(item.Lemia?.Emri ?? "n/a")</td>
 							<td>@item.NrLincences</td>
 							<td>
 								@if (item.RoletId == 1)

@@ -1,0 +1,76 @@
+﻿@model Pure_Life.Models.Kujdestarite
+
+
+@{
+	ViewData["Title"] = "Edit";
+	string dateTimeFormat = "d/m/Y";
+}
+
+<div class="card card-custom">
+	<div class="card-header">
+		<h3 class="card-title">
+			Shto kujdestarine
+		</h3>
+	</div>
+	<!--begin::Form-->
+	<form asp-action="Edit" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<input type="hidden" asp-for="Id" />
+
+		<div class="card-body">
+
+
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Data e kujdestarimit</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
+						<input type="text" class="form-control datetimepicker-input" placeholder="Select date & time" data-target="#kt_datetimepicker_1" asp-for="Data" />
+						<div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
+							<span class="input-group-text">
+								<i class="ki ki-calendar"></i>
+							</span>
+						</div>
+						<span asp-validation-for="Data" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-2 col-form-label">Stafi</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select asp-for="StafiId" class="form-control" asp-items="ViewBag.StafiId"></select>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-2">
+				</div>
+				<div class="col-10">
+					<div class="form-group" style="display:flex;flex-direction:row;justify-content:end;">
+						<input type="submit" value="Create" class="btn btn-primary me-4" />
+						<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+
+}
+@*<script>
+	$(document).ready(function () {
+	$("#DueDate").flatpickr({
+		dateFormat: "@dateTimeFormat",
+	});
+		});
+</script>*@
