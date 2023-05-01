@@ -64,13 +64,13 @@ namespace Pure_Life.Controllers
 
 					}
 				}
-				TempData["Error"] = "Wrong credentials. Please, try again!";
-				return View(loginVM);
+                ModelState.AddModelError(string.Empty, "Invalid email or password.");
+                return View(loginVM);
 			}
 
 
-			TempData["Error"] = "Wrong credentials. Please, try again!";
-			return View(loginVM);
+            ModelState.AddModelError(string.Empty, "Invalid email or password.");
+            return View(loginVM);
 		}
 
 		[HttpPost]

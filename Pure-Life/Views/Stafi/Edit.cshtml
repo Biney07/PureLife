@@ -1,4 +1,5 @@
-﻿@model Stafi
+﻿@using Pure_Life.ViewModel.Stafi;
+@model EditStafiViewModel;
 
 @{
 	ViewData["Title"] = "Edit";
@@ -21,7 +22,7 @@
 				<div></div>
 				<div class="custom-file">
 					<input type="file" class="custom-file-input" asp-for="PictureUrl" id="customFile" />
-					<label class="custom-file-label" for="customFile">@Model.PictureUrl</label>
+					<label class="custom-file-label" for="customFile">@Model.imagelink</label>
 				</div>
 			</div>
 			<div class="form-group row">
