@@ -25,6 +25,8 @@ namespace Pure_Life.Data
         public DbSet<Rolet> Rolet { get; set; }
         public DbSet<Kujdestarite> Kujdestarite { get; set; }
         public DbSet<DitetEPushimeve> DitetEPushimeve { get; set; }
+		public DbSet<Sherbimet> Sherbimet { get; set; }
+
 
 	}
 }
