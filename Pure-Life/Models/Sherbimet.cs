@@ -7,7 +7,7 @@
 
 		public string Pershkrimi { get; set; }
 
-		public string Cmimi { get; set; }
+		public decimal Cmimi { get; set; }
 
 		public string InsertedFrom { get; set; }
 

@@ -1,0 +1,69 @@
+﻿@model Pure_Life.Models.Sherbimet
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Sherbimet</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Emri" class="control-label"></label>
+                <input asp-for="Emri" class="form-control" />
+                <span asp-validation-for="Emri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pershkrimi" class="control-label"></label>
+                <input asp-for="Pershkrimi" class="form-control" />
+                <span asp-validation-for="Pershkrimi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cmimi" class="control-label"></label>
+                <input asp-for="Cmimi" class="form-control" />
+                <span asp-validation-for="Cmimi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsertedFrom" class="control-label"></label>
+                <input asp-for="InsertedFrom" class="form-control" />
+                <span asp-validation-for="InsertedFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsertedDate" class="control-label"></label>
+                <input asp-for="InsertedDate" class="form-control" />
+                <span asp-validation-for="InsertedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedFrom" class="control-label"></label>
+                <input asp-for="ModifiedFrom" class="form-control" />
+                <span asp-validation-for="ModifiedFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
