@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ 'padding-left': $route.path.includes('login') ? '0px' : '' }" :class="['flexible-content', {'flexible-content-minimized': minimized}]">
+  <div :style="{ 'padding-left': ['/login', '/404'].includes($route.path) ? '0px' : '' }" :class="['flexible-content', {'flexible-content-minimized': minimized}]">
     <!--Navbar-->
     <mdb-navbar v-if="user.isAuthenticated" :class="['flexible-navbar white', {'flexible-navbar-minimized white': minimized}]" light position="top" scrolling>
       <mdb-navbar-brand href="https://mdbootstrap.com/docs/vue/" target="_blank">MDB</mdb-navbar-brand>
@@ -58,7 +58,7 @@
     </div>
     <!-- /Sidebar  -->
     <main>
-      <div :class="{'m-5 p-5': !this.$route.path.includes('login')}">
+      <div :class="{'mt-5 p-5': !['/login', '/404'].includes($route.path)}">
         <router-view></router-view>
       </div>
     </main>
@@ -112,6 +112,8 @@ export default {
     })
   },
   mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$route)
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
     }
