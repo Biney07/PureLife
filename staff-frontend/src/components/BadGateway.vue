@@ -34,7 +34,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .full {
-  height: 70vh;
+  height: 100vh;
 }
 .bad-gateway-row {
   margin: 0;
