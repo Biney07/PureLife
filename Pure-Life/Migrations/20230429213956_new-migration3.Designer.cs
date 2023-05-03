@@ -12,8 +12,8 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230414221136_someChanges")]
-    partial class someChanges
+    [Migration("20230429213956_new-migration3")]
+    partial class newmigration3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,9 +245,6 @@ namespace Pure_Life.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -328,9 +325,6 @@ namespace Pure_Life.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -350,10 +344,18 @@ namespace Pure_Life.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("ConfirmPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("DataLindjes")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailZyrtar")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -370,6 +372,9 @@ namespace Pure_Life.Migrations
                     b.Property<string>("InsertedFrom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("LemiaId")
                         .HasColumnType("int");
@@ -398,15 +403,21 @@ namespace Pure_Life.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Qyteti")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoletId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoliId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ShtetiId")

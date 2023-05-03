@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Pure_Life.Migrations
 {
-    public partial class init : Migration
+    public partial class firstmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -83,6 +83,19 @@ namespace Pure_Life.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Nacionaliteti", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rolet",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Emri = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rolet", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,18 +228,22 @@ namespace Pure_Life.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NrLeternjoftimit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NrLeternjoftimit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Emri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mbiemri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gjinia = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataLindjes = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NrLincences = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NrLincences = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NrTel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoletId = table.Column<int>(type: "int", nullable: false),
                     ShtetiId = table.Column<int>(type: "int", nullable: true),
                     Qyteti = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NacionalitetiId = table.Column<int>(type: "int", nullable: true),
                     LemiaId = table.Column<int>(type: "int", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailZyrtar = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InsertedFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -247,6 +264,12 @@ namespace Pure_Life.Migrations
                         column: x => x.NacionalitetiId,
                         principalTable: "Nacionaliteti",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Stafi_Rolet_RoletId",
+                        column: x => x.RoletId,
+                        principalTable: "Rolet",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Stafi_Shteti_ShtetiId",
                         column: x => x.ShtetiId,
@@ -304,6 +327,11 @@ namespace Pure_Life.Migrations
                 column: "NacionalitetiId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Stafi_RoletId",
+                table: "Stafi",
+                column: "RoletId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stafi_ShtetiId",
                 table: "Stafi",
                 column: "ShtetiId");
@@ -340,6 +368,9 @@ namespace Pure_Life.Migrations
 
             migrationBuilder.DropTable(
                 name: "Nacionaliteti");
+
+            migrationBuilder.DropTable(
+                name: "Rolet");
 
             migrationBuilder.DropTable(
                 name: "Shteti");

@@ -12,8 +12,8 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230414223934_someChanges2")]
-    partial class someChanges2
+    [Migration("20230425233851_staff-mvc-staff-api")]
+    partial class staffmvcstaffapi
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -350,10 +350,18 @@ namespace Pure_Life.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("ConfirmPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("DataLindjes")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailZyrtar")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -397,6 +405,14 @@ namespace Pure_Life.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

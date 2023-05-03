@@ -12,8 +12,8 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230417044902_foto")]
-    partial class foto
+    [Migration("20230425003835_first migration")]
+    partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -354,6 +354,10 @@ namespace Pure_Life.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailZyrtar")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
