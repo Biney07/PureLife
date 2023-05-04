@@ -43,7 +43,6 @@
 
 
 <script>
-import{getUsers} from "../../staff-sdk/auth"
 export default {
   data() {
     return {
@@ -53,11 +52,6 @@ export default {
       },
       errorMessage: null,
     }
-  },
-  async mounted() {
-    const response = await getUsers()
-    // eslint-disable-next-line no-console
-    console.log(response)
   },
   methods: {
     async login() {

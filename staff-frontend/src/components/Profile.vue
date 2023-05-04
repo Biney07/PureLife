@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container">
+  <div v-if="userData" class="profile-container">
     <div class="profile-left">
       <div class="profile-image-container">
         <img :src="userData.pictureUrl" alt="User Profile Image" class="profile-image" />
@@ -17,14 +17,14 @@
       <div class="profile-form">
         <div class="profile-form-header">
           <p>Personal Information</p>
-          <button class="profile-save-button">Save Changes</button>
+          <button type="submit" @click="editProfile" class="profile-save-button">Save Changes</button>
         </div>
         <hr>
         <div class="profile-form-content">
           <div class="profile-image-container pl-0 mb-4">
             <img :src="userData.pictureUrl" alt="User Profile Image" class="profile-image" />
-            <p class="profile-save-button" @click="openFileInput()">Change Image</p>
-            <input type="file" ref="fileInput" style="display:none" @change="uploadImage">
+            <p class="profile-save-button">Change Image</p>
+            <input type="file" ref="fileInput" style="display:none">
           </div>
           <form>
             <div class="form-outline">
@@ -36,6 +36,20 @@
             <div class="form-outline">
               <label class="form-label font-weight-normal" for="form1Example2">Last Name:</label>
               <input v-model="userData.mbiemri" placeholder="Your last name" class="form-control" />
+            </div>
+
+            <div class="form-outline">
+              <label class="form-label font-weight-normal" for="form1Example2">Date of birth:</label>
+              <input type="date" v-model="userData.dataLindjes" placeholder="Date of birth" class="form-control" />
+            </div>
+
+            <div>
+              <label class="form-label font-weight-normal" for="nationality">Gender</label>
+              <select id="nationality" v-model="userData.gjinia" class="form-control">
+                <option value="" disabled selected>Select your gender</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
+              </select>
             </div>
 
             <div class="form-outline">
@@ -58,20 +72,27 @@
               <input v-model="userData.nrLincences" type="number" placeholder="Your license number" class="form-control" />
             </div>
 
-            <div class="form-outline">
-              <label class="form-label font-weight-normal" for="form1Example2">Country:</label>
-              <input v-model="userData.shtetiId" placeholder="Country" class="form-control" />
+            <div>
+              <label class="form-label font-weight-normal" for="country">Country</label>
+              <select id="country" v-model="userData.shtetiId" class="form-control">
+                <option value="" disabled selected>Select your country</option>
+                <option v-for="country in countries" :value="country.id" :key="country.id">{{ country.emri }}</option>
+              </select>
             </div>
 
             <div class="form-outline">
               <label class="form-label font-weight-normal" for="form1Example2">City:</label>
-              <input v-model="userData.qytetiId" placeholder="City" class="form-control" />
+              <input v-model="userData.qyteti" placeholder="City" class="form-control" />
             </div>
 
-            <div class="form-outline">
-              <label class="form-label font-weight-normal" for="form1Example2">Nationality:</label>
-              <input v-model="userData.nacionalitetiId" placeholder="Nationality" class="form-control" />
+            <div>
+              <label class="form-label font-weight-normal" for="nationality">Nationality</label>
+              <select id="nationality" v-model="userData.nacionalitetiId" class="form-control">
+                <option value="" disabled selected>Select your nationality</option>
+                <option v-for="nationality in nationalities" :value="nationality.id" :key="nationality.id">{{ nationality.emri }}</option>
+              </select>
             </div>
+
           </form>
         </div>
       </div>
@@ -80,33 +101,63 @@
 </template>
 
 <script>
-import {getAllNationalities} from "../staff-sdk/nacionaliteti"
+import {getAllNationalities, getAllCountries} from "../staff-sdk/nacionaliteti"
+import {fetchCurrentUser} from "../staff-sdk/user"
 export default {
   data() {
     return {
-      userData: this.$store.state.authenticate.user.data
+      userData: null,
+      nationalities: null,
+      countries: null
     }
   },
   async mounted() {
-    const response = await getAllNationalities()
-    // eslint-disable-next-line no-console
-    console.log(response)
+    await this.fetchNationalities()
+    await this.fetchCountries()
+    await this.getCurrentUser();
   },
   methods: {
-    openFileInput() {
-      this.$refs.fileInput.click();
+    async fetchNationalities() {
+      try {
+        const response = await getAllNationalities()
+        this.nationalities = response?.data
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      }
     },
-    changeImage(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.userData.pictureUrl = reader.result;
-      });
-      reader.readAsDataURL(file);
+    async fetchCountries() {
+      try {
+        const response = await getAllCountries()
+        this.countries = response?.data
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      }
+    },
+    async editProfile(){
       // eslint-disable-next-line no-console
-      console.log(this.userData)
+        this.userData.modifiedFrom = this.userData.emri && this.userData.mbiemri ? `${this.userData.emri} ${this.userData.mbiemri}` : "Unknown";
+        this.userData.modifiedDate = new Date().toISOString();
+        try {
+          this.$store.dispatch('editUserProfile', this.userData)
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err)
+        }
+    },
+    async getCurrentUser(){
+      try {
+        const response = await fetchCurrentUser(this.$store.state.authenticate.user.data.id)
+        // eslint-disable-next-line no-console
+        this.userData = response?.data
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      }
     }
   }
+
 }
 </script>
 
@@ -208,7 +259,7 @@ label {
   margin-bottom: 5px;
 }
 
-input.form-control {
+input.form-control, select.form-control {
   border: none;
   background: #f3f6f9;
   border-radius: 8px;
@@ -225,6 +276,18 @@ input.form-control {
   box-shadow: none;
   transition: background-color 0.3s;
   padding: 0 15px;
+}
+
+select.form-control option {
+  border: none;
+  background: #f3f6f9;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  padding: 0 15px;
+}
+
+select.form-control option:hover {
+  background: #ebedf3;
 }
 
 @media (max-width: 980px) {

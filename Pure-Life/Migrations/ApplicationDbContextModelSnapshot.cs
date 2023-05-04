@@ -251,7 +251,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DitetEPushimeve");
+                    b.ToTable("DitetEPushimeve", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Kujdestarite", b =>
@@ -295,7 +295,7 @@ namespace Pure_Life.Migrations
 
                     b.HasIndex("StafiId");
 
-                    b.ToTable("Kujdestarite");
+                    b.ToTable("Kujdestarite", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Lemia", b =>
@@ -325,7 +325,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Lemia");
+                    b.ToTable("Lemia", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Nacionaliteti", b =>
@@ -358,7 +358,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nacionaliteti");
+                    b.ToTable("Nacionaliteti", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Rolet", b =>
@@ -375,7 +375,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rolet");
+                    b.ToTable("Rolet", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Sherbimet", b =>
@@ -416,7 +416,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sherbimet");
+                    b.ToTable("Sherbimet", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Shteti", b =>
@@ -446,7 +446,7 @@ namespace Pure_Life.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shteti");
+                    b.ToTable("Shteti", (string)null);
                 });
 
             modelBuilder.Entity("Pure_Life.Models.Stafi", b =>
@@ -546,7 +546,7 @@ namespace Pure_Life.Migrations
 
                     b.HasIndex("ShtetiId");
 
-                    b.ToTable("Stafi");
+                    b.ToTable("Stafi", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
