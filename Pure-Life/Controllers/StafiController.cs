@@ -125,7 +125,6 @@ namespace Pure_Life.Controllers
 
             return RedirectToAction("Index");
         }
-
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null || _context.Stafi == null)
@@ -138,19 +137,12 @@ namespace Pure_Life.Controllers
 			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
 
 			var stafi = await _context.Stafi.FindAsync(id);
-
-			if (stafi == null)
-			{
-				return NotFound();
-			}
-
-			// convert Stafi to EditStafiViewModel
-			var stafiVM = new EditStafiViewModel
+			/* stafiVM = new EditStafiViewModel
 			{
 				Id = stafi.Id,
-				
+
 				PublicId = stafi.PublicId,
-				imagelink = stafi.PictureUrl,
+				Imagelink = stafi.PictureUrl,
 				NrLeternjoftimit = stafi.NrLeternjoftimit,
 				Emri = stafi.Emri,
 				Mbiemri = stafi.Mbiemri,
@@ -172,11 +164,16 @@ namespace Pure_Life.Controllers
 				ModifiedDate = (DateTime)stafi.ModifiedDate,
 				ModifiedFrom = stafi.ModifiedFrom,
 				IsDeleted = stafi.IsDeleted
-			};
+			};*/
 
-			// Pass the EditStafiViewModel to the view
-			return View(stafiVM);
+			if (stafi == null)
+			{
+				return NotFound();
+			}
+			return View(stafi);
 		}
+
+	
 
 
 		[HttpPost]
@@ -200,7 +197,7 @@ namespace Pure_Life.Controllers
 			var stafiUpdated = new Stafi()
 			{
 				Id = staff.Id,
-				PictureUrl = staff.PictureUrl,
+				PictureUrl = staff.PictureUrl ?? " " ,
 				PublicId = staff.PublicId,
 				NrLeternjoftimit = stafiVM.NrLeternjoftimit,
 				Emri = staff.Emri,

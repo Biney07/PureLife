@@ -1,4 +1,6 @@
-﻿namespace Pure_Life.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Pure_Life.Models
 {
 	public class Sherbimet
 	{
@@ -13,9 +15,11 @@
 
 		public DateTime InsertedDate { get; set; }
 
-		public DateTime ModifiedDate { get; set; }
+		[ForeignKey("LemiaId")]
+		public int LemiaId { get; set; }
+		public DateTime? ModifiedDate { get; set; }
 
-		public string ModifiedFrom { get; set; }
+		public string? ModifiedFrom { get; set; }
 
 		public bool IsDeleted { get; set; }
 	}

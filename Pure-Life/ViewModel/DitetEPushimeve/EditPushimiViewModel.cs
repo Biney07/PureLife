@@ -7,5 +7,7 @@
         public DateTime Festa { get; set; }
 
         public DateTime DitaEPushimit { get; set; }
+
+
     }
 }

@@ -140,13 +140,14 @@ namespace Pure_Life.Controllers
             }
             var pushimi = await _context.DitetEPushimeve.FirstOrDefaultAsync(x=>x.Id== id);
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid  && pushimi != null)
             {
                 try
                 {
                     pushimi.Emri = ditetEPushimeve.Emri;
                     pushimi.Festa = ditetEPushimeve.Festa;
                     pushimi.DitaEPushimit = ditetEPushimeve.DitaEPushimit;
+                    
                     _context.Update(pushimi);
                     await _context.SaveChangesAsync();
                 }

@@ -10,6 +10,7 @@
         public string? ModifiedFrom { get; set; }
        
         public List<Stafi> Stafi { get; set; }
-   
-    }
+        public List<Sherbimet> Sherbimet { get; set; }
+
+	}
 }
