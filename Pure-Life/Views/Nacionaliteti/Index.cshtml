@@ -37,6 +37,7 @@
 <table class="table">
     <thead class="thead-dark">
         <tr>
+            <th> # </th>
             <th>
                 @Html.DisplayNameFor(model => model.Emri)
             </th>
@@ -57,9 +58,13 @@
         </tr>
     </thead>
     <tbody>
+            @{
+                int row = 1;
+            }
         @foreach (var item in Model)
         {
             <tr>
+                <td>@row</td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Emri)
                 </td>
@@ -84,11 +89,12 @@
                         <i class="la la-edit"></i>
                     </a>
                         <a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
-                            <i class="la la-trash" style="color:white;"></i>
+                            <i class="la la-trash"></i>
                         </a>
                 </td>
-            </tr>
-        }
+                </tr>
+                row++;
+            }
     </tbody>
 </table>
 

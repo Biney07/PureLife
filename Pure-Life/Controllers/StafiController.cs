@@ -125,7 +125,6 @@ namespace Pure_Life.Controllers
 
             return RedirectToAction("Index");
         }
-
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null || _context.Stafi == null)
@@ -143,47 +142,12 @@ namespace Pure_Life.Controllers
 			ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
 			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
 
-		
 
-			// convert Stafi to EditStafiViewModel
-			var stafiVM = new EditStafiViewModel
-			{
-				Id = stafi.Id,
-				PublicId = stafi.PublicId,
-				imagelink = stafi.PictureUrl,
-				NrLeternjoftimit = stafi.NrLeternjoftimit,
-				Emri = stafi.Emri,
-				Mbiemri = stafi.Mbiemri,
-				Gjinia = stafi.Gjinia,
-				DataLindjes = stafi.DataLindjes,
-				NrLincences = stafi.NrLincences,
-				NrTel = stafi.NrTel,
-				Email = stafi.Email,
-				EmailZyrtar = stafi.EmailZyrtar,
-				RoletId = stafi.RoletId,
-				ShtetiId = stafi.ShtetiId,
-				Qyteti = stafi.Qyteti,
-				NacionalitetiId = stafi.NacionalitetiId,
-				LemiaId = stafi.LemiaId,
-				Password = stafi.Password,
-				ConfirmPassword = stafi.ConfirmPassword,
-				InsertedFrom = stafi.InsertedFrom,
-				InsertedDate = stafi.InsertedDate,
-				ModifiedDate = (DateTime)stafi.ModifiedDate,
-				ModifiedFrom = stafi.ModifiedFrom,
-				IsDeleted = stafi.IsDeleted
-			};
-
-			// Pass the EditStafiViewModel to the view
-			return View(stafiVM);
+			return View(stafi);
 		}
-
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-
-
-
 		public async Task<IActionResult> Edit(int id, EditStafiViewModel stafiVM)
 		{
 			if (id != stafiVM.Id)
@@ -191,16 +155,18 @@ namespace Pure_Life.Controllers
 				return NotFound();
 			}
 
-			var staff = _context.Stafi.Where(x => x.Id == id).FirstOrDefault();
+			var staff = await _context.Stafi.FindAsync(id);
 
-			// Detach the already tracked instance of Stafi
-			_context.Entry(staff).State = EntityState.Detached;
+			if (staff == null)
+			{
+				return NotFound();
+			}
 
 			var user = _currentUser.GetCurrentUserName();
 			var stafiUpdated = new Stafi()
 			{
 				Id = staff.Id,
-				PictureUrl = staff.PictureUrl,
+				PictureUrl = staff.PictureUrl ?? " " ,
 				PublicId = staff.PublicId,
 				NrLeternjoftimit = stafiVM.NrLeternjoftimit,
 				Emri = staff.Emri,
@@ -224,22 +190,42 @@ namespace Pure_Life.Controllers
 				ModifiedFrom = user,
 				IsDeleted = staff.IsDeleted,
 			};
+			staff.NrLeternjoftimit = stafiVM.NrLeternjoftimit;
+			staff.Mbiemri = stafiVM.Mbiemri;
+			staff.Gjinia = stafiVM.Gjinia;
+			staff.DataLindjes = stafiVM.DataLindjes;
+			staff.NrLincences = stafiVM.NrLincences;
+			staff.NrTel = stafiVM.NrTel;
+			staff.RoletId = stafiVM.RoletId;
+			staff.ShtetiId = stafiVM.ShtetiId;
+			staff.Qyteti = stafiVM.Qyteti;
+			staff.NacionalitetiId = stafiVM.NacionalitetiId;
+			staff.LemiaId = stafiVM.LemiaId;
+			staff.ModifiedDate = DateTime.Now;
+			staff.ModifiedFrom = user;
 
 			if (stafiVM.PictureUrl != null)
 			{
 				var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
-				stafiUpdated.PictureUrl = result.Url.ToString();
-				stafiUpdated.PublicId = result.PublicId;
+
+				if (staff.PublicId != null)
+				{
+					// delete the existing photo from Cloudinary
+					await _imageService.DeletePhotoAsync(staff.PublicId);
+				}
+
+				staff.PictureUrl = result.Url.ToString();
+				staff.PublicId = result.PublicId;
 			}
 
 			try
 			{
-				_context.Update(stafiUpdated);
+				_context.Update(staff);
 				await _context.SaveChangesAsync();
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!StafiExists(stafiUpdated.Id))
+				if (!StafiExists(staff.Id))
 				{
 					return NotFound();
 				}
@@ -252,6 +238,81 @@ namespace Pure_Life.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
+
+
+		/*	[HttpPost]
+			[ValidateAntiForgeryToken]
+
+
+
+			public async Task<IActionResult> Edit(int id, EditStafiViewModel stafiVM)
+			{
+				if (id != stafiVM.Id)
+				{
+					return NotFound();
+				}
+
+				var staff = _context.Stafi.Where(x => x.Id == id).FirstOrDefault();
+
+				// Detach the already tracked instance of Stafi
+				_context.Entry(staff).State = EntityState.Detached;
+
+				var user = _currentUser.GetCurrentUserName();
+				var stafiUpdated = new Stafi()
+				{
+					Id = staff.Id,
+					PictureUrl = staff.PictureUrl,
+					PublicId = staff.PublicId,
+					NrLeternjoftimit = stafiVM.NrLeternjoftimit,
+					Emri = staff.Emri,
+					Mbiemri = stafiVM.Mbiemri,
+					Gjinia = stafiVM.Gjinia,
+					DataLindjes = stafiVM.DataLindjes,
+					NrLincences = stafiVM.NrLincences,
+					NrTel = stafiVM.NrTel,
+					Email = staff.Email,
+					EmailZyrtar = staff.EmailZyrtar,
+					RoletId = stafiVM.RoletId,
+					ShtetiId = stafiVM.ShtetiId,
+					Qyteti = stafiVM.Qyteti,
+					NacionalitetiId = stafiVM.NacionalitetiId,
+					LemiaId = stafiVM.LemiaId,
+					Password = staff.Password,
+					ConfirmPassword = staff.ConfirmPassword,
+					InsertedFrom = staff.InsertedFrom,
+					InsertedDate = staff.InsertedDate,
+					ModifiedDate = DateTime.Now,
+					ModifiedFrom = user,
+					IsDeleted = staff.IsDeleted,
+				};
+
+				if (stafiVM.PictureUrl != null)
+				{
+					var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
+					stafiUpdated.PictureUrl = result.Url.ToString();
+					stafiUpdated.PublicId = result.PublicId;
+				}
+
+				try
+				{
+					_context.Update(stafiUpdated);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!StafiExists(stafiUpdated.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+
+				return RedirectToAction(nameof(Index));
+			}
+	*/
 
 
 

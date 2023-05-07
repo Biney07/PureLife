@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
+using Pure_Life.ViewModel.Rolet;
 
 namespace Pure_Life.Controllers
 {
     public class RoletController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public RoletController(ApplicationDbContext context)
+        private readonly ICurrentUser _currentUser;
+        public RoletController(ApplicationDbContext context,ICurrentUser currentUser)
         {
             _context = context;
+            _currentUser = currentUser;
         }
 
         // GET: Rolet
@@ -56,16 +59,24 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Emri")] Rolet rolet)
+        public async Task<IActionResult> Create(AddRoliViewModel rolet)
         {
-            ModelState.Remove("Stafi");
-            if (ModelState.IsValid)
+            
+            if (!ModelState.IsValid)
             {
-                _context.Add(rolet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+               return View(rolet);
             }
-            return View(rolet);
+            var user = _currentUser.GetCurrentUserName();
+            var roli = new Rolet()
+            {
+                Emri = rolet.Emri,
+                InsertedFrom = user,
+                InsertedDate = DateTime.Now
+            };
+			_context.Add(roli);
+			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Rolet/Edit/5
@@ -89,18 +100,22 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri")] Rolet rolet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,ModifiedDate,ModifiedFrom")] EditRoliViewModel rolet)
         {
             if (id != rolet.Id)
             {
                 return NotFound();
             }
-            ModelState.Remove("Stafi");
+            var user = _currentUser.GetCurrentUserName();
+            var roli = await _context.Rolet.FindAsync(id);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(rolet);
+                    roli.Emri=rolet.Emri;
+                    roli.ModifiedDate=DateTime.Now;
+                    roli.ModifiedFrom = user;
+                    _context.Update(roli);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -54,8 +54,9 @@
 					int row = 1;
 					foreach (var item in Model)
 					{
+						
 						<tr>
-							<td>1</td>
+							<td>@row</td>
 							<td>
 								<div class="symbol symbol-50 flex-shrink-0">
 									<img src=@item.PictureUrl alt="photo" style="width:100px;height:50px;transition:transform 0.2s ease-in-out;image-rendering: pixelated;" onmouseover="this.style.transform='scale(2.7)'" onmouseout="this.style.transform='scale(1)'">
@@ -100,11 +101,14 @@
 									<i class="la la-edit"></i>
 								</a>
 								<a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
-									<i class="la la-trash" style="color:white;"></i>
+									<i class="la la-trash"></i>
 								</a>
 							</td>
 						</tr>
+						row++;
 					}
+					
+
 				}
 
 			</tbody>
