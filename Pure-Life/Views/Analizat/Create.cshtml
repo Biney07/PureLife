@@ -1,0 +1,87 @@
+﻿@model Pure_Life.ViewModel.Analizat.AnalizaCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@{
+    var llojet = Model.Llojet;
+    var columnSize = (int)Math.Ceiling((double)llojet.Count / 5);
+}
+<form asp-action="Create" method="post">
+    <div class="form-horizontal">
+        <h2> Create Analiza</h2>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Emri" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Emri" class="form-control" />
+                <span asp-validation-for="Emri" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Cmimi" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Cmimi" class="form-control" />
+                <span asp-validation-for="Cmimi" class="text-danger"></span>
+            </div>
+        </div>
+
+
+  
+
+
+        <div class="form-group">
+            <label asp-for="SelectedLlojet" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input type="text" id="searchLlojet" class="form-control" placeholder="Search Llojet" />
+                <br />
+                <div class="row">
+                    @for (var i = 0; i < 5; i++)
+                    {
+                        <div class="col-md-4">
+                            @for (var j = i * columnSize; j < Math.Min((i + 1) * columnSize, llojet.Count); j++)
+                            {
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="SelectedLlojet" value="@llojet[j].Id" />
+                                        @llojet[j].Emri
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="SelectedLlojet" class="text-danger"></span>
+            </div>
+        </div>
+
+
+				<div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Create</button>
+                  <a asp-action="Index" asp-controller="Analizat" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#searchLlojet").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".checkbox").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}
