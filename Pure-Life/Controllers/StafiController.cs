@@ -132,23 +132,23 @@ namespace Pure_Life.Controllers
 			{
 				return NotFound();
 			}
-			ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
+            var stafi = await _context.Stafi.FindAsync(id);
+
+            if (stafi == null)
+            {
+                return NotFound();
+            }
+            ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
 			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
 			ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
 			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
 
-			var stafi = await _context.Stafi.FindAsync(id);
-
-			if (stafi == null)
-			{
-				return NotFound();
-			}
+		
 
 			// convert Stafi to EditStafiViewModel
 			var stafiVM = new EditStafiViewModel
 			{
 				Id = stafi.Id,
-				
 				PublicId = stafi.PublicId,
 				imagelink = stafi.PictureUrl,
 				NrLeternjoftimit = stafi.NrLeternjoftimit,
