@@ -8,75 +8,305 @@
 
 <div class="d-flex flex-column-fluid">
 	<!--begin::Container-->
-	<div class=" container ">
-		<!--begin::Card-->
-		<div class="card card-custom gutter-b">
-			<div class="card-body">
-				<div class="d-flex">
-					<!--begin::Pic-->
-					<div class="flex-shrink-0 mr-7">
-						<div class="symbol symbol-50 symbol-lg-120">
-							<img alt="Pic" src=@Model.PictureUrl />
-						</div>
-					</div>
-					<!--end::Pic-->
-					<!--begin: Info-->
-					<div class="flex-grow-1">
-						<!--begin::Title-->
-						<div class="d-flex align-items-center justify-content-between flex-wrap">
-							<!--begin::User-->
-							<div class="mr-3">
-								<div class="d-flex align-items-center mr-3">
-									<!--begin::Name-->
-									<a class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">
-										@Model.Emri @Model.Mbiemri
-									</a>
-									<!--end::Name-->
-									<span class="label label-light-success label-inline font-weight-bolder mr-1">@Model.Rolet.Emri</span>
 
 
+    <!--begin::Container-->
+    <div class=" container ">
+        <!--begin::Card-->
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="d-flex">
+                    <!--begin::Pic-->
+                    <div class="flex-shrink-0 mr-7">
+                        <div class="symbol symbol-50 symbol-lg-120">
+                            <img alt="Pic" src=@Model.PictureUrl />
+                        </div>
+                    </div>
+                    <!--end::Pic-->
+                    <!--begin: Info-->
+                    <div class="flex-grow-1">
+                        <!--begin::Title-->
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <!--begin::User-->
+                            <div class="mr-3">
+                                <div class="d-flex align-items-center mr-3">
+                                    <!--begin::Name-->
+                                    <a class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">
+                                       @Model.Emri @Model.Mbiemri
+                                    </a>
+                                    <!--end::Name-->
+                                    <span class="label label-light-success label-inline font-weight-bolder mr-1">@Model.Rolet.Emri</span>
+
+                                 
+                                </div>
+
+                                <!--begin::Contacts-->
+                                <div class="d-flex flex-wrap my-2">
+                                    <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                            <!--begin::Svg Icon | path:~/media/svg/icons/Communication/Mail-notification.svg-->
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path d="M21,12.0829584 C20.6747915,12.0283988 20.3407122,12 20,12 C16.6862915,12 14,14.6862915 14,18 C14,18.3407122 14.0283988,18.6747915 14.0829584,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12.0829584 Z M18.1444251,7.83964668 L12,11.1481833 L5.85557487,7.83964668 C5.4908718,7.6432681 5.03602525,7.77972206 4.83964668,8.14442513 C4.6432681,8.5091282 4.77972206,8.96397475 5.14442513,9.16035332 L11.6444251,12.6603533 C11.8664074,12.7798822 12.1335926,12.7798822 12.3555749,12.6603533 L18.8555749,9.16035332 C19.2202779,8.96397475 19.3567319,8.5091282 19.1603533,8.14442513 C18.9639747,7.77972206 18.5091282,7.6432681 18.1444251,7.83964668 Z" fill="#000000" />
+                                                    <circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5" />
+                                                </g>
+                                            </svg><!--end::Svg Icon-->
+                                        </span>                                @Model.EmailZyrtar
+                                    </a>
+                                    <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                            <!--begin::Svg Icon | path:~/media/svg/icons/General/Lock.svg-->
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <mask fill="white">
+                                                        <use xlink:href="#path-1" />
+                                                    </mask>
+                                                    <g />
+                                                    <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000" />
+                                                </g>
+                                            </svg><!--end::Svg Icon-->
+                                        </span>                                @Model.NrLincences
+                                    </a>
+                                    <a href="#" class="text-muted text-hover-primary font-weight-bold">
+                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                            <!--begin::Svg Icon | path:~/media/svg/icons/Map/Marker2.svg-->
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000" />
+                                                </g>
+                                            </svg><!--end::Svg Icon-->
+                                        </span>                                @Model.Qyteti
+                                    </a>
+                                </div>
+                            </div>
+                           
+                        </div>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           
+            <div class="col-xl-10">
+                <div class="card card-custom gutter-b">
+                    <div class="card-header card-header-tabs-line">
+                        <div class="card-toolbar">
+                            <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-bold nav-tabs-line-3x" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_1">
+                                        <span class="nav-icon">
+
+                                           <i class="fa-solid fa-user" style="color: #3b9de8;"></i>
+                                            
+                                        </span>
+                                        <span class="nav-text">
+                                            Personale
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item mr-3">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2">
+                                        <span class="nav-icon mr-2">
+                                            <span class="nav-icon">
+                                                <!--begin::Svg Icon | path:~/media/svg/icons/Communication/Chat-check.svg-->
+                                                <i class="fa-solid fa-address-book" style="color: #3b9de8;"></i>
+                                            </span>
+                                        </span>
+                                        <span class="nav-text">
+                                            Contact Details
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item mr-3">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_3">
+                                        <span class="nav-icon mr-2">
+                                            <span class="nav-icon">
+                                                <!--begin::Svg Icon | path:~/media/svg/icons/Communication/Chat-check.svg-->
+                                                <i class="fas fa-plus-square" style="color: #3b9de8;"></i>
+                                            </span>
+                                        </span>
+                                        <span class="nav-text">
+                                            Other
+                                        </span>
+                                    </a>
+                                </li>
+
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body px-0">
+                        <div class="tab-content pt-5">
+                            <!--begin::Tab Content-->
+                            <div class="tab-pane show active fade" id="kt_apps_contacts_view_tab_1" role="tabpanel">
+                                <form class="form">
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Emri</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Emri />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Mbiemri</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Mbiemri />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Numri Leternjoftimit</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.NrLeternjoftimit />
+                                          
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Data e lindjes</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.DataLindjes/>
+
+                                        </div>
+                                    </div>
+
+                             
+                          
+                                
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Gjinia</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group input-group-lg input-group-solid">
+                                               
+                                                @if (Model.Gjinia == "M")
+                                                {
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" value="Mashkull" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" value="Femer" placeholder="Phone" />
+
+                                                }
+
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Email Address</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group input-group-lg input-group-solid">
+                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                                <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Email"  />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Shteti</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group input-group-lg input-group-solid">
+                                                <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Shteti.Emri" />
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Qyteti</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group input-group-lg input-group-solid">
+                                                <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Qyteti" />
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Nacionaliteti</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group input-group-lg input-group-solid">
+                                                <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Nacionaliteti.Emri" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--end::Tab Content-->
+                            <!--begin::Tab Content-->
+                            <div class="tab-pane" id="kt_apps_contacts_view_tab_2" role="tabpanel">
+                                <form class="form">
+                                    
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Email zyrtar</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.EmailZyrtar />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Numri Licenses</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.NrLincences />
+                                        </div>
+                                    </div>
+                                    @if (Model.Lemia != null)
+                                    {
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label text-right">Specializimi</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Lemia.Emri />
+
+                                            </div>
+                                        </div>
+
+                                    }
+                               
+                                  
+
+                                    </form>
 								</div>
+                            <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
+                                <form class="form">
 
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Inserted From</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.InsertedFrom />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Inserted Date</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.InsertedDate />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Modified From</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.ModifiedFrom />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label text-right">Modified Date</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" value=@Model.ModifiedDate />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+
+                            </div>
 								<!--begin::Contacts-->
-								<div class="d-flex flex-wrap my-2">
-									<a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-										<span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-											<!--begin::Svg Icon | path:~/media/svg/icons/Communication/Mail-notification.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect x="0" y="0" width="24" height="24" />
-													<path d="M21,12.0829584 C20.6747915,12.0283988 20.3407122,12 20,12 C16.6862915,12 14,14.6862915 14,18 C14,18.3407122 14.0283988,18.6747915 14.0829584,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12.0829584 Z M18.1444251,7.83964668 L12,11.1481833 L5.85557487,7.83964668 C5.4908718,7.6432681 5.03602525,7.77972206 4.83964668,8.14442513 C4.6432681,8.5091282 4.77972206,8.96397475 5.14442513,9.16035332 L11.6444251,12.6603533 C11.8664074,12.7798822 12.1335926,12.7798822 12.3555749,12.6603533 L18.8555749,9.16035332 C19.2202779,8.96397475 19.3567319,8.5091282 19.1603533,8.14442513 C18.9639747,7.77972206 18.5091282,7.6432681 18.1444251,7.83964668 Z" fill="#000000" />
-													<circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5" />
-												</g>
-											</svg><!--end::Svg Icon-->
-										</span>                                @Model.EmailZyrtar
-									</a>
-									<a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-										<span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-											<!--begin::Svg Icon | path:~/media/svg/icons/General/Lock.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<mask fill="white">
-														<use xlink:href="#path-1" />
-													</mask>
-													<g />
-													<path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000" />
-												</g>
-											</svg><!--end::Svg Icon-->
-										</span>                                @Model.NrLincences
-									</a>
-									<a href="#" class="text-muted text-hover-primary font-weight-bold">
-										<span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-											<!--begin::Svg Icon | path:~/media/svg/icons/Map/Marker2.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect x="0" y="0" width="24" height="24" />
-													<path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000" />
-												</g>
-											</svg><!--end::Svg Icon-->
-										</span>                                @Model.Qyteti
-									</a>
-								</div>
+							
 							</div>
 
 						</div>
@@ -85,188 +315,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-
-			<div class="col-xl-10">
-				<div class="card card-custom gutter-b">
-					<div class="card-header card-header-tabs-line">
-						<div class="card-toolbar">
-							<ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-bold nav-tabs-line-3x" role="tablist">
-								<li class="nav-item">
-									<a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_1">
-										<span class="nav-icon">
-
-											<i class="fa-solid fa-user" style="color: #3b9de8;"></i>
-
-										</span>
-										<span class="nav-text">
-											Personale
-										</span>
-									</a>
-								</li>
-								<li class="nav-item mr-3">
-									<a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2">
-										<span class="nav-icon mr-2">
-											<span class="nav-icon">
-												<!--begin::Svg Icon | path:~/media/svg/icons/Communication/Chat-check.svg-->
-												<i class="fa-solid fa-address-book" style="color: #3b9de8;"></i>
-											</span>
-										</span>
-										<span class="nav-text">
-											Contact Details
-										</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<!--end::Header-->
-					<!--begin::Body-->
-					<div class="card-body px-0">
-						<div class="tab-content pt-5">
-							<!--begin::Tab Content-->
-							<div class="tab-pane fade show active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
-								<form class="form">
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Emri</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Emri />
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Mbiemri</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Mbiemri />
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Numri Leternjoftimit</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.NrLeternjoftimit />
-
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Data e lindjes</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.DataLindjes />
-
-										</div>
-									</div>
-
-
-
-
-
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Gjinia</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-
-												@if (Model.Gjinia == "M")
-												{
-													<input type="text" class="form-control form-control-lg form-control-solid" value="Mashkull" />
-												}
-												else
-												{
-													<input type="text" class="form-control form-control-lg form-control-solid" value="Femer" placeholder="Phone" />
-
-												}
-
-											</div>
-
-										</div>
-									</div>
-
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Email Address</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-												<input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Email" />
-											</div>
-										</div>
-									</div>
-
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Shteti</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-												<input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Shteti.Emri" />
-
-											</div>
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Qyteti</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-												<input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Qyteti" />
-
-											</div>
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Nacionaliteti</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-												<input type="text" class="form-control form-control-lg form-control-solid" value="@Model.Nacionaliteti.Emri" />
-
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<!--end::Tab Content-->
-							<!--begin::Tab Content-->
-							<div class="tab-pane" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-								<form class="form">
-
-
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Email zyrtar</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.EmailZyrtar />
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Numri Licenses</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.NrLincences />
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Specializimi</label>
-										<div class="col-lg-9 col-xl-6">
-											<input class="form-control form-control-lg form-control-solid" type="text" value=@Model.Lemia.Emri />
-
-										</div>
-									</div>
-
-
-
-
-									<div class="form-group row">
-										<label class="col-xl-3 col-lg-3 col-form-label text-right">Roli</label>
-										<div class="col-lg-9 col-xl-6">
-											<div class="input-group input-group-lg input-group-solid">
-
-												<input type="text" class="form-control form-control-lg form-control-solid" value=@Model.Rolet.Emri />
-											</div>
-
-										</div>
-									</div>
-
-
-								</form>
-							</div>
-
-
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 	</div>
+
 </div>

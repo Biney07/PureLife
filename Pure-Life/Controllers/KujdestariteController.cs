@@ -69,7 +69,7 @@ namespace Pure_Life.Controllers
         // GET: Kujdestarite/Create
         public IActionResult Create()
         {
-			ViewData["StafiId"] = new SelectList(_context.Stafi.ToList(), "Id", "EmailZyrtar");
+			ViewData["StafiId"] = new SelectList(_context.Stafi.Where(s=>!s.IsDeleted).ToList(), "Id", "EmailZyrtar");
 
 			return View();
         }

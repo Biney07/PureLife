@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pure_Life.Data;
 
@@ -11,9 +12,10 @@ using Pure_Life.Data;
 namespace Pure_Life.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230507152731_RoletAdd")]
+    partial class RoletAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,13 +418,11 @@ namespace Pure_Life.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LemiaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedFrom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pershkrimi")
@@ -430,8 +430,6 @@ namespace Pure_Life.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LemiaId");
 
                     b.ToTable("Sherbimet");
                 });
@@ -537,6 +535,7 @@ namespace Pure_Life.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PictureUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublicId")
@@ -627,15 +626,6 @@ namespace Pure_Life.Migrations
                     b.Navigation("Stafi");
                 });
 
-            modelBuilder.Entity("Pure_Life.Models.Sherbimet", b =>
-                {
-                    b.HasOne("Pure_Life.Models.Lemia", null)
-                        .WithMany("Sherbimet")
-                        .HasForeignKey("LemiaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Pure_Life.Models.Stafi", b =>
                 {
                     b.HasOne("Pure_Life.Models.Lemia", "Lemia")
@@ -667,8 +657,6 @@ namespace Pure_Life.Migrations
 
             modelBuilder.Entity("Pure_Life.Models.Lemia", b =>
                 {
-                    b.Navigation("Sherbimet");
-
                     b.Navigation("Stafi");
                 });
 

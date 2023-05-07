@@ -13,30 +13,61 @@ namespace Pure_Life.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public async Task<IActionResult> Index()
-        {
-
-           
-            // Get a list of users in the role
-            var usersWithPermission = _userManager.GetUsersInRoleAsync("ADMIN").Result;
-
-            // Then get a list of the ids of these users
-            var idsWithPermission = usersWithPermission.Select(u => u.Id);
-
-            // Now get the users in our database with the same ids
-            var users = _context.Users.Where(u => idsWithPermission.Contains(u.Id)).ToList();
-
-            return View(users);
+        /*     public async Task<IActionResult> Index()
+             {
 
 
-        }
-        public AdminController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
+                 // Get a list of users in the role
+                 var usersWithPermission = _userManager.GetUsersInRoleAsync("ADMIN").Result;
+
+                 // Then get a list of the ids of these users
+                 var idsWithPermission = usersWithPermission.Select(u => u.Id);
+
+                 // Now get the users in our database with the same ids
+                 var users = _context.Users.Where(u => idsWithPermission.Contains(u.Id)).ToList();
+
+                 return View(users);
+
+
+             }*/
+
+
+        public AdminController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
 
+        }
+        public async Task<IActionResult> Index()
+        {
+			var stafiEmails = await _context.Stafi
+				.Where(s => !s.IsDeleted)
+				.Select(s => s.Email)
+				.ToListAsync();
+
+            var users = await _userManager.Users
+                .Where(u => stafiEmails.Contains(u.Email))
+                .ToListAsync();
+            /*	var users = await _userManager.Users
+                    .Where(u => u.role stafiEmails.Contains(u.Email))
+                    .ToListAsync();*/
+            var userRoles = new List<UsersRoles>();
+
+			foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles.Add(new UsersRoles()
+                {
+                    User = user,
+                    Roles = roles
+                });
+            }
+
+            return View(userRoles.OrderBy(u=>u.User.Email));
         }
         public IActionResult Create()
         {

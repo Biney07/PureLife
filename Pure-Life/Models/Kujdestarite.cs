@@ -8,10 +8,12 @@ namespace Pure_Life.Models
         public int Id { get; set; }
 
 
-
-        public DateTime Data { get; set; }
-        public int Kati { get; set; }
-        public string Reparti { get; set; }
+		[Required]
+		public DateTime Data { get; set; }
+		[Required]
+		public int Kati { get; set; }
+		[Required]
+		public string Reparti { get; set; }
 
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }

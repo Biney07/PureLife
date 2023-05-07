@@ -132,7 +132,7 @@ namespace Pure_Life.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Festa,DitaEPushimit")] EditPushimiViewModel ditetEPushimeve)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Emri,Festa,DitaEPushimit")] EditPushimiViewModel ditetEPushimeve)
         {
             if (id != ditetEPushimeve.Id)
             {

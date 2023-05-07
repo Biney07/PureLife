@@ -10,8 +10,10 @@ namespace Pure_Life.Models
     {
         public int Id { get; set; }
         public string? NrLeternjoftimit { get; set; }
+        [Required]
         public string Emri { get; set; }
-        public string Mbiemri { get; set; }
+		[Required]  
+		public string Mbiemri { get; set; }
         public string? Gjinia { get; set; }
         public DateTime? DataLindjes { get; set; }
         public string? NrLincences { get; set; }
@@ -29,7 +31,8 @@ namespace Pure_Life.Models
         public int? LemiaId { get; set; }
         [ForeignKey("LemiaId")]
 
-		//public string? Imagelink { get; set; }
+		[Required]
+
 		public string Email { get; set; }
         public string EmailZyrtar { get; set; }
 		[Required]
