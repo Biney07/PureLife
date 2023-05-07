@@ -15,6 +15,8 @@ export const removeUser = (state) => {
 }
 
 export const updateUser = (state, userData) => {
+    // eslint-disable-next-line no-console
+    console.log(userData)
     state.user.data = userData;
     auth.removeUser()
     auth.storeUser(JSON.stringify(userData));

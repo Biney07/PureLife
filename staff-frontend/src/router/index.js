@@ -8,7 +8,7 @@ import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/Profile'
 import Tables from '@/components/Tables'
 import Maps from '@/components/Maps'
-// import BadGateway from '@/components/BadGateway'
+import BadGateway from '@/components/BadGateway'
 import Login from '../views/auth/Login'
 
 Vue.use(VueRouter)
@@ -51,19 +51,19 @@ const router = new VueRouter({
       props: {page: 6},
       meta: { requiresAuth: false }
     },
-    // {
-    //   path: '/404',
-    //   name: 'BadGateway',
-    //   component: BadGateway,
-    //   props: {page: 5},
-    //   meta: { requiresAuth: false }
-    // },
-    // {
-    //   path: '*',
-    //   redirect: '/404',
-    //   props: {page: 5},
-    //   meta: { requiresAuth: false }
-    // },
+    {
+      path: '/404',
+      name: 'BadGateway',
+      component: BadGateway,
+      props: {page: 5},
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '*',
+      redirect: '/404',
+      props: {page: 5},
+      meta: { requiresAuth: false }
+    },
   ]
 })
 

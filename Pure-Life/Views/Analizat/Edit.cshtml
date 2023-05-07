@@ -1,0 +1,67 @@
+﻿@model Pure_Life.ViewModel.Analizat.AnalizaUpdateViewModel
+@{
+    var llojet = Model.Llojet;
+    var columnSize = (int)Math.Ceiling((double)llojet.Count / 5);
+}
+<h2>Edit Analiza</h2>
+
+<form asp-action="Edit" method="post" class="form-horizontal" role="form">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Emri" class="control-label col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Emri" class="form-control" />
+            <span asp-validation-for="Emri" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cmimi" class="control-label col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Cmimi" class="form-control" />
+            <span asp-validation-for="Cmimi" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Data" class="control-label col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Data" class="form-control" />
+            <span asp-validation-for="Data" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedLlojet" class="control-label col-md-2"></label>
+        <div class="col-md-10">
+            <input type="text" id="searchLlojet" class="form-control" placeholder="Search Llojet" />
+            <br />
+            <div class="row">
+                @for (var i = 0; i < 5; i++)
+                {
+                    <div class="col-md-4">
+                        @foreach (var lloja in Model.Llojet.Skip(i * columnSize).Take(columnSize))
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="SelectedLlojet" value="@lloja.Id" @(Model.SelectedLlojet.Contains(lloja.Id) ? "checked" : "") />
+                                    @lloja.Emri
+                                </label>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <span asp-validation-for="SelectedLlojet" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" asp-controller="Analizat" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</form>

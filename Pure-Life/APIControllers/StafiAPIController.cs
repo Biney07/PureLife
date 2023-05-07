@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.ViewModel;
+using Pure_Life.ViewModel.Stafi;
 using Pure_Life.ViewModels;
 
 namespace Pure_Life.APIControllers
@@ -58,18 +60,41 @@ namespace Pure_Life.APIControllers
         // PUT: api/StafiAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStafi(int id, Stafi stafi)
+        public async Task<IActionResult> PutStafi(int id, [FromBody] EditStafiApiViewModel request)
         {
-            if (id != stafi.Id)
+            var stafi = await _context.Stafi.FindAsync(id);
+            if (stafi == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
+            // Update the specific fields
+            stafi.Emri = request.Emri;
+            stafi.Mbiemri = request.Mbiemri;
+            stafi.NrTel = request.NrTel;
+            stafi.Email = request.Email;
+
+            // Add the other fields that need to be updated
+            stafi.NrLeternjoftimit = request.NrLeternjoftimit;
+            stafi.Gjinia = request.Gjinia;
+            stafi.DataLindjes = request.DataLindjes;
+            stafi.NrLincences = request.NrLincences;
+            stafi.PictureUrl = stafi.PictureUrl;
+            stafi.ShtetiId = request.ShtetiId;
+            stafi.Qyteti = request.Qyteti;
+            stafi.NacionalitetiId = request.NacionalitetiId;
+            stafi.ModifiedDate = request.ModifiedDate;
+            stafi.ModifiedFrom = request.ModifiedFrom;
 
             _context.Entry(stafi).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+
+                // Retrieve the updated user from the database
+                var updatedStafi = await _context.Stafi.FindAsync(id);
+                return Ok(updatedStafi); // Return the updated user in the response
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,9 +107,9 @@ namespace Pure_Life.APIControllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
+
+
 
         // POST: api/StafiAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -115,7 +140,7 @@ namespace Pure_Life.APIControllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<Stafi>> GetStafiByEmailAndPassword([FromBody] LoginViewModel request)
+        public async Task<ActionResult<Object>> GetStafiByEmailAndPassword([FromBody] LoginViewModel request)
         {
             if (string.IsNullOrEmpty(request.EmailAddress) || string.IsNullOrEmpty(request.Password))
             {
@@ -134,9 +159,31 @@ namespace Pure_Life.APIControllers
                 return NotFound("Incorrect password.");
             }
 
-            // Return the found user object
-            return user;
+            // Create a new object with only the properties we want to return
+            var userData = new
+            {
+                Id = user.Id,
+                NrLeternjoftimit = user.NrLeternjoftimit,
+                Emri = user.Emri,
+                Mbiemri = user.Mbiemri,
+                Gjinia = user.Gjinia,
+                DataLindjes = user.DataLindjes,
+                NrLincences = user.NrLincences,
+                NrTel = user.NrTel,
+                PictureUrl = user.PictureUrl,
+                RoletId = user.RoletId,
+                ShtetiId = user.ShtetiId,
+                Qyteti = user.Qyteti,
+                NacionalitetiId = user.NacionalitetiId,
+                LemiaId = user.LemiaId,
+                Email = user.Email,
+                EmailZyrtar = user.EmailZyrtar,
+            };
+
+            // Return the new object
+            return userData;
         }
+
 
 
 

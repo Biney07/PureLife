@@ -1,6 +1,6 @@
 const routes = [
     {
-      path: '/dashboard',
+      path: '/',
       name: 'Dashboard',
       icon: 'chart-pie',
       authRequired: false,

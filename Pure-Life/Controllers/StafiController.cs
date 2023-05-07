@@ -131,45 +131,18 @@ namespace Pure_Life.Controllers
 			{
 				return NotFound();
 			}
-			ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
+            var stafi = await _context.Stafi.FindAsync(id);
+
+            if (stafi == null)
+            {
+                return NotFound();
+            }
+            ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
 			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
 			ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
 			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
 
-			var stafi = await _context.Stafi.FindAsync(id);
-			/* stafiVM = new EditStafiViewModel
-			{
-				Id = stafi.Id,
 
-				PublicId = stafi.PublicId,
-				Imagelink = stafi.PictureUrl,
-				NrLeternjoftimit = stafi.NrLeternjoftimit,
-				Emri = stafi.Emri,
-				Mbiemri = stafi.Mbiemri,
-				Gjinia = stafi.Gjinia,
-				DataLindjes = stafi.DataLindjes,
-				NrLincences = stafi.NrLincences,
-				NrTel = stafi.NrTel,
-				Email = stafi.Email,
-				EmailZyrtar = stafi.EmailZyrtar,
-				RoletId = stafi.RoletId,
-				ShtetiId = stafi.ShtetiId,
-				Qyteti = stafi.Qyteti,
-				NacionalitetiId = stafi.NacionalitetiId,
-				LemiaId = stafi.LemiaId,
-				Password = stafi.Password,
-				ConfirmPassword = stafi.ConfirmPassword,
-				InsertedFrom = stafi.InsertedFrom,
-				InsertedDate = stafi.InsertedDate,
-				ModifiedDate = (DateTime)stafi.ModifiedDate,
-				ModifiedFrom = stafi.ModifiedFrom,
-				IsDeleted = stafi.IsDeleted
-			};*/
-
-			if (stafi == null)
-			{
-				return NotFound();
-			}
 			return View(stafi);
 		}
 

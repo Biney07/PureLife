@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .login-container {
   height: 100vh !important;
   background: white !important;

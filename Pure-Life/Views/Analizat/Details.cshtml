@@ -1,0 +1,58 @@
+﻿@model Pure_Life.ViewModel.Analizat.AnalizaDetailsViewModel
+
+
+
+
+
+<div class="card card-custom">
+  
+
+    <h2>@Model.Analiza.Emri</h2>
+    <hr />
+    <dl class="row">
+    
+        <dt class="col-sm-2">
+            <label asp-for="Analiza.Cmimi"></label>
+        </dt>
+        <dd class="col-sm-10">
+            <h5>@Model.Analiza.Cmimi Euro</h5>
+        </dd>
+        <dt class="col-sm-2">
+            <label asp-for="Analiza.Data"></label>
+        </dt>
+        <dd class="col-sm-10">
+            <h5>@Model.Analiza.Data.ToString("dd/MM/yyyy")</h5>
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+  
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Emri
+                </th>
+                <th>
+                    Vlera Referente
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lloji in Model.Llojet)
+            {
+                <tr>
+                    <td>
+                        <span>@lloji.Emri</span>
+                    </td>
+                    <td>
+                        <span>@lloji.VleratReferente</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Index" asp-controller="Analizat" class="btn btn-secondary">Back to List</a>
+</div>
