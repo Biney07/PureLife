@@ -22,7 +22,7 @@ namespace Pure_Life.Services
 			var newStaf = new ApplicationUser()
 			{
 				FullName = stafi.Emri,
-				Email = stafi.Email,
+				Email = stafi.EmailZyrtar,
 				UserName = stafi.Email
 
 
