@@ -44,20 +44,21 @@ namespace Pure_Life.Controllers
         }
         public async Task<IActionResult> Index()
         {
-			var stafiEmails = await _context.Stafi
-				.Where(s => !s.IsDeleted)
-				.Select(s => s.Email)
-				.ToListAsync();
-
-            var users = await _userManager.Users
-                .Where(u => stafiEmails.Contains(u.Email))
+            var stafiEmails = await _context.Stafi
+                .Where(s => !s.IsDeleted)
+                .Select(s => s.Email)
                 .ToListAsync();
-            /*	var users = await _userManager.Users
-                    .Where(u => u.role stafiEmails.Contains(u.Email))
-                    .ToListAsync();*/
+            var usersWithPermission = await _userManager.GetUsersInRoleAsync("ADMIN");
+			var notstafusers = await _userManager.GetUsersInRoleAsync("USER");
+            
+
+			var users = await _userManager.Users
+                .Where(u => stafiEmails.Contains(u.Email) || usersWithPermission.Select(x => x.Email).Contains(u.Email) || notstafusers.Select(x=>x.Email).Contains(u.Email))
+                .ToListAsync();
+         
             var userRoles = new List<UsersRoles>();
 
-			foreach (var user in users)
+            foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 userRoles.Add(new UsersRoles()
@@ -67,8 +68,9 @@ namespace Pure_Life.Controllers
                 });
             }
 
-            return View(userRoles.OrderBy(u=>u.User.Email));
+            return View(userRoles.OrderBy(u => u.User.Email));
         }
+
         public IActionResult Create()
         {
             return View();

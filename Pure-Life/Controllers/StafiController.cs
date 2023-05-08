@@ -361,7 +361,6 @@ namespace Pure_Life.Controllers
             }
 
 			stafi.IsDeleted= true;
-            
 			await _context.SaveChangesAsync();
 			var user = await _userManager.FindByEmailAsync(stafi.Email);
 			if (user == null)
@@ -371,6 +370,12 @@ namespace Pure_Life.Controllers
 			}
 			else
 			{
+				var userRoles = await _userManager.GetRolesAsync(user);
+				foreach (var role in userRoles)
+				{
+					await _userManager.RemoveFromRoleAsync(user, role);
+				}
+
 				var result = await _userManager.DeleteAsync(user);
 				if (result.Succeeded)
 				{

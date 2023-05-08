@@ -19,11 +19,14 @@
 </div>
 
 <table class="table">
-    <tr>
-        <th>@Html.DisplayNameFor(model => model.Emri)</th>
-        <th>@Html.DisplayNameFor(model => model.VleratReferente)</th>
-        <th>Actions</th>
-    </tr>
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Emri)</th>
+            <th>@Html.DisplayNameFor(model => model.VleratReferente)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
 
     @foreach (var item in Model)
     {
@@ -35,40 +38,19 @@
                     <i class="la la-edit"></i>
                 </a>
                 <a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
-                    <i class="la la-trash" style="color:white;"></i>
+                    <i class="la la-trash"></i>
                 </a>
-                        <a href="#" class="btn btn-sm btn-icon delete-link" data-id="@item.Id" title="Delete">
-                        <i class="la la-trash" style="color:red;"></i>
-                    </a>
-                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:none;" id="delete-form-@item.Id">
+        @*        <form asp-action="Delete" asp-route-id="@item.Id" method="post"  id="delete-form-@item.Id">
                         @Html.AntiForgeryToken()
                     </form>
+                 *@
             </td>
         </tr>
     }
 </table>
 
-<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="delete-modal-label">Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this record?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="delete-cancel-button">Cancel</button>
-                <button type="button" class="btn btn-primary" id="delete-confirm-button">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-@section Scripts {
+
+@*@section Scripts {
     <script>
         $(function () {
             var deleteFormId;
@@ -88,4 +70,16 @@
         });
 
     </script>
+}*@
+
+@Html.Partial("Delete")
+@section Scripts {
+          <script>
+            $(function() {
+              $('.delete-button').click(function() {
+                var id = $(this).data('id');
+                $('#delete-form').attr('action', '/Nacionaliteti/Delete/' + id);
+              });
+            });
+          </script>
 }
