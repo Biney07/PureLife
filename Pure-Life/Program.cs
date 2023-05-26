@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+builder.Services.AddHttpClient();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllersWithViews();
@@ -38,6 +38,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IADProductService, ADProductService>();
+builder.Services.AddScoped<IBotAPIService, BotAPIService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
@@ -78,7 +80,7 @@ app.MapControllerRoute(
     //pattern: "{controller=Home}/{action=Index}/{id?}");
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
+//AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
 
 
 app.Run();
