@@ -7,6 +7,7 @@ import router from './router'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import store from './store';
 import Vuex from 'vuex'
+import VCalendar from 'v-calendar';
 
 Vue.use(Vuex)
 
@@ -15,6 +16,8 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places'
   }
 })
+
+Vue.use(VCalendar);
 
 Vue.config.productionTip = false
 

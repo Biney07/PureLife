@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "dayjs": "^1.11.7",
     "mdbvue": "6.5.0",
+    "v-calendar": "^2.4.1",
     "vue": "^2.6.11",
     "vue2-google-maps": "^0.10.7"
   },

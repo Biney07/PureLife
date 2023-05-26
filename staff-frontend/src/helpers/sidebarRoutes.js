@@ -12,6 +12,12 @@ const routes = [
       authRequired: false,
     },
     {
+      path: '/shifts',
+      name: 'Night Shifts',
+      icon: 'clock',
+      authRequired: false,
+    },
+    {
       path: '/tables',
       name: 'Tables',
       icon: 'table',

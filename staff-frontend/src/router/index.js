@@ -10,6 +10,7 @@ import Tables from '@/components/Tables'
 import Maps from '@/components/Maps'
 import BadGateway from '@/components/BadGateway'
 import Login from '../views/auth/Login'
+import Kujdestarite from '../views/Kujdestarite'
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,13 @@ const router = new VueRouter({
       redirect: '/404',
       props: {page: 5},
       meta: { requiresAuth: false }
+    },
+    {
+      path: '/shifts',
+      name: 'Night Shifts',
+      component: Kujdestarite,
+      props: {page: 7},
+      meta: { requiresAuth: true }
     },
   ]
 })
