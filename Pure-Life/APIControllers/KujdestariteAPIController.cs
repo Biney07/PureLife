@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Models;
 using System.Web.Helpers;
+using Pure_Life.ViewModel.Kujdestarite;
 
 namespace Pure_Life.APIControllers
 {
@@ -23,12 +24,26 @@ namespace Pure_Life.APIControllers
 		[HttpGet]
 		public async Task<IActionResult> GetKujdestarite()
 		{
-			var kujdestarite = await _context.Kujdestarite.ToListAsync();
+			var kujdestarite = await _context.Kujdestarite
+				.Include(s=>s.Stafi)
+				.Where(x=>!x.IsDeleted && x.Data.Date>=DateTime.Now.Date)
+				.ToListAsync();
+			
 			if (_context.Kujdestarite == null)
 			{
 				return BadRequest("test error");
 			}
-			return Ok(kujdestarite);
+			
+			var result = kujdestarite.Select(x => new GetKujdestariteAPIViewModel
+			{
+				Id = x.Id,
+				Data = x.Data,
+				Kati = x.Kati,
+				Reparti = x.Reparti,
+				StafiEmriMbiemri = $"{x.Stafi.Emri} {x.Stafi.Mbiemri}",
+				StafiId = x.StafiId,
+			});
+			return Ok(result);
 		}
 
 

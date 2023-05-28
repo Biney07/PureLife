@@ -12,55 +12,55 @@ namespace Pure_Life.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoletController : ControllerBase
+    public class LemiaAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public RoletController(ApplicationDbContext context)
+        public LemiaAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Rolet
+        // GET: api/Lemia
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rolet>>> GetRolet()
+        public async Task<ActionResult<IEnumerable<Lemia>>> GetLemia()
         {
-          if (_context.Rolet == null)
+          if (_context.Lemia == null)
           {
               return NotFound();
           }
-            return await _context.Rolet.ToListAsync();
+            return await _context.Lemia.ToListAsync();
         }
 
-        // GET: api/Rolet/5
+        // GET: api/Lemia/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rolet>> GetRolet(int id)
+        public async Task<ActionResult<Lemia>> GetLemia(int id)
         {
-          if (_context.Rolet == null)
+          if (_context.Lemia == null)
           {
               return NotFound();
           }
-            var rolet = await _context.Rolet.FindAsync(id);
+            var lemia = await _context.Lemia.FindAsync(id);
 
-            if (rolet == null)
+            if (lemia == null)
             {
                 return NotFound();
             }
 
-            return rolet;
+            return lemia;
         }
 
-        // PUT: api/Rolet/5
+        // PUT: api/Lemia/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRolet(int id, Rolet rolet)
+        public async Task<IActionResult> PutLemia(int id, Lemia lemia)
         {
-            if (id != rolet.Id)
+            if (id != lemia.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(rolet).State = EntityState.Modified;
+            _context.Entry(lemia).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace Pure_Life.APIControllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoletExists(id))
+                if (!LemiaExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace Pure_Life.APIControllers
             return NoContent();
         }
 
-        // POST: api/Rolet
+        // POST: api/Lemia
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Rolet>> PostRolet(Rolet rolet)
+        public async Task<ActionResult<Lemia>> PostLemia(Lemia lemia)
         {
-          if (_context.Rolet == null)
+          if (_context.Lemia == null)
           {
-              return Problem("Entity set 'ApplicationDbContext.Rolet'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Lemia'  is null.");
           }
-            _context.Rolet.Add(rolet);
+            _context.Lemia.Add(lemia);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRolet", new { id = rolet.Id }, rolet);
+            return CreatedAtAction("GetLemia", new { id = lemia.Id }, lemia);
         }
 
-        // DELETE: api/Rolet/5
+        // DELETE: api/Lemia/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRolet(int id)
+        public async Task<IActionResult> DeleteLemia(int id)
         {
-            if (_context.Rolet == null)
+            if (_context.Lemia == null)
             {
                 return NotFound();
             }
-            var rolet = await _context.Rolet.FindAsync(id);
-            if (rolet == null)
+            var lemia = await _context.Lemia.FindAsync(id);
+            if (lemia == null)
             {
                 return NotFound();
             }
 
-            _context.Rolet.Remove(rolet);
+            _context.Lemia.Remove(lemia);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool RoletExists(int id)
+        private bool LemiaExists(int id)
         {
-            return (_context.Rolet?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Lemia?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
