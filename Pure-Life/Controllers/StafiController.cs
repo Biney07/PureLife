@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
+using Pure_Life.ViewModel.Email;
 using Pure_Life.ViewModel.Stafi;
 
 namespace Pure_Life.Controllers
@@ -22,8 +23,8 @@ namespace Pure_Life.Controllers
         private readonly IAccountService _accountService;
         private readonly ICurrentUser _currentUser;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager)
+		private readonly EmailService _emailService;
+        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager, EmailService emailService)
         {
             _context = context;
             _imageService = imageService;
@@ -31,6 +32,7 @@ namespace Pure_Life.Controllers
             _accountService = accountService;
             _currentUser = currentUser;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         // GET: Stafi
@@ -102,6 +104,23 @@ namespace Pure_Life.Controllers
               stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + "@purelife.net";
             }
             var user = _currentUser.GetCurrentUserName();
+
+            if (string.IsNullOrEmpty(viewModel.Password))
+            {
+                // Generate random password based on user's name and four random numbers + special character
+                var passwordBase = $"{viewModel.Emri.ToLower()}{viewModel.Mbiemri.ToLower().Replace(" ", "")}";
+                var random = new Random();
+                var randomNumbers = random.Next(1000, 10000).ToString();
+                var specialCharacters = new[] { "@", "!", "?" };
+                var specialCharacter = specialCharacters[random.Next(specialCharacters.Length)];
+                stafi.Password = passwordBase + randomNumbers + specialCharacter;
+            }
+            else
+            {
+                stafi.Password = viewModel.Password;
+            }
+
+
             if (viewModel.PictureUrl != null)
             {
                 var result = await _imageService.AddPhotoAsync(viewModel.PictureUrl);
@@ -112,16 +131,23 @@ namespace Pure_Life.Controllers
                 stafi.IsDeleted= false;
 
             }
-            
+
             if (ModelState.IsValid)
             {
                 await _accountService.RegistersStaf(stafi);
                 _context.Add(stafi);
                 await _context.SaveChangesAsync();
+
+                // Send email with credentials
+                var email = new EmailViewModel
+                {
+                    RecipentEmail = stafi.Email,
+                    Subject = "Credentials for PureLife Account",
+                    Body = $"Pershendetje {viewModel.Emri},\n\nYour PureLife account credentials are as follows:\n\nEmail: {stafi.EmailZyrtar}\nPassword: {stafi.Password}\n\nPlease keep these credentials secure and do not share them with anyone.\n\nBest regards,\nThe PureLife Team"
+                };
+
+                await _emailService.SendEmailAsync(email);
             }
-
-
-
 
             return RedirectToAction("Index");
         }
