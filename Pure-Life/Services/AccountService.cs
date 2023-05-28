@@ -30,7 +30,7 @@ namespace Pure_Life.Services
 			var newUserResponse = await _userManager.CreateAsync(newStaf, stafi.Password);
 
 			if (newUserResponse.Succeeded)
-				await _userManager.AddToRoleAsync(newStaf, UserRoles.User);
+			await _userManager.AddToRoleAsync(newStaf, UserRoles.User);
 			await _context.SaveChangesAsync();
 		}
 	}
