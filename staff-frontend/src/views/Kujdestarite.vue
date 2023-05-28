@@ -14,7 +14,7 @@
     >
 
       <template v-slot:day-content="{ day, attributes }">
-        <div>
+        <div @click="showDetails(day)">
           <span>{{ day.day }}</span>
           <div
             v-for="attr in attributes"
@@ -28,20 +28,52 @@
              <p
               class="staff-name"
             >
-              Name: {{ attr.customData.staffName }}
+              Emri: {{ attr.customData.staffName }}
             </p>
            
           </div>
         </div>
       </template>
     </v-calendar>
+    <Modal
+      v-if="showModal && modalData.attributes.length"
+      @close="closeModal"
+    >
+      <template v-slot:header>
+        Data: {{modalData.ariaLabel}}
+      </template>
+
+      <template v-if="modalData.attributes" v-slot:body>
+        <div
+          v-for="attr in modalData.attributes"
+          :key="attr.id"
+          class="mb-4"
+        >
+          <h3
+            class=""
+          >
+            Reparti: {{ attr.customData.reparti }}
+          </h3>
+            <p
+            class="staff-name"
+          >
+            Emri: {{ attr.customData.staffName }}
+          </p>
+          
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { getAllShifts } from "../staff-sdk/kujdestarite"
 import { mapGetters } from 'vuex'
+import Modal from '@/components/Modal.vue';
 export default {
+  components: {
+    Modal,
+  },
   data() {
     // const month = new Date().getMonth();
     // const year = new Date().getFullYear();
@@ -53,11 +85,12 @@ export default {
         weekdays: 'WWW',
       },
       attributes: [],
+      showModal: false,
+      modalData: null,
     };
   },
   mounted() {
     this.fetchAllShifts();
-    this.fetchStaff();
   },
   computed: {
     ...mapGetters({
@@ -72,7 +105,7 @@ export default {
             // eslint-disable-next-line no-unused-vars
             const [year, month, date] = dateString.split('-');
             const reparti = item.reparti;
-            const stafi = item.stafi;
+            const stafi = item.stafiEmriMbiemri;
             return {
                 customData: {
                     staffId: item.stafiId,
@@ -85,7 +118,16 @@ export default {
         this.attributes.push(...newData);
         // eslint-disable-next-line no-console
         console.log(this.attributes);
-    }
+    },
+    showDetails(day) {
+      this.showModal = true;
+      this.modalData = day;
+      // eslint-disable-next-line no-console
+      console.log(this.modalData);
+    },
+    closeModal() {
+      this.showModal = false;
+    },
   }
 };
 </script>
@@ -169,7 +211,6 @@ export default {
     background-color: #fff;
     padding: 20px 30px;
     border-radius: 6px;
-    box-shadow: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 </style>
