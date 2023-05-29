@@ -49,13 +49,12 @@
           :key="attr.id"
           class="mb-4"
         >
-          <h3
-            class=""
-          >
+          <p class="reparti-modal-text">
             Reparti: {{ attr.customData.reparti }}
-          </h3>
-            <p
-            class="staff-name"
+          </p>
+          
+          <p
+            class="staff-name-modal-text"
           >
             Emri: {{ attr.customData.staffName }}
           </p>
@@ -212,5 +211,19 @@ export default {
     padding: 20px 30px;
     border-radius: 6px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.reparti-modal-text{
+    font-size: 25px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.staff-name-modal-text {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgb(241,201,137);
+    font-weight: 500;
 }
 </style>

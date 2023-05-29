@@ -1,7 +1,7 @@
 <template>
 <transition name="modal-fade">
-  <div class="modal-backdrop">
-    <div class="modal">
+  <div @click="close" class="modal-backdrop">
+    <div @click.stop class="modal">
       <header class="modal-header">
         <slot name="header">
           This is the default title!
@@ -24,14 +24,14 @@
       <footer class="modal-footer">
         <slot name="footer">
           <!--  -->
+            <p
+                type="button"
+                class="close-button"
+                @click="close"
+            >
+                Close
+            </p>
         </slot>
-        <p
-          type="button"
-          class="close-button"
-          @click="close"
-        >
-          Close
-        </p>
       </footer>
     </div>
   </div>
@@ -60,6 +60,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    outline: none;
   }
 
   .modal {
@@ -89,6 +90,7 @@
     border-bottom: 1px solid #eeeeee;
     justify-content: space-between;
     align-items: center;
+    font-size: 25px;
   }
 
   .modal-footer {
@@ -100,11 +102,12 @@
 
   .modal-body {
     position: relative;
-    padding: 20px 10px;
+    padding: 20px 20px;
+    overflow: auto;
   }
 
     .close-button{
-        background: rgba(252, 146, 120, 0.9);
+        background: #f64e60;
         width: fit-content;
         padding: 10px 20px;
         border-radius: 10px;
@@ -115,14 +118,14 @@
     }
 
     .close-button:hover, .btn-close:hover{
-        background: rgba(245, 118, 86, 0.9);
+        background: #ee2d41;
         transition: background-color 0.3s;
         cursor: pointer;
     }
 
     .btn-close {
         color: white;
-        background: rgba(252, 146, 120, 0.9);
+        background: #f64e60;
         border: none !important;
         outline: none;
         width: fit-content;
