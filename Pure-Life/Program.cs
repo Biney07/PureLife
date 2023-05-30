@@ -7,6 +7,8 @@ using Pure_Life.Helpers;
 using Pure_Life.Models;
 using Pure_Life.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Net.Mail;
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,10 +38,13 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddScoped<IEmailService,EmailService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.Configure<GmailSettings>(builder.Configuration.GetSection("GmailSettings"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddScoped<IADProductService, ADProductService>();
 //builder.Services.AddScoped<IBotAPIService, BotAPIService>();
+builder.Services.AddScoped<SmtpClient>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
@@ -80,7 +85,7 @@ app.MapControllerRoute(
     //pattern: "{controller=Home}/{action=Index}/{id?}");
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-//AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
+AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
 
 
 app.Run();

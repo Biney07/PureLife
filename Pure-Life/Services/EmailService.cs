@@ -1,17 +1,19 @@
-﻿using Pure_Life.ViewModel.Email;
+﻿using Microsoft.Extensions.Options;
+using Pure_Life.Helpers;
+using Pure_Life.ViewModel.Email;
 using System.Net;
 using System.Net.Mail;
 
 namespace Pure_Life.Services
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private readonly SmtpClient _client;
-        public EmailService(SmtpClient client)
+        public EmailService(SmtpClient client, IOptions<GmailSettings> config)
         {
             _client = new SmtpClient("smtp.gmail.com");
             _client.EnableSsl = true;
-            _client.Credentials = new NetworkCredential("purelifeabr@gmail.com", "qcdaoiwlwakdngvm");
+            _client.Credentials = new NetworkCredential("purelifeabr@gmail.com", config.Value.AccessKey);
         }
         public async Task<string> SendEmailAsync(EmailViewModel email)
         {

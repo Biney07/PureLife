@@ -23,8 +23,8 @@ namespace Pure_Life.Controllers
         private readonly IAccountService _accountService;
         private readonly ICurrentUser _currentUser;
         private readonly UserManager<ApplicationUser> _userManager;
-		private readonly EmailService _emailService;
-        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager, EmailService emailService)
+		private readonly IEmailService _emailService;
+        public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _context = context;
             _imageService = imageService;
@@ -138,18 +138,21 @@ namespace Pure_Life.Controllers
                 _context.Add(stafi);
                 await _context.SaveChangesAsync();
 
-                // Send email with credentials
-                var email = new EmailViewModel
-                {
-                    RecipentEmail = stafi.Email,
-                    Subject = "Credentials for PureLife Account",
-                    Body = $"Pershendetje {viewModel.Emri},\n\nYour PureLife account credentials are as follows:\n\nEmail: {stafi.EmailZyrtar}\nPassword: {stafi.Password}\n\nPlease keep these credentials secure and do not share them with anyone.\n\nBest regards,\nThe PureLife Team"
-                };
+				// Send email with credentials
+				// Krijo objektin e emailit
+				var email = new EmailViewModel
+				{
+					RecipentEmail = stafi.Email,
+					Subject = "Kredencialet për Llogarinë PureLife",
+					Body = $"Pershendetje {viewModel.Emri},\n\nKredencialet për llogarinë tuaj në PureLife janë si vijon:\n\nEmail: {stafi.EmailZyrtar}\nFjalëkalim: {stafi.Password}\n\nJu lutemi mbani këto kredenciale të sigurta dhe mos i ndani me asnjë person tjetër.\n\nMe respekt,\nEkipi PureLife"
+				};
 
-                await _emailService.SendEmailAsync(email);
-            }
+				// Dërgo emailin
+				await _emailService.SendEmailAsync(email);
 
-            return RedirectToAction("Index");
+			}
+
+			return RedirectToAction("Index");
         }
 		public async Task<IActionResult> Edit(int? id)
 		{

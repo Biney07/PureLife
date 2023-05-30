@@ -35,13 +35,13 @@ namespace Pure_Life.Models
 
 		public string Email { get; set; }
         public string EmailZyrtar { get; set; }
-		[Required]
+		/*[Required]*/
 		[DataType(DataType.Password)]
-		[StringLength(100, MinimumLength = 6, ErrorMessage = "The password must be at least {2} characters long.")]
+		//[StringLength(100, MinimumLength = 6, ErrorMessage = "The password must be at least {2} characters long.")]
 		public string Password { get; set; }
 
 		[Display(Name = "Confirm password")]
-		[Required(ErrorMessage = "Confirm password is required")]
+		//[Required(ErrorMessage = "Confirm password is required")]
 		[DataType(DataType.Password)]
 		[Compare("Password", ErrorMessage = "Passwords do not match.")]
 		public string ConfirmPassword { get; set; }
