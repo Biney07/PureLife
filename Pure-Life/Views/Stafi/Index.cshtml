@@ -1,132 +1,185 @@
-﻿@model IEnumerable<Pure_Life.Models.Stafi>
+﻿@using Pure_Life.Services
+@model PaginatedList<Pure_Life.Models.Stafi>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
 <!--begin::Card-->
 <div class="card card-custom">
-	<div class="card-header flex-wrap py-5">
-		<div class="card-title">
-			<h3 class="card-label">
-				Stafi
-				
-			</h3>
-		</div>
-		<div class="card-toolbar">
-			<!--begin::Dropdown-->
-			
-			<!--end::Dropdown-->
-			<!--begin::Button-->
-			<a asp-action="Create" class="btn btn-primary font-weight-bolder">
-				<span class="svg-icon svg-icon-md">
-					<!--begin::Svg Icon | path:~/media/svg/icons/Design/Flatten.svg-->
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-							<rect x="0" y="0" width="24" height="24" />
-							<circle fill="#000000" cx="9" cy="15" r="6" />
-							<path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
-						</g>
-					</svg><!--end::Svg Icon-->
-				</span>	Krijo
-			</a>
-			<!--end::Button-->
-		</div>
-	</div>
-	<div class="card-body">
-		<!--begin: Datatable-->
-		<table class="table table-separate table-head-custom table-checkable" id="kt_datatable">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th></th>
-					<th>Staf</th>
-					<th>Specializimi</th>
-					<th>Nr. Licences</th>
-					<th>Roli</th>
-					<th>Gjinia</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
+    <div class="card-header flex-wrap py-5">
+        <div class="card-title">
+            <h3 class="card-label">
+                Stafi
 
-			<tbody>
-				@{
-					int row = 1;
-					foreach (var item in Model)
-					{
-						
-						<tr>
-							<td>@row</td>
-							<td>
-								<div class="symbol symbol-50 flex-shrink-0">
-									<img src=@item.PictureUrl alt="photo" style="width:100px;height:50px;transition:transform 0.2s ease-in-out;image-rendering: pixelated;" onmouseover="this.style.transform='scale(2.7)'" onmouseout="this.style.transform='scale(1)'">
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <!--begin::Dropdown-->
+            <!--end::Dropdown-->
+            <!--begin::Button-->
+            <a asp-action="Create" class="btn btn-primary font-weight-bolder">
+                <span class="svg-icon svg-icon-md">
+                    <!--begin::Svg Icon | path:~/media/svg/icons/Design/Flatten.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <circle fill="#000000" cx="9" cy="15" r="6" />
+                            <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+                        </g>
+                    </svg><!--end::Svg Icon-->
+                </span>	Krijo
+            </a>
 
-								</div>
-							</td>
+            <!--end::Button-->
+        </div>
+    </div>
+    <div style="width:40%; margin: 30px 0px -20px 20px">
+    <form asp-action="Index" asp-controller="Stafi" method="get">
 
-							<td>
-								<div style="display:flex;flex-direction:row;flex-wrap:wrap;font-size:13px;">
-									<div class="me-2">
-										<p>@item.Emri</p>
-									</div>
-									<div>
-										<p>@item.Mbiemri</p>
-									</div>
-								</div>
-								<div>
-									<p>@item.Email</p>
-								</div>
-							</td>
-							<td>@(item.Lemia?.Emri ?? "n/a")</td>
-							<td>@item.NrLincences</td>
-							<td>
-								@if (item.RoletId == 1)
-								{
-									<span class="badge badge-light-info fs-7 gs-0">@item.Rolet.Emri</span>
-								}
-								else if (item.RoletId == 2)
-								{
-									<span class="badge badge-light-primary fs-7 gs-0">@item.Rolet.Emri</span>
-								}
-							</td>
-							<td>@item.Gjinia</td>
-							<td nowrap="" style="">
-								
-									<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" >
-									<i class="la la-eye"></i>
-									</a>
-								
-							
-								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Edit details">
-									<i class="la la-edit"></i>
-								</a>
-								<a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
-									<i class="la la-trash"></i>
-								</a>
-							</td>
-						</tr>
-						row++;
-					}
-					
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Find by name" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to Full List</a>
+                </div>
+            </div>
+        </div>
 
-				}
+    </form>
+    </div>
+    <div class="card-body">
+        <!--begin: Datatable-->
+        <table class="table table-separate table-head-custom table-checkable" id="kt_datatable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th></th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["EmriSortParm"]">Staf</a>
+                    </th>
+                    <th>Specializimi</th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NrLeternjoftimitSortParm"]">Nr. Licences</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["RoliSortParm"]">Roli</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["GjiniaSortParm"]">Gjinia</a>
+                    </th>
 
-			</tbody>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-		</table>
-		<!--end: Datatable-->
-	</div>
+            <tbody>
+                @{
+                    int row = 1;
+
+                    @foreach (var item in Model.Where(staff => string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()) ||
+                staff.Emri.Contains(ViewData["CurrentFilter"].ToString(), StringComparison.OrdinalIgnoreCase) ||
+                staff.Mbiemri.Contains(ViewData["CurrentFilter"].ToString(), StringComparison.OrdinalIgnoreCase)))
+                    {
+
+
+                        <tr>
+                            <td>@row</td>
+                            <td>
+                                <div class="symbol symbol-50 flex-shrink-0">
+                                    <img src=@item.PictureUrl alt="photo" style="width:100px;height:50px;transition:transform 0.2s ease-in-out;image-rendering: pixelated;" onmouseover="this.style.transform='scale(2.7)'" onmouseout="this.style.transform='scale(1)'">
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div style="display:flex;flex-direction:row;flex-wrap:wrap;font-size:13px;">
+                                    <div class="me-2">
+                                        <p>@item.Emri</p>
+                                    </div>
+                                    <div>
+                                        <p>@item.Mbiemri</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>@item.Email</p>
+                                </div>
+                            </td>
+                            <td>@(item.Lemia?.Emri ?? "n/a")</td>
+                            <td>@item.NrLincences</td>
+                            <td>
+                                @switch (item.RoletId)
+                                {
+                                    case 1:
+                                        <span class="badge badge-light-info fs-7 gs-0">@item.Rolet.Emri</span>
+                                        break;
+                                    case 3:
+                                        <span class="badge badge-light-primary fs-7 gs-0">@item.Rolet.Emri</span>
+                                        break;
+                                    default:
+                                        <span class="badge badge-light-primary fs-7 gs-0">@item.Rolet.Emri</span>
+                                        break;
+                                }
+                            </td>
+
+                            <td>@item.Gjinia</td>
+                            <td nowrap="" style="">
+
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon">
+                                    <i class="la la-eye"></i>
+                                </a>
+
+
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Edit details">
+                                    <i class="la la-edit"></i>
+                                </a>
+                                <a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
+                                    <i class="la la-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        row++;
+                    }
+
+
+                }
+
+            </tbody>
+
+        </table>
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+        <!--end: Datatable-->
+    </div>
 </div>
 
 <!--end::Card-->
-	@Html.Partial("Delete")
-	@section Scripts {
-  <script>
-    $(function() {
-      $('.delete-button').click(function() {
-        var id = $(this).data('id');
-        $('#delete-form').attr('action', '/Stafi/Delete/' + id);
-      });
-    });
-  </script>
+@Html.Partial("Delete")
+@section Scripts {
+    <script>
+        $(function () {
+            $('.delete-button').click(function () {
+                var id = $(this).data('id');
+                $('#delete-form').attr('action', '/Stafi/Delete/' + id);
+            });
+        });
+    </script>
 }

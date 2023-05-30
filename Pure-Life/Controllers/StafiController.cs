@@ -23,7 +23,7 @@ namespace Pure_Life.Controllers
         private readonly IAccountService _accountService;
         private readonly ICurrentUser _currentUser;
         private readonly UserManager<ApplicationUser> _userManager;
-		private readonly IEmailService _emailService;
+        private readonly IEmailService _emailService;
         public StafiController(ApplicationDbContext context, ImageService imageService, IMapper mapper, IAccountService accountService, ICurrentUser currentUser, UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _context = context;
@@ -36,16 +36,82 @@ namespace Pure_Life.Controllers
         }
 
         // GET: Stafi
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter,string searchString,int? pageNumber)
         {
-			var stafiList = await _context.Stafi
-				.Include(s => s.Lemia)
-				.Include(s => s.Nacionaliteti)
-				.Include(s => s.Rolet)
-				.Include(s => s.Shteti)
-				.Where(s => s.IsDeleted == false).ToListAsync();
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["EmriSortParm"] = sortOrder == "Emri" ? "emri_desc" : "Emri";
+            ViewData["NrLeternjoftimitSortParm"] = sortOrder == "NrLeternjoftimit" ? "nrlet_desc" : "NrLeternjoftimit";
+            ViewData["GjiniaSortParm"] = sortOrder == "Gjinia" ? "gjinia_desc" : "Gjinia";
+            ViewData["RoliSortParm"] = sortOrder == "Roli" ? "roli_desc" : "Roli";
+            ViewData["LemiaIdSortParm"] = sortOrder == "LemiaId" ? "lemiaid_desc" : "LemiaId";
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            var stafi = from s in _context.Stafi
+                        select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                stafi = stafi.Where(s => s.Emri.Contains(searchString)
+                                       || s.Mbiemri.Contains(searchString));
+            }
+          
+            var stafiList = _context.Stafi
+                .Include(s => s.Lemia)
+                .Include(s => s.Nacionaliteti)
+                .Include(s => s.Rolet)
+                .Include(s => s.Shteti)
+                .Where(s => s.IsDeleted == false);
 
-            return View(stafiList);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.Mbiemri);
+                    break;
+                case "Emri":
+                    stafiList = stafiList.OrderBy(s => s.Emri);
+                    break;
+                case "emri_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.Emri);
+                    break;
+                case "NrLeternjoftimit":
+                    stafiList = stafiList.OrderBy(s => s.NrLeternjoftimit);
+                    break;
+                case "nrlet_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.NrLeternjoftimit);
+                    break;
+                case "Gjinia":
+                    stafiList = stafiList.OrderBy(s => s.Gjinia);
+                    break;
+                case "gjinia_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.Gjinia);
+                    break;
+                case "Roli":
+                    stafiList = stafiList.OrderBy(s => s.Rolet.Emri);
+                    break;
+                case "roli_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.Rolet.Emri);
+                    break;
+                case "LemiaId":
+                    stafiList = stafiList.OrderBy(s => s.LemiaId);
+                    break;
+                case "lemiaid_desc":
+                    stafiList = stafiList.OrderByDescending(s => s.LemiaId);
+                    break;
+                default:
+                    stafiList = stafiList.OrderBy(s => s.InsertedDate);
+                    break;
+            }
+            var pageSize = 3;
+            var stafiListWithSorting = await PaginatedList<Stafi>.CreateAsync(stafiList.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+            return View(stafiListWithSorting);
         }
 
         // GET: Stafi/Details/5
@@ -74,11 +140,11 @@ namespace Pure_Life.Controllers
         // GET: Stafi/Create
         public IActionResult Create()
         {
-                ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
-                ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
-                ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
+            ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
+            ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
+            ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
             ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
-     
+
             return View();
         }
 
@@ -90,18 +156,18 @@ namespace Pure_Life.Controllers
 
             var stafi = _mapper.Map<Stafi>(viewModel);
 
-            var stafiEmailatZyrtar = _context.Stafi.Where(s => s.EmailZyrtar == (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "")+ "@purelife.net").Count();
-            
-            if (stafiEmailatZyrtar !=0)
+            var stafiEmailatZyrtar = _context.Stafi.Where(s => s.EmailZyrtar == (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + "@purelife.net").Count();
+
+            if (stafiEmailatZyrtar != 0)
             {
                 var numriRandom = stafiEmailatZyrtar + 1;
                 stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + (numriRandom == 0 ? "" : numriRandom) + "@purelife.net";
-               
+
 
             }
             else
             {
-              stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + "@purelife.net";
+                stafi.EmailZyrtar = (viewModel.Emri.ToLower() + viewModel.Mbiemri.ToLower()).Replace(" ", "") + "@purelife.net";
             }
             var user = _currentUser.GetCurrentUserName();
 
@@ -127,8 +193,8 @@ namespace Pure_Life.Controllers
                 stafi.PictureUrl = result.Url.ToString();
                 stafi.PublicId = result.PublicId;
                 stafi.InsertedFrom = user;
-                stafi.InsertedDate= DateTime.Now;
-                stafi.IsDeleted= false;
+                stafi.InsertedDate = DateTime.Now;
+                stafi.IsDeleted = false;
 
             }
 
@@ -138,28 +204,28 @@ namespace Pure_Life.Controllers
                 _context.Add(stafi);
                 await _context.SaveChangesAsync();
 
-				// Send email with credentials
-				// Krijo objektin e emailit
-				var email = new EmailViewModel
-				{
-					RecipentEmail = stafi.Email,
-					Subject = "Kredencialet për Llogarinë PureLife",
-					Body = $"Pershendetje {viewModel.Emri},\n\nKredencialet për llogarinë tuaj në PureLife janë si vijon:\n\nEmail: {stafi.EmailZyrtar}\nFjalëkalim: {stafi.Password}\n\nJu lutemi mbani këto kredenciale të sigurta dhe mos i ndani me asnjë person tjetër.\n\nMe respekt,\nEkipi PureLife"
-				};
+                // Send email with credentials
+                // Krijo objektin e emailit
+                var email = new EmailViewModel
+                {
+                    RecipentEmail = stafi.Email,
+                    Subject = "Kredencialet për Llogarinë PureLife",
+                    Body = $"Pershendetje {viewModel.Emri},\n\nKredencialet për llogarinë tuaj në PureLife janë si vijon:\n\nEmail: {stafi.EmailZyrtar}\nFjalëkalim: {stafi.Password}\n\nJu lutemi mbani këto kredenciale të sigurta dhe mos i ndani me asnjë person tjetër.\n\nMe respekt,\nEkipi PureLife"
+                };
 
-				// Dërgo emailin
-				await _emailService.SendEmailAsync(email);
+                // Dërgo emailin
+                await _emailService.SendEmailAsync(email);
 
-			}
+            }
 
-			return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
-		public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null || _context.Stafi == null)
-			{
-				return NotFound();
-			}
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Stafi == null)
+            {
+                return NotFound();
+            }
             var stafi = await _context.Stafi.FindAsync(id);
 
             if (stafi == null)
@@ -167,109 +233,109 @@ namespace Pure_Life.Controllers
                 return NotFound();
             }
             ViewData["LemiaId"] = new SelectList(_context.Lemia.ToList(), "Id", "Emri");
-			ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
-			ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
-			ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
+            ViewData["NacionalitetiId"] = new SelectList(_context.Nacionaliteti.ToList(), "Id", "Emri");
+            ViewData["RoletId"] = new SelectList(_context.Rolet.ToList(), "Id", "Emri");
+            ViewData["ShtetiId"] = new SelectList(_context.Shteti.ToList(), "Id", "Emri");
 
 
-			return View(stafi);
-		}
+            return View(stafi);
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, EditStafiViewModel stafiVM)
-		{
-			if (id != stafiVM.Id)
-			{
-				return NotFound();
-			}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditStafiViewModel stafiVM)
+        {
+            if (id != stafiVM.Id)
+            {
+                return NotFound();
+            }
 
-			var staff = await _context.Stafi.FindAsync(id);
+            var staff = await _context.Stafi.FindAsync(id);
 
-			if (staff == null)
-			{
-				return NotFound();
-			}
+            if (staff == null)
+            {
+                return NotFound();
+            }
 
-			var user = _currentUser.GetCurrentUserName();
-			var stafiUpdated = new Stafi()
-			{
-				Id = staff.Id,
-				PictureUrl = staff.PictureUrl ?? " " ,
-				PublicId = staff.PublicId,
-				NrLeternjoftimit = stafiVM.NrLeternjoftimit,
-				Emri = staff.Emri,
-				Mbiemri = stafiVM.Mbiemri,
-				Gjinia = stafiVM.Gjinia,
-				DataLindjes = stafiVM.DataLindjes,
-				NrLincences = stafiVM.NrLincences,
-				NrTel = stafiVM.NrTel,
-				Email = staff.Email,
-				EmailZyrtar = staff.EmailZyrtar,
-				RoletId = stafiVM.RoletId,
-				ShtetiId = stafiVM.ShtetiId,
-				Qyteti = stafiVM.Qyteti,
-				NacionalitetiId = stafiVM.NacionalitetiId,
-				LemiaId = stafiVM.LemiaId,
-				Password = staff.Password,
-				ConfirmPassword = staff.ConfirmPassword,
-				InsertedFrom = staff.InsertedFrom,
-				InsertedDate = staff.InsertedDate,
-				ModifiedDate = DateTime.Now,
-				ModifiedFrom = user,
-				IsDeleted = staff.IsDeleted,
-			};
-			staff.NrLeternjoftimit = stafiVM.NrLeternjoftimit;
-			staff.Mbiemri = stafiVM.Mbiemri;
-			staff.Gjinia = stafiVM.Gjinia;
-			staff.DataLindjes = stafiVM.DataLindjes;
-			staff.NrLincences = stafiVM.NrLincences;
-			staff.NrTel = stafiVM.NrTel;
-			staff.RoletId = stafiVM.RoletId;
-			staff.ShtetiId = stafiVM.ShtetiId;
-			staff.Qyteti = stafiVM.Qyteti;
-			staff.NacionalitetiId = stafiVM.NacionalitetiId;
-			staff.LemiaId = stafiVM.LemiaId;
-			staff.ModifiedDate = DateTime.Now;
-			staff.ModifiedFrom = user;
+            var user = _currentUser.GetCurrentUserName();
+            var stafiUpdated = new Stafi()
+            {
+                Id = staff.Id,
+                PictureUrl = staff.PictureUrl ?? " ",
+                PublicId = staff.PublicId,
+                NrLeternjoftimit = stafiVM.NrLeternjoftimit,
+                Emri = staff.Emri,
+                Mbiemri = stafiVM.Mbiemri,
+                Gjinia = stafiVM.Gjinia,
+                DataLindjes = stafiVM.DataLindjes,
+                NrLincences = stafiVM.NrLincences,
+                NrTel = stafiVM.NrTel,
+                Email = staff.Email,
+                EmailZyrtar = staff.EmailZyrtar,
+                RoletId = stafiVM.RoletId,
+                ShtetiId = stafiVM.ShtetiId,
+                Qyteti = stafiVM.Qyteti,
+                NacionalitetiId = stafiVM.NacionalitetiId,
+                LemiaId = stafiVM.LemiaId,
+                Password = staff.Password,
+                ConfirmPassword = staff.ConfirmPassword,
+                InsertedFrom = staff.InsertedFrom,
+                InsertedDate = staff.InsertedDate,
+                ModifiedDate = DateTime.Now,
+                ModifiedFrom = user,
+                IsDeleted = staff.IsDeleted,
+            };
+            staff.NrLeternjoftimit = stafiVM.NrLeternjoftimit;
+            staff.Mbiemri = stafiVM.Mbiemri;
+            staff.Gjinia = stafiVM.Gjinia;
+            staff.DataLindjes = stafiVM.DataLindjes;
+            staff.NrLincences = stafiVM.NrLincences;
+            staff.NrTel = stafiVM.NrTel;
+            staff.RoletId = stafiVM.RoletId;
+            staff.ShtetiId = stafiVM.ShtetiId;
+            staff.Qyteti = stafiVM.Qyteti;
+            staff.NacionalitetiId = stafiVM.NacionalitetiId;
+            staff.LemiaId = stafiVM.LemiaId;
+            staff.ModifiedDate = DateTime.Now;
+            staff.ModifiedFrom = user;
 
-			if (stafiVM.PictureUrl != null)
-			{
-				var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
+            if (stafiVM.PictureUrl != null)
+            {
+                var result = await _imageService.AddPhotoAsync(stafiVM.PictureUrl);
 
-				if (staff.PublicId != null)
-				{
-					// delete the existing photo from Cloudinary
-					await _imageService.DeletePhotoAsync(staff.PublicId);
-				}
+                if (staff.PublicId != null)
+                {
+                    // delete the existing photo from Cloudinary
+                    await _imageService.DeletePhotoAsync(staff.PublicId);
+                }
 
-				staff.PictureUrl = result.Url.ToString();
-				staff.PublicId = result.PublicId;
-			}
+                staff.PictureUrl = result.Url.ToString();
+                staff.PublicId = result.PublicId;
+            }
 
-			try
-			{
-				_context.Update(staff);
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!StafiExists(staff.Id))
-				{
-					return NotFound();
-				}
-				else
-				{
-					throw;
-				}
-			}
+            try
+            {
+                _context.Update(staff);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StafiExists(staff.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-			return RedirectToAction(nameof(Index));
-		}
+            return RedirectToAction(nameof(Index));
+        }
 
 
 
-		/*	[HttpPost]
+        /*	[HttpPost]
 			[ValidateAntiForgeryToken]
 
 
@@ -347,28 +413,28 @@ namespace Pure_Life.Controllers
 
 
 
-		// GET: Stafi/Delete/5
-		public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
+        // GET: Stafi/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var stafi = await _context.Stafi
+                .Include(s => s.Lemia)
+                .Include(s => s.Nacionaliteti)
+                .Include(s => s.Rolet)
+                .Include(s => s.Shteti)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (stafi == null)
+            {
+                return NotFound();
+            }
+
+            return View(stafi);
         }
-
-        var stafi = await _context.Stafi
-            .Include(s => s.Lemia)
-            .Include(s => s.Nacionaliteti)
-            .Include(s => s.Rolet)
-            .Include(s => s.Shteti)
-            .FirstOrDefaultAsync(m => m.Id == id);
-
-        if (stafi == null)
-        {
-            return NotFound();
-        }
-
-        return View(stafi);
-    }
 
         // POST: Stafi/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -389,40 +455,40 @@ namespace Pure_Life.Controllers
 
             }
 
-			stafi.IsDeleted= true;
-			await _context.SaveChangesAsync();
-			var user = await _userManager.FindByEmailAsync(stafi.Email);
-			if (user == null)
-			{
-				ViewBag.ErrorMessage = $"User cannot be found";
-				return View("NotFound");
-			}
-			else
-			{
-				var userRoles = await _userManager.GetRolesAsync(user);
-				foreach (var role in userRoles)
-				{
-					await _userManager.RemoveFromRoleAsync(user, role);
-				}
+            stafi.IsDeleted = true;
+            await _context.SaveChangesAsync();
+            var user = await _userManager.FindByEmailAsync(stafi.Email);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                foreach (var role in userRoles)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, role);
+                }
 
-				var result = await _userManager.DeleteAsync(user);
-				if (result.Succeeded)
-				{
-					return RedirectToAction(nameof(Index));
-				}
-				foreach (var error in result.Errors)
-				{
-					ModelState.AddModelError("", error.Description);
-				}
-			}
-		
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
 
             return RedirectToAction(nameof(Index));
         }
-		private bool StafiExists(int id)
-		{
-			return _context.Stafi.Any(e => e.Id == id);
-		}
+        private bool StafiExists(int id)
+        {
+            return _context.Stafi.Any(e => e.Id == id);
+        }
 
-	}
+    }
 }
