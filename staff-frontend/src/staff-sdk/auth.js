@@ -8,3 +8,7 @@ export function login(userData) {
         password: userData.password
     })
 }
+
+export function me() {
+    return axios.get(`${API_URL}/api/StafiAPI/me`)
+}

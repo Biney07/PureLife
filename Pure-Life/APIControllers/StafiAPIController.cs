@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.ViewModel;
@@ -21,11 +24,13 @@ namespace Pure_Life.APIControllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         // GET: api/StafiAPI
@@ -160,6 +165,7 @@ namespace Pure_Life.APIControllers
             }
 
             // Create a new object with only the properties we want to return
+            var token = CreateToken(user);
             var userData = new
             {
                 Id = user.Id,
@@ -178,6 +184,7 @@ namespace Pure_Life.APIControllers
                 LemiaId = user.LemiaId,
                 Email = user.Email,
                 EmailZyrtar = user.EmailZyrtar,
+                token = token.ToString(),
             };
 
             // Return the new object
@@ -185,6 +192,44 @@ namespace Pure_Life.APIControllers
         }
 
 
+        private string CreateToken(Stafi stafi)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, stafi.Emri),
+                new Claim(ClaimTypes.Sid, stafi.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+
+        [HttpGet("me")]
+        public ActionResult<Stafi> GetCurrentUser()
+        {
+            // Check if the token has expired
+            var expiryClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Expiration)?.Value;
+            if (expiryClaim != null && DateTime.TryParse(expiryClaim, out var expiryTime))
+            {
+                if (expiryTime <= DateTime.UtcNow)
+                {
+                    return Unauthorized("Token has expired.");
+                }
+            }
+            // Return the new object
+            return Ok("Token is valid");
+        }
 
 
 

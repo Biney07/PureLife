@@ -77,21 +77,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
-      const isAuthenticated = checkAuthentication();
-      if (isAuthenticated) {
-          store.commit('storeUser', auth.getUser());
-          next();
-      } else {
-          next('/login');
-      }
+      store.dispatch('authenticateUser').then((response) => {
+        if (response.status === 200) {
+            store.commit('storeUser', auth.getUser());
+            next();
+        } else {
+            next('/login');
+        }
+      }).catch(() => {
+        next('/login');
+      });
   } else {
     next();
   }
 });
-
-function checkAuthentication() {
-    if(auth.userExists()) return true
-    return false;
-}
 
 export default router;
