@@ -1,4 +1,4 @@
-import { login } from '../../../staff-sdk/auth'
+import { login, me } from '../../../staff-sdk/auth'
 import { editUser } from '../../../staff-sdk/user'
 
 // eslint-disable-next-line no-unused-vars
@@ -26,6 +26,20 @@ export const editUserProfile = ({commit}, userData) => {
             // eslint-disable-next-line no-console
             console.log(response)
             commit('storeUser', response.data)
+            resolve(response)
+        })
+        .catch(error => { reject(error) })
+    })
+};
+
+export const authenticateUser = () => {
+    // eslint-disable-next-line no-console
+    console.log("asdfsafd");
+    return new Promise((resolve, reject) => {
+        me()
+        .then((response) => {
+            // eslint-disable-next-line no-console
+            console.log(response);
             resolve(response)
         })
         .catch(error => { reject(error) })
