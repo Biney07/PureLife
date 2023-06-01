@@ -365,3 +365,4 @@ FodyWeavers.xsd
 .DS_Store
 appsettings.json
 Pure-Life/appsettings.json
+appsettings.Development.json
