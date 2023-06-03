@@ -1,5 +1,6 @@
 import { login, me } from '../../../staff-sdk/auth'
 import { editUser } from '../../../staff-sdk/user'
+import {getUser} from '../../../helpers/auth'
 
 // eslint-disable-next-line no-unused-vars
 export const loginUser = ({commit}, userData) => {
@@ -33,10 +34,9 @@ export const editUserProfile = ({commit}, userData) => {
 };
 
 export const authenticateUser = () => {
-    // eslint-disable-next-line no-console
-    console.log("asdfsafd");
+    const token = getUser()
     return new Promise((resolve, reject) => {
-        me()
+        me(token.token)
         .then((response) => {
             // eslint-disable-next-line no-console
             console.log(response);
