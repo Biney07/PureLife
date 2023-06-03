@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -219,17 +220,43 @@ namespace Pure_Life.APIControllers
         public ActionResult<Stafi> GetCurrentUser()
         {
             // Check if the token has expired
-            var expiryClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Expiration)?.Value;
-            if (expiryClaim != null && DateTime.TryParse(expiryClaim, out var expiryTime))
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(token))
             {
-                if (expiryTime <= DateTime.UtcNow)
+                return Unauthorized("Token is missing.");
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+
+            try
+            {
+                // Validate the token
+                ClaimsPrincipal claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                var expiryClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Expiration)?.Value;
+                if (expiryClaim != null && DateTime.TryParse(expiryClaim, out var expiryTime))
                 {
-                    return Unauthorized("Token has expired.");
+                    if (expiryTime <= DateTime.UtcNow)
+                    {
+                        return Unauthorized("Token has expired.");
+                    }
                 }
             }
+            catch (Exception)
+            {
+                return Unauthorized("Invalid token.");
+            }
+
             // Return the new object
             return Ok("Token is valid");
         }
+
 
 
 
