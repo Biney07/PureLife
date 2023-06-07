@@ -57,6 +57,7 @@ namespace Pure_Life.Models
         public Shteti Shteti { get; set; }
         public Rolet Rolet { get; set; }
         public List<Kujdestarite> Kujdestarite { get;set; }
+        public List<Termini> Terminet {get; set; }
        
     }
 }
