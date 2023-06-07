@@ -38,5 +38,6 @@ namespace Pure_Life.Services
             var user = _userManager.FindByEmailAsync(email).Result;
             return user?.FullName;
         }
+      
     }
 }

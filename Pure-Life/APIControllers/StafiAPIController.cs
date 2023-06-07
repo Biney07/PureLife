@@ -26,12 +26,14 @@ namespace Pure_Life.APIControllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
         // GET: api/StafiAPI
@@ -279,6 +281,56 @@ namespace Pure_Life.APIControllers
 
             return NoContent();
         }
+        [HttpPost]
+        [Route("api/login")]
+        public async Task<IActionResult> Login(LoginViewModel loginVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
+            if (user != null)
+            {
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+
+                if (passwordCheck)
+                {
+                    // Authentication successful
+                    var role = await _userManager.GetRolesAsync(user);
+                    var response = new
+                    {
+                        Success = true,
+                        Role = role.FirstOrDefault(),
+                        Message = "Authentication successful."
+                    };
+
+                    return Ok(response);
+                }
+            }
+
+            // Invalid email or password
+            var errorResponse = new
+            {
+                Success = false,
+                Message = "Invalid email or password."
+            };
+
+            return Unauthorized(errorResponse);
+        }
+
+        [HttpPost]
+        [Route("api/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok("Logged out successfully.");
+        }
+
+
+
+
 
         private bool StafiExists(int id)
         {

@@ -366,3 +366,7 @@ FodyWeavers.xsd
 appsettings.json
 Pure-Life/appsettings.json
 appsettings.Development.json
+
+
+**/Migrations/*
+/Migrations

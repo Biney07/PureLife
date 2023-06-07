@@ -13,5 +13,7 @@ namespace Pure_Life.Models
         public string? ModifiedFrom { get; set; }
        
         public List<Stafi> Stafi { get; set; }
+        public List<Pacienti> Pacienti { get; set; }
+
     }
 }
