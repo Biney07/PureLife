@@ -32,30 +32,81 @@ namespace Pure_Life.APIControllers
       
         }
 
-       
-        [HttpPost]
-        public async Task<IActionResult> Create(int stafiId)
-        {
-            /*
-             * 
-             8:00 - 8:30
-             8:30 - 9:00
-             9:00 - 9:30
-             9:30 - 10:00
-             10:30 - 11:00
-             11:00 - 11:30
-            11:30 - 12:00
 
-            13:00 - 13:30
-            13:30 - 14:00
-            14:00 - 14:30
-            14:30 - 15:00
-            15:30 - 16:00
+		/*        [HttpPost]
+				public async Task<IActionResult> Create(int stafiId)
+				{
+					*//*
+					 * 
+					 8:00 - 8:30
+					 8:30 - 9:00
+					 9:00 - 9:30
+					 9:30 - 10:00
+					 10:30 - 11:00
+					 11:00 - 11:30
+					11:30 - 12:00
 
-             */
-       TimeSpan[] timeSlots = new TimeSpan[]
-      {
-        new TimeSpan(8, 0, 0),   // 8:00 - 8:30
+					13:00 - 13:30
+					13:30 - 14:00
+					14:00 - 14:30
+					14:30 - 15:00
+					15:30 - 16:00
+
+					 *//*
+			   TimeSpan[] timeSlots = new TimeSpan[]
+			  {
+				new TimeSpan(8, 0, 0),   // 8:00 - 8:30
+				new TimeSpan(8, 30, 0),  // 8:30 - 9:00
+				new TimeSpan(9, 0, 0),   // 9:00 - 9:30
+				new TimeSpan(9, 30, 0),  // 9:30 - 10:00
+				new TimeSpan(10, 30, 0), // 10:30 - 11:00
+				new TimeSpan(11, 0, 0),  // 11:00 - 11:30
+				new TimeSpan(11, 30, 0), // 11:30 - 12:00
+				new TimeSpan(13, 0, 0),  // 13:00 - 13:30
+				new TimeSpan(13, 30, 0), // 13:30 - 14:00
+				new TimeSpan(14, 0, 0),  // 14:00 - 14:30
+				new TimeSpan(14, 30, 0), // 14:30 - 15:00
+				new TimeSpan(15, 30, 0)  // 15:30 - 16:00
+		   };
+					//var user = _currentUser.GetCurrentUserName();
+					//var stafi = _context.Stafi.Where(x => x.Emri == user).FirstOrDefault();
+					var stafi = _context.Stafi.Where(x => x.Id == stafiId).FirstOrDefault();
+
+				  *//*  if (!ModelState.IsValid)
+					{
+						return BadRequest(model);
+					}*//*
+					DateTime currentDateTime = DateTime.Now;
+					var terminiList = new List<Termini>();
+
+					foreach (var timeSlot in timeSlots)
+					{
+
+						var termini = new Termini()
+						{
+							StartTime = (currentDateTime.Date + timeSlot).ToString(),
+							EndTime = (currentDateTime.Date + timeSlot.Add(new TimeSpan(0, 30, 0))).ToString(),
+							Status = false,
+							Price = 0,
+							StafiId = stafi.Id,
+							PacientiId = null,
+							InsertedDate = currentDateTime,
+							InsertedFrom = _currentUser.GetCurrentUserName(),
+						};
+						terminiList.Add(termini);
+					}
+					await _context.AddRangeAsync(terminiList);
+					await _context.SaveChangesAsync();
+					return Ok();
+
+				}*/
+		[Route("Create")]
+		[HttpPost]
+		public async Task<IActionResult> Create(int stafiId)
+		{
+			TimeSpan[] timeSlots = new TimeSpan[]
+			{
+		new TimeSpan(8, 0, 0),   // 8:00 - 8:30
         new TimeSpan(8, 30, 0),  // 8:30 - 9:00
         new TimeSpan(9, 0, 0),   // 9:00 - 9:30
         new TimeSpan(9, 30, 0),  // 9:30 - 10:00
@@ -67,47 +118,108 @@ namespace Pure_Life.APIControllers
         new TimeSpan(14, 0, 0),  // 14:00 - 14:30
         new TimeSpan(14, 30, 0), // 14:30 - 15:00
         new TimeSpan(15, 30, 0)  // 15:30 - 16:00
-   };
-            //var user = _currentUser.GetCurrentUserName();
-            //var stafi = _context.Stafi.Where(x => x.Emri == user).FirstOrDefault();
-            var stafi = _context.Stafi.Where(x => x.Id == stafiId).FirstOrDefault();
+			};
 
-          /*  if (!ModelState.IsValid)
-            {
-                return BadRequest(model);
-            }*/
-            DateTime currentDateTime = DateTime.Now;
-            var terminiList = new List<Termini>();
+			var stafi = _context.Stafi.Where(x => x.Id == stafiId).FirstOrDefault();
+			DateTime startDate = DateTime.Today; // Assuming today as the starting date
+			DateTime endDate = startDate.AddDays(4); // Adding 4 days to include Monday to Friday
+			DateTime currentDateTime = DateTime.Now;
 
-            foreach (var timeSlot in timeSlots)
-            {
+			var terminiList = new List<Termini>();
 
-                var termini = new Termini()
-                {
-                    StartTime = (currentDateTime.Date + timeSlot).ToString(),
-                    EndTime = (currentDateTime.Date + timeSlot.Add(new TimeSpan(0, 30, 0))).ToString(),
-                    Status = false,
-                    Price = 0,
-                    StafiId = stafi.Id,
-                    PacientiId = null,
-                    InsertedDate = currentDateTime,
-                    InsertedFrom = _currentUser.GetCurrentUserName(),
-                };
-                terminiList.Add(termini);
-            }
-            await _context.AddRangeAsync(terminiList);
-            await _context.SaveChangesAsync();
-            return Ok();
+			// Iterate through each weekday
+			for (DateTime currentDate = startDate; currentDate <= endDate; currentDate = currentDate.AddDays(1))
+			{
+				// Iterate through each time slot
+				foreach (var timeSlot in timeSlots)
+				{
+					var termini = new Termini()
+					{
+						StartTime = (currentDate.Date + timeSlot).ToString(),
+						EndTime = (currentDate.Date + timeSlot.Add(new TimeSpan(0, 30, 0))).ToString(),
+						Status = false,
+						Price = 0,
+						StafiId = stafi.Id,
+						PacientiId = null,
+						InsertedDate = currentDateTime,
+						InsertedFrom = _currentUser.GetCurrentUserName(),
+					};
+					terminiList.Add(termini);
+				}
+			}
 
-        }
+			await _context.AddRangeAsync(terminiList);
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
 
-        
+		[Route("RezervoTerminin")]
+		[HttpPut]
+		public async Task<IActionResult> RezervoTerminin(int terminiId, int pacientiId)
+		{
+			var termini = await _context.Terminet.Where(x=>x.Id == terminiId && !x.IsDeleted && x.Status==false).FirstOrDefaultAsync();
+			if (termini==null)
+			{
+				return BadRequest("Terminin nuk u gjet");
+			}
 
-        [HttpGet]
+			termini.PacientiId = pacientiId;
+			termini.Status = true;
+
+			await _context.SaveChangesAsync();
+			return Ok("Termini u rezervua me sukses");
+		}
+		[Route("Index")]
+		[HttpGet]
         public IActionResult Index()
         {
-            var terminet = _context.Terminet.ToList();
+            var terminet = _context.Terminet.Where(x=>!x.IsDeleted).ToList();
             return Ok(terminet);
         }
+
+		[Route("GetTerminiByStaf/{id}")]
+        [HttpGet]
+
+        public async Task<IActionResult> GetTerminiByStaf(int id)
+        {
+
+            var termini = await _context.Terminet.Where(x=>x.StafiId== id && !x.IsDeleted).ToListAsync();
+
+            return new JsonResult(termini);
+
+        }
+
+        [Route("GetTerminiByDate/{date}")]
+        [HttpGet]
+
+        public async Task<IActionResult> GetTerminiByDate(string date)
+        {
+            DateTime parsedDate = DateTime.Parse(date);
+            var terminiList = await _context.Terminet.ToListAsync();
+            var termini = terminiList
+                .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted)
+                .ToList();
+
+            return new JsonResult(termini);
+
+        }
+
+        [Route("DeleteTermin/{id}")]
+        [HttpDelete]
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var termini = await _context.Terminet.FindAsync(id);
+
+            if (termini == null)
+            {
+                return BadRequest("Termini nuk u gjet");
+            }
+
+            termini.IsDeleted = true;
+            await _context.SaveChangesAsync();
+            return new JsonResult("Deleted successfully!");
+        }
+
     }
 }
