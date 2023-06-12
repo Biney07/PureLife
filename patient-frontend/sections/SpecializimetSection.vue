@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .specializimet {
     width: 100%;
     min-height: 450px;

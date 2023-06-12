@@ -1,9 +1,12 @@
 <template>
   <section class="features-section">
-    <div class="feature-card" v-for="feature in features" :key="feature.title">
-        <img class="feature-image" :src="feature.img" :alt="feature.title">
-        <p class="feature-title">{{feature.title}}</p>
-        <NuxtLink to="/login"><button>Shiko Me shume</button></NuxtLink>
+    <p class="features-title">Cfare mund te beni ne PureLife?</p>
+    <div class="features-row">
+        <div class="feature-card" v-for="feature in features" :key="feature.title">
+            <img class="feature-image" :src="feature.img" :alt="feature.title">
+            <p class="feature-title">{{feature.title}}</p>
+            <NuxtLink to="/login"><button>Shiko Me shume</button></NuxtLink>
+        </div>
     </div>
   </section>
 </template>
@@ -31,16 +34,27 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .features-section {
     width: 100%;
     height: 600px;
     background: var(--third-color);
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.features-row {
+    width: 100%;
+    height: 100%;
+    background: var(--third-color);
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 5%;
+    padding-top: 3%;
 }
 
 .feature-card {
@@ -90,5 +104,18 @@ export default {
     cursor: pointer;
     color: white;
     text-decoration: none;
+    transition: background-color 0.5s;
+}
+
+.feature-card button:hover {
+    background: rgba(44, 100, 216, 0.8);
+    transition: background-color 0.5s;
+}
+
+.features-title {
+    font-size: 36px;
+    color: var(--primary-font-color);
+    text-align: center;
+    margin-top: 50px;
 }
 </style>
