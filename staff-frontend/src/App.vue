@@ -35,6 +35,7 @@
       </mdb-navbar-toggler>
     </mdb-navbar>
     <!--/.Navbar-->
+
     <!-- Sidebar -->
     <div v-if="user.isAuthenticated" class="sidebar-fixed position-fixed"
        :class="{ 'toggleSidebar': !minimized, 'shrink-sidebar': minimized }"
@@ -42,7 +43,7 @@
        @mouseleave="minimized = true">
       <a class="logo-wrapper"><img alt="" class="img-fluid" src="./assets/logo-mdb-vue-small.png"/></a>
       <mdb-list-group class="list-group-flush">
-        <router-link v-for="(route, index) in routes" :key="index" :to="route.path" @click.native="activeItem = index + 1">
+        <router-link v-for="(route, index) in filteredRoutes" :key="index" :to="route.path" @click.native="activeItem = index + 1">
           <mdb-list-group-item v-if="!route.authRequired" :action="true" :class="{ active: activeItem === index + 1, 'custom-list-group-item': index === 4 }">
             <mdb-icon :icon="route.icon" class="mr-3 icon-shrink"/>
             <span>{{ route.name }}</span>
@@ -97,7 +98,7 @@ export default {
   data() {
     return {
       activeItem: 1,
-      minimized: true
+      minimized: true,
     };
   },
   computed: {
@@ -109,11 +110,14 @@ export default {
     },
     ...mapGetters({
       user: 'getUser'
-    })
+    }),
+    filteredRoutes() {
+      const userRole = this.user?.user?.data?.roletId;
+      return routes.filter((route) => route.role.includes(userRole));
+    },
+
   },
   mounted() {
-    // eslint-disable-next-line no-console
-    console.log(this.$route)
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
     }
@@ -147,6 +151,8 @@ export default {
 main {
   font-family: 'Poppins', Helvetica, sans-serif;
   background-color: #ededee;
+  height: 100%;
+  overflow: hidden;
 }
 
 .flexible-content {
