@@ -9,6 +9,13 @@ import store from './store';
 import Vuex from 'vuex'
 import VCalendar from 'v-calendar';
 
+import VueGoodTablePlugin from 'vue-good-table';
+
+// import the styles
+import 'vue-good-table/dist/vue-good-table.css'
+
+Vue.use(VueGoodTablePlugin);
+
 Vue.use(Vuex)
 
 Vue.use(VueGoogleMaps, {

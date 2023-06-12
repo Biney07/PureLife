@@ -11,6 +11,7 @@ import Maps from '@/components/Maps'
 import BadGateway from '@/components/BadGateway'
 import Login from '../views/auth/Login'
 import Kujdestarite from '../views/Kujdestarite'
+import Terminet from '../views/Terminet'
 
 Vue.use(VueRouter)
 
@@ -70,6 +71,13 @@ const router = new VueRouter({
       name: 'Night Shifts',
       component: Kujdestarite,
       props: {page: 7},
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/terminet',
+      name: 'Terminet',
+      component: Terminet,
+      props: {page: 8},
       meta: { requiresAuth: true }
     },
   ]

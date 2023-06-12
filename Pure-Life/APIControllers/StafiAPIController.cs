@@ -102,7 +102,30 @@ namespace Pure_Life.APIControllers
 
                 // Retrieve the updated user from the database
                 var updatedStafi = await _context.Stafi.FindAsync(id);
-                return Ok(updatedStafi); // Return the updated user in the response
+                var token = CreateToken(updatedStafi);
+                var userData = new
+                {
+                    Id = updatedStafi.Id,
+                    NrLeternjoftimit = updatedStafi.NrLeternjoftimit,
+                    Emri = updatedStafi.Emri,
+                    Mbiemri = updatedStafi.Mbiemri,
+                    Gjinia = updatedStafi.Gjinia,
+                    DataLindjes = updatedStafi.DataLindjes,
+                    NrLincences = updatedStafi.NrLincences,
+                    NrTel = updatedStafi.NrTel,
+                    PictureUrl = updatedStafi.PictureUrl,
+                    RoletId = updatedStafi.RoletId,
+                    ShtetiId = updatedStafi.ShtetiId,
+                    Qyteti = updatedStafi.Qyteti,
+                    NacionalitetiId = updatedStafi.NacionalitetiId,
+                    LemiaId = updatedStafi.LemiaId,
+                    Email = updatedStafi.Email,
+                    EmailZyrtar = updatedStafi.EmailZyrtar,
+                    token = token.ToString(),
+                };
+
+                // Return the new object with the updated user and token
+                return Ok(userData);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -116,6 +139,7 @@ namespace Pure_Life.APIControllers
                 }
             }
         }
+
 
 
 

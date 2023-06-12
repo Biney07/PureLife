@@ -15,6 +15,7 @@
     "mdbvue": "6.5.0",
     "v-calendar": "^2.4.1",
     "vue": "^2.6.11",
+    "vue-good-table": "^2.21.11",
     "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {

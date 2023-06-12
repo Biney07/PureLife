@@ -1,0 +1,35 @@
+/* Example base.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Primary Colors */
+:root {
+    --primary-color: #D4E5F9;
+    --secondary-color: #EEF2FD;
+    --third-color: #AEC9E8;
+    --button-background: rgba(44, 100, 216, 1);
+    --footer-background: #333333;
+    --primary-font: 'Inter', sans-serif;
+    --primary-font-color: #333333;
+    --secondary-font-color: #2C64D8;
+
+    --header-height: 100px;
+  }
+  
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Background Colors */
+  body {
+    font-family: var(--primary-font);
+    background-color:  white;
+    max-width: 100%;
+    color: var(--primary-font-color);
+    scroll-behavior: smooth;
+  }
+
+  /* Other styles */
+  /* ... */
+  
