@@ -32,5 +32,7 @@ namespace Pure_Life.Models
 
         public Pacienti Pacienti { get; set; }
         public Stafi Stafi { get; set; }
+
+        public List<Terapia> Terapia { get; set; }
     }
 }

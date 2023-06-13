@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
+using Pure_Life.ViewModel.Kujdestarite;
 using Pure_Life.ViewModel.Termini;
 using Pure_Life.ViewModels;
 using System.IdentityModel.Tokens.Jwt;
@@ -169,13 +170,62 @@ namespace Pure_Life.APIControllers
 			await _context.SaveChangesAsync();
 			return Ok("Termini u rezervua me sukses");
 		}
-		[Route("Index")]
+		/*[Route("Index")]
 		[HttpGet]
         public IActionResult Index()
         {
             var terminet = _context.Terminet.Where(x=>!x.IsDeleted).ToList();
             return Ok(terminet);
-        }
+        }*/
+
+
+		[HttpGet]
+		public async Task<IActionResult> GetKujdestarite()
+		{
+			var kujdestarite = await _context.Kujdestarite
+				.Include(s => s.Stafi)
+				.Where(x => !x.IsDeleted && x.Data.Date >= DateTime.Now.Date)
+				.ToListAsync();
+
+			if (_context.Kujdestarite == null)
+			{
+				return BadRequest("test error");
+			}
+
+			var result = kujdestarite.Select(x => new GetKujdestariteAPIViewModel
+			{
+				Id = x.Id,
+				Data = x.Data,
+				Kati = x.Kati,
+				Reparti = x.Reparti,
+				StafiEmriMbiemri = $"{x.Stafi.Emri} {x.Stafi.Mbiemri}",
+				StafiId = x.StafiId,
+			});
+			return Ok(result);
+		}
+		[Route("Index")]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var terminet = await _context.Terminet
+		.Include(x => x.Pacienti)
+		.Where(x => !x.IsDeleted)
+		.ToListAsync();
+
+			var result = terminet.Select(x => new GetTerminiViewModel
+			{
+				Id = x.Id,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				Status = x.Status ? "I rezervuar" : "I lire",
+				PacientiId = x.PacientiId ?? 0,
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null"
+			});
+
+
+			return Ok(result);
+		}
 
 		[Route("GetTerminiByStaf/{id}")]
         [HttpGet]
