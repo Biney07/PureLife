@@ -25,6 +25,7 @@ namespace Pure_Life.Data
         public DbSet<Lloji> Llojet { get; set; }
         public DbSet<Pacienti> Pacientet { get; set; }
         public DbSet<Termini> Terminet { get; set; }
+        public DbSet<Terapia> Terapia { get; set; }
 
 
     }
