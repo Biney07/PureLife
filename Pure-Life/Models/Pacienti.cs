@@ -7,6 +7,8 @@ namespace Pure_Life.Models
     {
 
         public int Id { get; set; }
+
+        public string? UId { get; set; }
         public string? NrLeternjoftimit { get; set; }
         [Required]
         public string Emri { get; set; }
@@ -36,7 +38,7 @@ namespace Pure_Life.Models
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string InsertedFrom { get; set; }
+      
         public DateTime InsertedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiedFrom { get; set; }
