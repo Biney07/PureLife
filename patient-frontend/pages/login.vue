@@ -142,7 +142,7 @@ export default {};
     position: relative;
     width: 100%;
     border: 1px solid #00234B;
-    padding: 15px;
+    padding: 15px 0;
     background-color: white;
     display: flex;
     align-items: center;
@@ -162,7 +162,7 @@ export default {};
     color: var(--primary-font-color);
     text-align: center;
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -192,6 +192,11 @@ export default {};
 @media screen and (max-width: 500px) {
     .login-page {
         height: 100vh;
+    }
+
+    .redirect-link{
+        width: 100%;
+        bottom: 0;
     }
 }
 

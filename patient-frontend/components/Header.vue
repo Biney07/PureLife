@@ -50,10 +50,6 @@ export default {
 };
 </script>
 <style scoped>
-:root {
-  --blue: #1c41ea; /* Define the color variable and set its value */
-}
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 .navbar {
   box-sizing: border-box;
   padding: 0;

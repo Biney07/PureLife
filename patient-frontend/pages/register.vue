@@ -81,7 +81,7 @@ export default {
 .login-page {
     position: relative;
     padding: 60px 40px;
-    max-width: 500px;
+    max-width: auto;
     min-height: fit-content;
     border: 1px solid #ebebeb;
     border-radius: 10px;
@@ -176,14 +176,13 @@ export default {
     position: relative;
     width: 100%;
     border: 1px solid #00234B;
-    padding: 15px;
+    padding: 15px 0;
     background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
 }
 
 .google-button img{
@@ -197,7 +196,7 @@ export default {
     color: var(--primary-font-color);
     text-align: center;
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -228,7 +227,6 @@ export default {
     display: flex;
     flex-direction: row !important;
     justify-content: space-between;
-    gap: 10px !important;
 }
 
 </style>
