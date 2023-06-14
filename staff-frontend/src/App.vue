@@ -228,5 +228,5 @@ main {
   .flexible-navbar {
     padding-left: 80px;
   }
-}
+} 
 </style>

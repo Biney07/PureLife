@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header />
+        <Header v-if="showHeader" />
 
         <div>
             <slot />
@@ -16,6 +16,11 @@ export default {
     components: {
         Header,
         Footer
+    },
+    computed: {
+        showHeader() {
+            return !['/register', '/login'].includes(this.$nuxt._route.path)
+        }
     }
 }
 </script>

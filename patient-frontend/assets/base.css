@@ -1,7 +1,6 @@
 /* Example base.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
 /* Primary Colors */
 :root {
     --primary-color: #D4E5F9;
@@ -9,7 +8,7 @@
     --third-color: #AEC9E8;
     --button-background: rgba(44, 100, 216, 1);
     --footer-background: #333333;
-    --primary-font: 'Inter', sans-serif;
+    --primary-font: 'Raleway', sans-serif;
     --primary-font-color: #333333;
     --secondary-font-color: #2C64D8;
 
@@ -28,6 +27,14 @@
     max-width: 100%;
     color: var(--primary-font-color);
     scroll-behavior: smooth;
+  }
+
+  button {
+    font-family: var(--primary-font);
+  }
+
+  input::placeholder {
+    font-family: var(--primary-font);
   }
 
   /* Other styles */
