@@ -22,5 +22,7 @@ namespace Pure_Life.Models
 		public string? ModifiedFrom { get; set; }
 
 		public bool IsDeleted { get; set; }
+
+		public List<TerapiaSherbimet> TerapiaSherbimet { get; set; }
 	}
 }

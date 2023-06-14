@@ -27,6 +27,8 @@ namespace Pure_Life.Data
         public DbSet<Termini> Terminet { get; set; }
         public DbSet<Terapia> Terapia { get; set; }
 
+        public DbSet<TerapiaSherbimet> TerapiaSherbimet { get; set; }
+
 
     }
 }
