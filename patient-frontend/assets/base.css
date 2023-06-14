@@ -37,6 +37,10 @@
     font-family: var(--primary-font);
   }
 
+  textarea::placeholder {
+    font-family: var(--primary-font);
+  }
+
   /* Other styles */
   /* ... */
   

@@ -459,7 +459,7 @@ section {
     cursor: pointer;
   }
   .menutoggle.active {
-    background: url(https://i.postimg.cc/yNcK65Gc/close.png);
+    /* background: url(https://i.postimg.cc/yNcK65Gc/close.png); */
     background-size: 25px;
     background-repeat: no-repeat;
     background-position: center;

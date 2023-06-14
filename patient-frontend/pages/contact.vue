@@ -227,7 +227,6 @@ export default {
 
 .contact100-form-title {
   display: block;
-  font-family: SourceSansPro-Bold;
   font-size: 30px;
   color: #333333;
   line-height: 1.2;
@@ -405,12 +404,9 @@ button {
   height: 42px;
   background-color: #1d7eed;
   border-radius: 21px;
-  font-family: JosefinSans-Bold;
-  font-size: 14px;
+    font-size: 14px;
   color: #fff;
-  line-height: 1.2;
   text-transform: uppercase;
-  padding-top: 5px;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
