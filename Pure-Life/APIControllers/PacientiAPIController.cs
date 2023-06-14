@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
@@ -29,7 +30,7 @@ namespace Pure_Life.APIControllers
             }
             var pacienti = new Pacienti()
             {
-                UId = null,
+                UId = model.UId,
                 Emri = model.Emri,
                 Mbiemri = model.Mbiemri,
                 MembershipStatus = false,
@@ -74,5 +75,37 @@ namespace Pure_Life.APIControllers
 
 			return Ok(pacientet);
         }
-    }
+
+		[HttpGet("GetPacientiByUId/{uId}")]
+		public async Task<IActionResult> GetPacientiByUId(string uId)
+		{
+			var pacienti = await _context.Pacientet.Where(x => x.UId == uId).FirstOrDefaultAsync();
+
+			var result =  new GetPacientiViewModel
+			{
+				Id = pacienti.Id,
+				UId = pacienti.UId,
+				NrLeternjoftimit = pacienti.NrLeternjoftimit,
+				Emri = pacienti.Emri,
+				Mbiemri = pacienti.Mbiemri,
+				Gjinia = pacienti.Gjinia,
+				DataLindjes = pacienti.DataLindjes,
+				Alergji = pacienti.Alergji,
+				NrTel =pacienti.NrTel,
+				MembershipStatus = pacienti.MembershipStatus,
+				ShtetiId = pacienti.ShtetiId,
+				Qyteti = pacienti.Qyteti,
+				NacionalitetiId = pacienti.NacionalitetiId,
+				Email = pacienti.Email,
+				InsertedDate =pacienti.InsertedDate,
+				ModifiedDate = pacienti.ModifiedDate,
+				ModifiedFrom =pacienti.ModifiedFrom,
+				IsDeleted = pacienti.IsDeleted
+			};
+
+			return new JsonResult(result);
+
+		
+		}
+	}
 }
