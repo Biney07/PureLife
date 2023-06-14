@@ -1,13 +1,11 @@
 <template>
-  <p>this is the login page</p>
+  <div class="alert alert-primary" role="alert">
+    A simple primary alert—check it out!
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
-
-</style>
+<style></style>
