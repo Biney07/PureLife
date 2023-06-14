@@ -24,6 +24,9 @@ namespace Pure_Life.Models
 
         public Termini Termini { get; set; }
 
+        public List<TerapiaSherbimet> TerapiaSherbimet { get; set; }
+
+
 
     }
 }
