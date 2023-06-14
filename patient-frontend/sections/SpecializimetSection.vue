@@ -17,27 +17,27 @@ export default {
         return {
             specializimet: [
                 {
-                    img: "../assets/trajtimi-primar.svg",
+                    img: "assets/trajtimi-primar.svg",
                     title: "Trajtimi Primar"
                 },
                 {
-                    img: "../assets/dentist.svg",
+                    img: "assets/dentist.svg",
                     title: "Dentist"
                 },
                 {
-                    img: "../assets/ob-gyn.svg",
+                    img: "assets/ob-gyn.svg",
                     title: "Trajtimi Primar"
                 },
                 {
-                    img: "../assets/dermatolog.svg",
+                    img: "assets/dermatolog.svg",
                     title: "Dermatologjist"
                 },
                 {
-                    img: "../assets/psikiater.svg",
+                    img: "assets/psikiater.svg",
                     title: "Psikiater"
                 },
                 {
-                    img: "../assets/syte.svg",
+                    img: "assets/syte.svg",
                     title: "Optamologji"
                 },
             ]

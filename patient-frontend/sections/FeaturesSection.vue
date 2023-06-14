@@ -17,15 +17,15 @@ export default {
         return {
             features: [
                 {
-                    img: "../assets/membership.svg",
+                    img: "assets/membership.svg",
                     title: "Purelife Membership"
                 },
                 {
-                    img: "../assets/vleresimi.svg",
+                    img: "assets/vleresimi.svg",
                     title: "Vlereso Sherbimin"
                 },
                 {
-                    img: "../assets/rezervimi.svg",
+                    img: "assets/rezervimi.svg",
                     title: "Rezervo Terminin"
                 }
             ]

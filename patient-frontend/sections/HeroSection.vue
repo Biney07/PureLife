@@ -39,7 +39,7 @@
             >Kam therje ne zemer tek cili doktor duhet te shkoj??</span
           >
           <div class="search-button">
-            <img src="../assets/search.svg" alt="search" />
+            <img src="@/assets/search.svg" alt="search" />
           </div>
         </div>
         <small class="register-invite"
@@ -65,7 +65,7 @@ export default {};
   justify-content: center;
   align-items: center;
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-    url(../assets/hero.jpg);
+    url(./assets/hero.jpg);
   background-size: cover;
 }
 
@@ -100,8 +100,7 @@ export default {};
   letter-spacing: 5px;
 }
 .hero {
-  padding-top: 90px;
-  height: calc(100vh - var(--header-height));
+  height: 100vh;
   background: var(--secondary-color);
   width: 100%;
   display: flex;
@@ -110,7 +109,7 @@ export default {};
 }
 
 .hero-content {
-  margin-top: 50px;
+  margin-top: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -184,8 +183,8 @@ export default {};
   height: 60px;
   border: 1px solid black;
   border-radius: 5px;
-  margin-top: 10px;
   width: 100%;
+  margin: 10px 0;
   position: relative;
   background: white;
 }

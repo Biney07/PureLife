@@ -7,16 +7,16 @@
         
         <div class="download-here">
             <small>Shkarko aplikacionin duke skanuar QR CODE</small>
-            <img src="../assets/qrCode.svg" alt="qr-code">
+            <img src="@/assets/qrCode.svg" alt="qr-code">
         </div>
         <div class="store-platforms">
-            <img src="../assets/app-store.svg" alt="">
-            <img src="../assets/play-store.svg" alt="">
+            <img src="@/assets/app-store.svg" alt="">
+            <img src="@/assets/play-store.svg" alt="">
         </div>
     </div>
     <div class="section-image">
-        <img src="../assets/app.svg" alt="app">
-        <img src="../assets/half-circle.svg" alt="qr-code">
+        <img src="@/assets/app.svg" alt="app">
+        <img src="@/assets/half-circle.svg" alt="qr-code">
     </div>
   </section>
 </template>

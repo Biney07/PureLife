@@ -56,6 +56,7 @@ export default {
   margin: 0;
   font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
+  z-index: 10;
 }
 .logoheader {
   display: flex;
