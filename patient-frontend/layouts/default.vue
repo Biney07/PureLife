@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header />
+        <Header v-if="showHeader" />
 
         <div>
             <slot />
@@ -13,6 +13,11 @@ import Header from '../components/Header.vue'
 export default {
     components: {
         Header
+    },
+    computed: {
+        showHeader() {
+            return !['/register', '/login'].includes(this.$nuxt._route.path)
+        }
     }
 }
 </script>
