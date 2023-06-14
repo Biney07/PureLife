@@ -63,7 +63,15 @@ export default {
             } catch (err) {
                 this.errorMessage = err
                 console.log(this.errorMessage)
+            } finally {
+                this.reset()
             }
+        },
+        reset() {
+            this.userData.firstName = null
+            this.userData.lastName = null
+            this.userData.email = null
+            this.userData.password = null
         }
     }
 }
