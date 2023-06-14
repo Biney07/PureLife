@@ -9,10 +9,13 @@
       <div class="menutoggle" @click="toggleMenu"></div>
       <ul class="navigation" :class="{ active: isMenuActive }">
         <li>
+          <NuxtLink to="/">Home</NuxtLink>
+        </li>
+        <li>
           <NuxtLink to="/contact">Kontakti</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/about">Rreth Nesh</NuxtLink>
+          <NuxtLink to="/about">About</NuxtLink>
         </li>
         <li>
           <NuxtLink to="/login">Login</NuxtLink>
