@@ -15,5 +15,7 @@
 
 		public string? PacientiLastName { get; set; }
 
+		public string? PacientiNrTel { get; set; }
+
 	}
 }

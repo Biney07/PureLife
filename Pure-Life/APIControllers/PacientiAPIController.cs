@@ -27,26 +27,17 @@ namespace Pure_Life.APIControllers
             {
                 return BadRequest(model);
             }
-    
-
             var pacienti = new Pacienti()
             {
-                NrLeternjoftimit = model.NrLeternjoftimit,
+                UId = null,
                 Emri = model.Emri,
                 Mbiemri = model.Mbiemri,
-                Gjinia = model.Gjinia,
-                DataLindjes = model.DataLindjes,
-                Alergji = model.Alergji,
-                NrTel = model.NrTel,
-                MembershipStatus = model.MembershipStatus,
-                ShtetiId = model.ShtetiId,
-                Qyteti = model.Qyteti,
-                NacionalitetiId = model.NacionalitetiId,
+                MembershipStatus = false,
                 Email = model.Email,
                 Password = model.Password,
                 ConfirmPassword = model.ConfirmPassword,
                 InsertedDate = DateTime.Now,
-                InsertedFrom = _currentUser.GetCurrentUserName()
+              
         };
 
             await _context.Pacientet.AddAsync(pacienti);
@@ -58,7 +49,30 @@ namespace Pure_Life.APIControllers
         public IActionResult Index()
         {
             var pacientet = _context.Pacientet.ToList();
-            return Ok(pacientet);
+			var result = pacientet.Select(x => new GetPacientiViewModel
+			{
+				Id = x.Id,
+				UId = x.UId,
+				NrLeternjoftimit = x.NrLeternjoftimit,
+				Emri = x.Emri,
+				Mbiemri = x.Mbiemri,
+				Gjinia = x.Gjinia,
+				DataLindjes = x.DataLindjes,
+				Alergji = x.Alergji,
+				NrTel = x.NrTel,
+				MembershipStatus = x.MembershipStatus,
+				ShtetiId = x.ShtetiId,
+				Qyteti = x.Qyteti,
+				NacionalitetiId = x.NacionalitetiId,
+				Email = x.Email,
+				InsertedDate = x.InsertedDate,
+				ModifiedDate = x.ModifiedDate,
+				ModifiedFrom = x.ModifiedFrom,
+				IsDeleted = x.IsDeleted
+			});
+
+
+			return Ok(pacientet);
         }
     }
 }

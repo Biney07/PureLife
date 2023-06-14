@@ -220,7 +220,8 @@ namespace Pure_Life.APIControllers
 				Status = x.Status ? "I rezervuar" : "I lire",
 				PacientiId = x.PacientiId ?? 0,
 				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
-				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null"
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel: "null",
 			});
 
 
