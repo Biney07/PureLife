@@ -3,15 +3,15 @@
   <div class="login-page">
     <p class="back-link"><NuxtLink to="/">Back to Homepage</NuxtLink></p>
     <h1 class="page-title">To log in, enter your email and password</h1>
-    <form class="input-form" action="">
+    <form @submit.prevent="userLogin" class="input-form" action="">
         <div>
             <label class="email-label" for="email">Email Address</label>
-            <input class="email-input" type="email" id="email" placeholder="Email Address" />
+            <input v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
         </div>
 
         <div>
             <label class="password-label" for="password">Password</label>
-            <input class="password-input"  type="password" id="password" placeholder="Password" />
+            <input v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
         </div>
 
         <button class="login-button">Continue</button>
@@ -32,7 +32,33 @@
 </template>
 
 <script>
-export default {};
+import { signin } from '@/patient-sdk/auth'
+export default {
+    data() {
+        return {
+            userData: {
+                email: null,
+                password: null,
+            }
+        }
+    },
+    methods: {
+        async userLogin() {
+            try{
+                const response = await signin(this.userData)
+                console.log(response)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                this.reset()
+            }
+        },
+        reset() {
+            this.userData.email = null
+            this.userData.password = null
+        }
+    }
+};
 </script>
 
 <style scoped>
