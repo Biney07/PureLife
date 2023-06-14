@@ -3,7 +3,7 @@
     <header>
       <div class="logoheader">
         <img src="../assets/purelife.png" loading="lazy" class="logo-header" />
-        <a href="../assets/purelife.png" class="logo">Pure<span>Life</span></a>
+        <NuxtLink to="/" class="logo">Pure<span>Life</span></NuxtLink>
       </div>
 
       <div class="menutoggle" @click="toggleMenu"></div>
@@ -458,8 +458,8 @@ section {
     background-position: center;
     cursor: pointer;
   }
-  .menutoggle.active {
-    /* background: url(https://i.postimg.cc/yNcK65Gc/close.png); */
+  .menutoggle .active {
+    background: url(https://i.postimg.cc/yNcK65Gc/close.png);
     background-size: 25px;
     background-repeat: no-repeat;
     background-position: center;
