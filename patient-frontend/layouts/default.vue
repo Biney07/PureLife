@@ -5,7 +5,7 @@
         <div>
             <slot />
         </div>
-         <Footer v-if="showHeader" />
+        <Footer v-if="showHeader" />
     </div>
 </template>
 

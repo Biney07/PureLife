@@ -6,12 +6,12 @@
     <form @submit.prevent="userLogin" class="input-form" action="">
         <div>
             <label class="email-label" for="email">Email Address</label>
-            <input v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
+            <input required v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
         </div>
 
         <div>
             <label class="password-label" for="password">Password</label>
-            <input v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
+            <input required v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
         </div>
 
         <button class="login-button">Continue</button>
@@ -33,6 +33,7 @@
 
 <script>
 import { signin } from '@/patient-sdk/auth'
+import { storeUser } from "@/helper/auth"
 export default {
     data() {
         return {
@@ -46,11 +47,12 @@ export default {
         async userLogin() {
             try{
                 const response = await signin(this.userData)
-                console.log(response)
+                storeUser(JSON.stringify(response))
             } catch (err) {
                 console.log(err)
             } finally {
                 this.reset()
+                this.$router.push({path: "/dashboard"});
             }
         },
         reset() {
