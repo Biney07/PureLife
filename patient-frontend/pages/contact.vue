@@ -1,61 +1,81 @@
 <template>
-  <div class="contactcontainer">
-    <div class="wrap-contact100">
-      <div class="contactimage">
-        <img src="../assets/contactimage.jpg" alt="" />
-      </div>
-      <div class="formacontact">
-        <form
-          class="contact100-form validate-form"
-          @submit.prevent="submitForm"
+  <div class="wave-form-background-img">
+    <div class="overlay-text">
+      <h1 class="about-Title">NA KONTAKTONI</h1>
+      <p class="about-paragraf">
+        "Spitali PureLife: Kujdes për Shëndetin, Përkrahje për Jetën"
+      </p>
+    </div>
+  </div>
+  <div class="wrap-contact100">
+    <div class="contactimage">
+      <div class="containeremergjenca" style="display: flex">
+        <h1 class="about-Titlee">THIRR EMERGJENCEN</h1>
+        <p
+          class="ose"
+          style="
+            display: flex;
+            align-items: end;
+            font-size: 50px;
+            padding: 0px 0px 0px 30px;
+            font-weight: 500;
+          "
         >
-          <span class="contact100-form-title">Contact Us</span>
-          <div class="wrap-input100 validate-input">
-            <input
-              class="input100"
-              type="text"
-              v-model="name"
-              name="name"
-              :placeholder="namePlaceholder"
-            />
-            <span class="focus-input100"></span>
-          </div>
-          <div
-            class="wrap-input100 validate-input"
-            data-validate="Please enter email: e@a.x"
-          >
-            <input
-              class="input100"
-              v-model="email"
-              type="text"
-              name="email"
-              :placeholder="emailPlaceholder"
-            />
-            <span class="focus-input100"></span>
-          </div>
-          <div class="wrap-input100 validate-input">
-            <textarea
-              class="input100"
-              v-model="message"
-              name="message"
-              :placeholder="messagePlaceholder"
-            ></textarea>
-            <span class="focus-input100"></span>
-          </div>
-          <div class="container-contact100-form-btn">
-            <button
-              class="contact100-form-btn"
-              :disabled="!name || !email || !message"
-            >
-              Send Email
-            </button>
-          </div>
-        </form>
-
-        <div class="contact100-more">
-          Contact our 24/7 call center:
-          <span class="contact100-more-highlight">+001 345 6889</span>
+          ose
+        </p>
+      </div>
+      <h1 class="about-Titlee" style="color: #ed2b2a">+383 49 800 800</h1>
+      <div style="border-top: 3px solid black"></div>
+      <h1 class="about-Titlee" style="color: #ed2b2a">+383 44 500 500</h1>
+    </div>
+    <div class="formacontact">
+      <form class="contact100-form validate-form" @submit.prevent="submitForm">
+        <h1 class="about-Titlee">NA KONTAKTONI</h1>
+        <div class="wrap-input100 validate-input">
+          <input
+            class="input100"
+            type="text"
+            v-model="name"
+            name="name"
+            :placeholder="namePlaceholder"
+          />
+          <span class="focus-input100"></span>
         </div>
+        <div
+          class="wrap-input100 validate-input"
+          data-validate="Please enter email: e@a.x"
+        >
+          <input
+            class="input100"
+            v-model="email"
+            type="text"
+            name="email"
+            :placeholder="emailPlaceholder"
+          />
+          <span class="focus-input100"></span>
+        </div>
+        <div class="wrap-input100 validate-input">
+          <textarea
+            class="input100"
+            v-model="message"
+            name="message"
+            :placeholder="messagePlaceholder"
+          ></textarea>
+          <span class="focus-input100"></span>
+        </div>
+        <div class="container-contact100-form-btn">
+          <button
+            class="contact100-form-btn"
+            :disabled="!name || !email || !message"
+          >
+            Send Email
+          </button>
+        </div>
+      </form>
+
+      <div class="contact100-more">
+        Contact our 24/7 call center:
+        <span class="contact100-more-highlight">+001 345 6889</span>
       </div>
     </div>
   </div>
@@ -128,31 +148,98 @@ export default {
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
+.wave-form-background-img {
+  height: 45rem;
+  margin: -2px 0px;
+
+  background-image: url("../assets/contact.jpg");
+  background-size: cover;
+  background-position: center;
+  margin-bottom: -70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.overlay-text {
+  text-align: center;
+  color: white;
+}
+
+.about-Title {
+  font-family: "Poppins", sans-serif;
+  font-size: 100px;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.5);
+}
+.about-Titlee {
+  font-family: "Poppins", sans-serif;
+  font-size: 60px;
+  font-weight: 600;
+  text-align: left;
+}
+.about-paragraf {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+  margin-top: -20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 2.5);
+}
+.upbanner {
+  width: 100%;
+  bottom: -7px;
 }
 .formacontact {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  padding: 1% 10.5% 3.125% 10.5%;
+  padding: 3% 5.5% 3.125% 5.5%;
 }
 .contactimage {
   width: 50%;
+  padding: 50px;
 }
 .contactimage img {
   width: 100%;
 }
 @media screen and (max-width: 1000px) {
+  .formacontact {
+    width: 80%;
+    padding-top: 20px !important;
+  }
+  .ose {
+    display: none !important;
+  }
+  .containeremergjenca {
+    display: flex;
+    flex-direction: column !important;
+  }
   .contactimage {
-    display: none;
+    width: 85%;
+    padding: 40px;
+  }
+  .wrap-contact100 {
+    display: flex;
+    flex-direction: column !important;
+  }
+  .about-Title {
+    font-size: 40px;
+  }
+  .about-paragraf {
+    font-size: 15px !important;
+    padding-top: 5px;
+  }
+  .about-Titlee {
+    font-size: 40px;
   }
   .formacontact {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  padding: 9% 10.5% 3.125% 10.5%;
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 20% 10.5% 3.125% 10.5%;
+  }
 }
 
 .contactcontainer {
@@ -182,6 +269,7 @@ export default {
   width: 100%;
   background: #fff;
   display: flex;
+  flex-direction: row;
   overflow: hidden;
 }
 
@@ -382,7 +470,7 @@ button {
   height: 42px;
   background-color: #1d7eed;
   border-radius: 21px;
-    font-size: 14px;
+  font-size: 14px;
   color: #fff;
   text-transform: uppercase;
   -webkit-transition: all 0.4s;

@@ -34,73 +34,7 @@ namespace Pure_Life.APIControllers
         }
 
 
-		/*        [HttpPost]
-				public async Task<IActionResult> Create(int stafiId)
-				{
-					*//*
-					 * 
-					 8:00 - 8:30
-					 8:30 - 9:00
-					 9:00 - 9:30
-					 9:30 - 10:00
-					 10:30 - 11:00
-					 11:00 - 11:30
-					11:30 - 12:00
-
-					13:00 - 13:30
-					13:30 - 14:00
-					14:00 - 14:30
-					14:30 - 15:00
-					15:30 - 16:00
-
-					 *//*
-			   TimeSpan[] timeSlots = new TimeSpan[]
-			  {
-				new TimeSpan(8, 0, 0),   // 8:00 - 8:30
-				new TimeSpan(8, 30, 0),  // 8:30 - 9:00
-				new TimeSpan(9, 0, 0),   // 9:00 - 9:30
-				new TimeSpan(9, 30, 0),  // 9:30 - 10:00
-				new TimeSpan(10, 30, 0), // 10:30 - 11:00
-				new TimeSpan(11, 0, 0),  // 11:00 - 11:30
-				new TimeSpan(11, 30, 0), // 11:30 - 12:00
-				new TimeSpan(13, 0, 0),  // 13:00 - 13:30
-				new TimeSpan(13, 30, 0), // 13:30 - 14:00
-				new TimeSpan(14, 0, 0),  // 14:00 - 14:30
-				new TimeSpan(14, 30, 0), // 14:30 - 15:00
-				new TimeSpan(15, 30, 0)  // 15:30 - 16:00
-		   };
-					//var user = _currentUser.GetCurrentUserName();
-					//var stafi = _context.Stafi.Where(x => x.Emri == user).FirstOrDefault();
-					var stafi = _context.Stafi.Where(x => x.Id == stafiId).FirstOrDefault();
-
-				  *//*  if (!ModelState.IsValid)
-					{
-						return BadRequest(model);
-					}*//*
-					DateTime currentDateTime = DateTime.Now;
-					var terminiList = new List<Termini>();
-
-					foreach (var timeSlot in timeSlots)
-					{
-
-						var termini = new Termini()
-						{
-							StartTime = (currentDateTime.Date + timeSlot).ToString(),
-							EndTime = (currentDateTime.Date + timeSlot.Add(new TimeSpan(0, 30, 0))).ToString(),
-							Status = false,
-							Price = 0,
-							StafiId = stafi.Id,
-							PacientiId = null,
-							InsertedDate = currentDateTime,
-							InsertedFrom = _currentUser.GetCurrentUserName(),
-						};
-						terminiList.Add(termini);
-					}
-					await _context.AddRangeAsync(terminiList);
-					await _context.SaveChangesAsync();
-					return Ok();
-
-				}*/
+	
 		[Route("Create")]
 		[HttpPost]
 		public async Task<IActionResult> Create(int stafiId)
@@ -179,30 +113,6 @@ namespace Pure_Life.APIControllers
         }*/
 
 
-		[HttpGet]
-		public async Task<IActionResult> GetKujdestarite()
-		{
-			var kujdestarite = await _context.Kujdestarite
-				.Include(s => s.Stafi)
-				.Where(x => !x.IsDeleted && x.Data.Date >= DateTime.Now.Date)
-				.ToListAsync();
-
-			if (_context.Kujdestarite == null)
-			{
-				return BadRequest("test error");
-			}
-
-			var result = kujdestarite.Select(x => new GetKujdestariteAPIViewModel
-			{
-				Id = x.Id,
-				Data = x.Data,
-				Kati = x.Kati,
-				Reparti = x.Reparti,
-				StafiEmriMbiemri = $"{x.Stafi.Emri} {x.Stafi.Mbiemri}",
-				StafiId = x.StafiId,
-			});
-			return Ok(result);
-		}
 		[Route("Index")]
 		[HttpGet]
 		public async Task<IActionResult> Index()
@@ -228,6 +138,32 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
+
+		[Route("GetReservedTermine")]
+		[HttpGet]
+		public async Task<IActionResult> GetReservedTermine()
+		{
+			var terminet = await _context.Terminet
+		.Include(x => x.Pacienti)
+		.Where(x => !x.IsDeleted && x.PacientiId!=null)
+		.ToListAsync();
+
+			var result = terminet.Select(x => new GetTerminiViewModel
+			{
+				Id = x.Id,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				Status = x.Status ? "I rezervuar" : "I lire",
+				PacientiId = x.PacientiId ?? 0,
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
+			});
+
+
+			return Ok(result);
+		}
+
 		[Route("GetTerminiByStaf/{id}")]
         [HttpGet]
 
@@ -240,15 +176,53 @@ namespace Pure_Life.APIControllers
 
         }
 
-        [Route("GetTerminiByDate/{date}")]
+
+		[Route("GetTerminetByPacient/{id}")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetTerminetByPacient(string id)
+		{
+
+			var termini = await _context.Terminet.Include(x=>x.Pacienti).Include(x=>x.Stafi).ThenInclude(x=>x.Lemia).Where(x => x.Pacienti.UId.Equals(id) && !x.IsDeleted).ToListAsync();
+			var result = termini.Select(x => new GetTerminiViewModel
+			{
+				Id = x.Id,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				Status = x.Status ? "I rezervuar" : "I lire",
+				PacientiId = x.PacientiId ?? 0,
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
+				Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : "null",
+				Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri: "null",
+			});
+
+			return Ok(result);
+
+		}
+/*
+		[Route("GetTerminetByPacientPending/{id}")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetTerminetByPacientPending(int id)
+		{
+
+			var termini = await _context.Terminet.Where(x => x.PacientiId == id &&x.Price==0&& !x.IsDeleted).ToListAsync();
+
+			return new JsonResult(termini);
+
+		}*/
+
+		[Route("GetTerminiByDateAndId/{date}/{id}")]
         [HttpGet]
 
-        public async Task<IActionResult> GetTerminiByDate(string date)
+        public async Task<IActionResult> GetTerminiByDateAndId(string date, int id)
         {
             DateTime parsedDate = DateTime.Parse(date);
             var terminiList = await _context.Terminet.ToListAsync();
             var termini = terminiList
-                .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted)
+                .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted && x.StafiId==id)
                 .ToList();
 
             return new JsonResult(termini);

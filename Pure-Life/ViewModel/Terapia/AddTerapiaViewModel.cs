@@ -7,6 +7,8 @@
 
         public string Barnat { get; set; }
 
-        public string StartDate { get; set; }
+        public int TerminiId { get; set; }
+
+        public string SherbimetEKryera { get; set; }
     }
 }
