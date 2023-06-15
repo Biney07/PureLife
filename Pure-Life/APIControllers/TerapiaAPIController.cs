@@ -11,24 +11,24 @@ using System.Runtime.CompilerServices;
 
 namespace Pure_Life.APIControllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TerapiaAPIController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class TerapiaAPIController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
 
-        public TerapiaAPIController(ApplicationDbContext context)
-        {
-            _context= context;
-        }
+		public TerapiaAPIController(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> Create(AddTerapiaViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+		[HttpPost]
+		public async Task<IActionResult> Create(AddTerapiaViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
 			/*   DateTime parsedDateTime = DateTime.Parse(model.StartDate);
 
@@ -40,19 +40,19 @@ namespace Pure_Life.APIControllers
 				.FirstOrDefault(x => x.Id == model.TerminiId && !x.IsDeleted);
 
 			if (termini == null)
-            {
-                return NotFound("Termini not found");
-            }
-            var stafi = await _context.Stafi.Where(x=>x.Id==termini.StafiId).FirstOrDefaultAsync();
-            var terapia = new Terapia()
-            {
-                Pershkrimi = model.Pershkrimi,
-                Diagnoza = model.Diagnoza,
-                Barnat = model.Barnat,
-                TerminiId = termini.Id,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = stafi.EmailZyrtar
-            };
+			{
+				return NotFound("Termini not found");
+			}
+			var stafi = await _context.Stafi.Where(x => x.Id == termini.StafiId).FirstOrDefaultAsync();
+			var terapia = new Terapia()
+			{
+				Pershkrimi = model.Pershkrimi,
+				Diagnoza = model.Diagnoza,
+				Barnat = model.Barnat,
+				TerminiId = termini.Id,
+				InsertedDate = DateTime.Now,
+				InsertedFrom = stafi.EmailZyrtar
+			};
 
 			List<int> sherbimetIds = new List<int>();
 
@@ -86,7 +86,7 @@ namespace Pure_Life.APIControllers
 			await _context.SaveChangesAsync();
 
 
-		
+
 
 
 			var terapiaa = await _context.Terapia
@@ -94,9 +94,9 @@ namespace Pure_Life.APIControllers
 					.ThenInclude(t => t.Stafi)
 				.Include(t => t.Termini)
 					.ThenInclude(t => t.Pacienti)
-				.Where(x=>x.Id==terapia.Id)
+				.Where(x => x.Id == terapia.Id)
 				.FirstOrDefaultAsync();
-			
+
 			var result = new GetTerapiaViewModel
 			{
 				Id = terapiaa.Id,
@@ -119,7 +119,7 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
-      
+
 
 		[HttpGet("GetTerapiteEPacienteveMeSherbime")]
 		public async Task<IActionResult> GetTerapiteEPacienteveMeSherbime()
@@ -134,6 +134,7 @@ namespace Pure_Life.APIControllers
 		.ThenInclude(t => t.Pacienti)
 	.Include(t => t.TerapiaSherbimet)
 		.ThenInclude(ts => ts.Sherbimet)
+	.Where(t=>t.IsDeleted==false)
 	.ToListAsync();
 
 
@@ -146,8 +147,8 @@ namespace Pure_Life.APIControllers
 				Diagnoza = x.Diagnoza,
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
-				Sherbimet = x.TerapiaSherbimet != null 
-				? x.TerapiaSherbimet.Select(s=>s.Sherbimet.Emri).ToList() : null,
+				Sherbimet = x.TerapiaSherbimet != null
+				? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
 				InsertedFrom = x.InsertedFrom,
 				InsertedDate = x.InsertedDate,
@@ -157,20 +158,50 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
-		/*[HttpGet("GetTerapiteEPacienteve")]
-
-		public async Task<IActionResult> GetTerapiteEPacienteve()
+		[HttpPut]
+		public async Task<IActionResult> Edit(int id, EditTerapiaViewModel model, int stafiId)
 		{
+			var terapia = await _context.Terapia
+			.Include(t => t.Termini)
+				.ThenInclude(t => t.Stafi)
+			.Include(t => t.Termini)
+				.ThenInclude(t => t.Pacienti)
+			.Where(x => x.Id == id)
+			.FirstOrDefaultAsync();
 
+			if (terapia == null)
+			{
+				return BadRequest("Terapia nuk u gjet");
+			}
+			string[] sherbimetIds = model.SherbimetEKryera.Split(',');
+			List<int> sherbimetIdList = sherbimetIds.Select(int.Parse).ToList();
 
+			terapia.Id = id;
+			terapia.Pershkrimi = model.Pershkrimi;
+			terapia.Diagnoza = model.Diagnoza;
+			terapia.Barnat = model.Barnat;
+			var newEntries = sherbimetIdList.Select(sherbimetId => new TerapiaSherbimet
+			{
+				TerapiaId = id,
+				SherbimetId = sherbimetId
+			}).ToList();
+
+			_context.TerapiaSherbimet.AddRange(newEntries);
+
+			terapia.ModifiedFrom = _context.Stafi.FirstOrDefault(x => x.Id == stafiId).EmailZyrtar;
+			terapia.ModifiedDate = DateTime.Now;
+
+			await _context.SaveChangesAsync();
 
 			var terapite = await _context.Terapia
-				.Include(t => t.Termini)
-					.ThenInclude(t => t.Stafi)
-				.Include(t => t.Termini)
-					.ThenInclude(t => t.Pacienti)
-				.ToListAsync();
-
+.Include(t => t.Termini)
+.ThenInclude(t => t.Stafi)
+.Include(t => t.Termini)
+.ThenInclude(t => t.Pacienti)
+.Include(t => t.TerapiaSherbimet)
+.ThenInclude(ts => ts.Sherbimet)
+.Where(t=>t.Id == terapia.Id)
+.ToListAsync();
 			var result = terapite.Select(x => new GetTerapiaViewModel
 			{
 				Id = x.Id,
@@ -180,6 +211,8 @@ namespace Pure_Life.APIControllers
 				Diagnoza = x.Diagnoza,
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
+				Sherbimet = x.TerapiaSherbimet != null
+			? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
 				InsertedFrom = x.InsertedFrom,
 				InsertedDate = x.InsertedDate,
@@ -187,7 +220,10 @@ namespace Pure_Life.APIControllers
 				ModifiedFrom = x.ModifiedFrom
 			});
 			return Ok(result);
-		}*/
+
+
+
+		}
 
 		[HttpGet("GetTerapiteEPacientitID/{id}")]
 
@@ -226,6 +262,57 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
+		[HttpPut("DeleteTerapia/{id}")]
+
+		public async Task<IActionResult> DeleteTerapia(int id)
+		{
+			var terapia = await _context.Terapia
+			.Include(t => t.Termini)
+				.ThenInclude(t => t.Stafi)
+			.Include(t => t.Termini)
+				.ThenInclude(t => t.Pacienti)
+			.Where(x => x.Id == id)
+			.FirstOrDefaultAsync();
+
+			if(terapia == null)
+			{
+				return BadRequest("Terapia nuk u gjet");
+			}
+			terapia.IsDeleted = true;
+			await _context.SaveChangesAsync();
+
+			var terapite = await _context.Terapia
+				.Include(t => t.Termini)
+					.ThenInclude(t => t.Stafi)
+				.Include(t => t.Termini)
+					.ThenInclude(t => t.Pacienti)
+				.Include(t => t.TerapiaSherbimet)
+					.ThenInclude(t => t.Sherbimet)
+				.Where(t => t.Id == id)
+				.ToListAsync();
+			var result = terapite.Select(x => new GetTerapiaViewModel
+			{
+				Id = x.Id,
+				Pacienti = $"{x.Termini.Pacienti.Emri} {x.Termini.Pacienti.Mbiemri}",
+				NrLeternjoftimit = x.Termini.Pacienti.NrLeternjoftimit,
+				Koha = $"{x.Termini.StartTime} - {x.Termini.EndTime}",
+				Diagnoza = x.Diagnoza,
+				Pershkrimi = x.Pershkrimi,
+				Barnat = x.Barnat,
+				Sherbimet = x.TerapiaSherbimet != null
+		? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
+				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
+				InsertedFrom = x.InsertedFrom,
+				InsertedDate = x.InsertedDate,
+				ModifiedDate = x.ModifiedDate,
+				ModifiedFrom = x.ModifiedFrom
+			});
+			return Ok(result);
+
+
+		}
+
+
 		[HttpGet("GetTerapiteEPacientitLeternjoftim/{leternjoftimi}")]
 
 		public async Task<IActionResult> GetTerapiteEPacientitLeternjoftim(string leternjoftimi)
@@ -240,7 +327,7 @@ namespace Pure_Life.APIControllers
 					.ThenInclude(t => t.Pacienti).
 				Include(t => t.TerapiaSherbimet)
 					.ThenInclude(t => t.Sherbimet)
-				.Where(t => t.Termini.Pacienti.NrLeternjoftimit==leternjoftimi)
+				.Where(t => t.Termini.Pacienti.NrLeternjoftimit == leternjoftimi)
 				.ToListAsync();
 
 			var result = terapite.Select(x => new GetTerapiaViewModel
@@ -321,7 +408,7 @@ namespace Pure_Life.APIControllers
 				NrLeternjoftimit = terapite.Termini.Pacienti.NrLeternjoftimit,
 				Koha = $"{terapite.Termini.StartTime} - {terapite.Termini.EndTime}",
 				Diagnoza = terapite.Diagnoza,
-				Pershkrimi =terapite.Pershkrimi,
+				Pershkrimi = terapite.Pershkrimi,
 				Barnat = terapite.Barnat,
 				Doktori = $"Dr {terapite.Termini.Stafi.Emri} {terapite.Termini.Stafi.Mbiemri}",
 				InsertedFrom = terapite.InsertedFrom,
