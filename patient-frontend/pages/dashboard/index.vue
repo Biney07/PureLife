@@ -5,8 +5,15 @@
 </template>
 
 <script>
+import {userExists} from "@/helper/auth"
 export default {
-
+    setup() {
+        definePageMeta({
+            middleware: [
+                'auth',
+            ]
+        });
+    },
 }
 </script>
 

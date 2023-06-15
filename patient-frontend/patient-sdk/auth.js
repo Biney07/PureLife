@@ -46,4 +46,8 @@ export async function userSignOut() {
         console.log(err)
     }
 }
+
+export async function getPacienti(uid) {
+    return axios.get(`${API_URL}/api/PacientiAPI/GetPacientiByUId/${uid}`)
+}
   
