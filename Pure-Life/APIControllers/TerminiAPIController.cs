@@ -88,8 +88,7 @@ namespace Pure_Life.APIControllers
 			return Ok();
 		}
 
-		[Route("RezervoTerminin")]
-		[HttpPut]
+		[HttpPut("RezervoTerminin/{terminiId}/{pacientiId}")]
 		public async Task<IActionResult> RezervoTerminin(int terminiId, int pacientiId)
 		{
 			var termini = await _context.Terminet.Where(x=>x.Id == terminiId && !x.IsDeleted && x.Status==false).FirstOrDefaultAsync();

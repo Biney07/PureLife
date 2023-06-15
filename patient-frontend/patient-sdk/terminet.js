@@ -10,8 +10,5 @@ export function getTerminetByDate(date) {
 }
 
 export function rezervoTerminin(terminiId, pacientiId) {
-    return axios.put(`${API_URL}/api/TerminiAPI/RezervoTerminin/`, {
-        terminiId: terminiId,
-        pacientiId: pacientiId
-    })
+    return axios.put(`${API_URL}/api/TerminiAPI/RezervoTerminin/${terminiId}/${pacientiId}`)
 }
