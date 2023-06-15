@@ -5,6 +5,7 @@ using PagedList;
 using Pure_Life.Data;
 using Pure_Life.Migrations;
 using Pure_Life.Models;
+using Pure_Life.Models.Analiza;
 using Pure_Life.ViewModel.Terapia;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -36,6 +37,7 @@ namespace Pure_Life.APIControllers
 
 			/*      var termini = terminiList
 					  .FirstOrDefault(x => DateTime.Parse(x.StartTime) == parsedDateTime && !x.IsDeleted);*/
+
 			var termini = _context.Terminet
 				.FirstOrDefault(x => x.Id == model.TerminiId && !x.IsDeleted);
 
@@ -43,16 +45,16 @@ namespace Pure_Life.APIControllers
 			{
 				return NotFound("Termini not found");
 			}
-			var stafi = await _context.Stafi.Where(x => x.Id == termini.StafiId).FirstOrDefaultAsync();
-			var terapia = new Terapia()
+
+			List<int> analizaIds = model.AnalizatECaktuara.Split(',').Select(x => int.Parse(x)).ToList();
+
+			List<TerapiaAnalizaRezultati> terapiaAnalizaRezultatet = await _context.AnalizatLlojet.Where(x => analizaIds.Contains(x.AnalizaId)).Select(x => new TerapiaAnalizaRezultati
 			{
-				Pershkrimi = model.Pershkrimi,
-				Diagnoza = model.Diagnoza,
-				Barnat = model.Barnat,
-				TerminiId = termini.Id,
-				InsertedDate = DateTime.Now,
-				InsertedFrom = stafi.EmailZyrtar
-			};
+				AnalizaLlojiId = x.Id
+				//TerapiaId //kjo veqse mbushet ma poshte kur te krijohet terapia
+				//Rezultati // rezultati mbushet mas anej kurdo qe te osht nevoja
+			}).ToListAsync();
+
 
 			List<int> sherbimetIds = new List<int>();
 
@@ -66,14 +68,28 @@ namespace Pure_Life.APIControllers
 				}
 			}
 
+			List<TerapiaSherbimet> terapiaSherbimet = sherbimetIds.Select(sherbimId => new TerapiaSherbimet
+			{
+				SherbimetId = sherbimId
+			}).ToList();
+
+			var stafi = await _context.Stafi.Where(x => x.Id == termini.StafiId).FirstOrDefaultAsync();
+			var terapia = new Terapia()
+			{
+				Pershkrimi = model.Pershkrimi,
+				Diagnoza = model.Diagnoza,
+				Barnat = model.Barnat,
+				TerminiId = termini.Id,
+				InsertedDate = DateTime.Now,
+				InsertedFrom = stafi.EmailZyrtar,
+				TerapiaSherbimet = terapiaSherbimet,
+				TerapiaAnalizaRezultati = terapiaAnalizaRezultatet
+			};
+
 			await _context.Terapia.AddAsync(terapia);
 			await _context.SaveChangesAsync();
 
-			List<TerapiaSherbimet> terapiaSherbimet = sherbimetIds.Select(sherbimId => new TerapiaSherbimet
-			{
-				TerapiaId = terapia.Id,
-				SherbimetId = sherbimId
-			}).ToList();
+			
 
 			decimal totalPrice = await _context.Sherbimet
 	.Where(s => sherbimetIds.Contains(s.Id))
@@ -81,13 +97,6 @@ namespace Pure_Life.APIControllers
 
 			var terminiPrice = await _context.Terminet.FirstOrDefaultAsync(x => x.Id == termini.Id);
 			terminiPrice.Price = (double)totalPrice;
-
-			await _context.TerapiaSherbimet.AddRangeAsync(terapiaSherbimet);
-			await _context.SaveChangesAsync();
-
-
-
-
 
 			var terapiaa = await _context.Terapia
 				.Include(t => t.Termini)
@@ -124,21 +133,7 @@ namespace Pure_Life.APIControllers
 		[HttpGet("GetTerapiteEPacienteveMeSherbime")]
 		public async Task<IActionResult> GetTerapiteEPacienteveMeSherbime()
 		{
-
-
-
-			var terapite = await _context.Terapia
-	.Include(t => t.Termini)
-		.ThenInclude(t => t.Stafi)
-	.Include(t => t.Termini)
-		.ThenInclude(t => t.Pacienti)
-	.Include(t => t.TerapiaSherbimet)
-		.ThenInclude(ts => ts.Sherbimet)
-	.Where(t=>t.IsDeleted==false)
-	.ToListAsync();
-
-
-			var result = terapite.Select(x => new GetTerapiaViewModel
+			var result = await _context.Terapia.Select(x => new GetTerapiaViewModel
 			{
 				Id = x.Id,
 				Pacienti = $"{x.Termini.Pacienti.Emri} {x.Termini.Pacienti.Mbiemri}",
@@ -153,8 +148,16 @@ namespace Pure_Life.APIControllers
 				InsertedFrom = x.InsertedFrom,
 				InsertedDate = x.InsertedDate,
 				ModifiedDate = x.ModifiedDate,
-				ModifiedFrom = x.ModifiedFrom
-			});
+				ModifiedFrom = x.ModifiedFrom,
+				Analizat = x.TerapiaAnalizaRezultati.Select(y=> y.AnalizaLloji.Analiza).Distinct().Select(x=> new AnalizaETerapise
+				{
+					Id = x.Id,
+					EmriAnalizes = x.Emri,
+					Cmimi = x.Cmimi,
+					Data = x.Data
+				}).ToList()
+			}).ToListAsync();
+
 			return Ok(result);
 		}
 

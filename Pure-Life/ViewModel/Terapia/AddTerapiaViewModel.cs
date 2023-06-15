@@ -10,5 +10,6 @@
         public int TerminiId { get; set; }
 
         public string SherbimetEKryera { get; set; }
+        public string AnalizatECaktuara { get; set; }
     }
 }
