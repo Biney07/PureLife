@@ -7,22 +7,22 @@
         <div class="fullname-container">
             <div>
                 <label class="name-label" for="name">First Name</label>
-                <input v-model="userData.firstName" class="name-input" type="text" id="name" placeholder="First Name" />
+                <input required v-model="userData.firstName" class="name-input" type="text" id="name" placeholder="First Name" />
             </div>
             <div>
                 <label class="lastname-label" for="lastname">Last Name</label>
-                <input v-model="userData.lastName" class="lastname-input" type="text" id="lastname" placeholder="Last Name" />
+                <input required v-model="userData.lastName" class="lastname-input" type="text" id="lastname" placeholder="Last Name" />
             </div>
         </div>
 
         <div>
             <label class="email-label" for="email">Email Address</label>
-            <input v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
+            <input required v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
         </div>
 
         <div>
             <label class="password-label" for="password">Password</label>
-            <input v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
+            <input required v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
         </div>
 
         <button class="login-button">Continue</button>
@@ -64,6 +64,7 @@ export default {
                 this.errorMessage = err
                 console.log(this.errorMessage)
             } finally {
+                this.$router.push({path: "/login"})
                 this.reset()
             }
         },

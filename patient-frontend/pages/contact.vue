@@ -124,28 +124,6 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap");
-@font-face {
-  font-family: Material-Design-Iconic-Font;
-  src: url(https://colorlib.com/etc/cf/ContactFrom_v9/fonts/iconic/fonts/Material-Design-Iconic-Font.woff2?v=2.2.0)
-      format("woff2"),
-    url(https://colorlib.com/etc/cf/ContactFrom_v9/fonts/iconic/fonts/Material-Design-Iconic-Font.woff?v=2.2.0)
-      format("woff"),
-    url(https://colorlib.com/etc/cf/ContactFrom_v9/fonts/iconic/fonts/Material-Design-Iconic-Font.ttf?v=2.2.0)
-      format("truetype");
-}
-@font-face {
-  font-family: SourceSansPro-Regular;
-  src: url("https://colorlib.com/etc/cf/ContactFrom_v9/fonts/source-sans-pro/SourceSansPro-Regular.ttf");
-}
-@font-face {
-  font-family: SourceSansPro-Bold;
-  src: url("https://colorlib.com/etc/cf/ContactFrom_v9/fonts/source-sans-pro/SourceSansPro-Bold.ttf");
-}
-@font-face {
-  font-family: JosefinSans-Bold;
-  src: url("https://colorlib.com/etc/cf/ContactFrom_v9/fonts/JosefinSans/JosefinSans-Bold.ttf");
-}
 * {
   box-sizing: border-box;
   margin: 0px;
@@ -218,7 +196,7 @@ export default {
 }
 
 .contact100-more {
-  font-family: SourceSansPro-Regular;
+  font-family: var(--primary-font);
   font-size: 16px;
   color: #999999;
   line-height: 1.5;
@@ -263,7 +241,7 @@ export default {
   left: 0px;
   padding: 0 45px 0 22px;
   pointer-events: none;
-  font-family: SourceSansPro-Bold;
+  font-family: var(--primary-font);
   font-size: 16px;
   color: #fa4251;
   line-height: 1.2;
@@ -301,7 +279,7 @@ input {
   display: block;
   width: 100%;
   background: transparent;
-  font-family: SourceSansPro-Bold;
+  font-family: var(--primary-font);
   font-size: 16px;
   color: #149fe5;
   line-height: 1.2;
@@ -341,7 +319,7 @@ input.input100 {
 }
 
 .btn-hide-validate {
-  font-family: Material-Design-Iconic-Font;
+  font-family: var(--primary-font);
   font-size: 15px;
   color: #fa4251;
   cursor: pointer;

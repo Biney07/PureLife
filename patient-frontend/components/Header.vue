@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <header>
+    <header v-if="!isUserLoggedIn">
       <div class="logoheader">
         <img src="../assets/purelife.png" loading="lazy" class="logo-header" />
         <NuxtLink to="/" class="logo">Pure<span>Life</span></NuxtLink>
@@ -22,10 +22,33 @@
         </li>
       </ul>
     </header>
+
+    <header class="dashboard-header" v-else>
+      <nav class="header__nav">
+          <NuxtLink to="/dashboard"><img src="../assets/purelife color.png" alt="purelife-logo"></NuxtLink>
+          <ul class="header__menu" data-aos="fade-down">
+              <div class="seperated-links">
+                  <li>
+                      <NuxtLink to="/dashboard/terminet">Terminet</NuxtLink>
+                  </li>
+                  <li>
+                      <NuxtLink to="/about">Profile</NuxtLink>
+                  </li>
+              </div>
+              <div class="auth-links">
+                  <li>
+                      <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
+                  </li>
+              </div>
+          </ul>
+      </nav>
+    </header>
   </div>
 </template>
 
 <script>
+import {userExists, removeUser} from "@/helper/auth"
+import {userSignOut} from "@/patient-sdk/auth"
 export default {
   data() {
     return {
@@ -38,6 +61,11 @@ export default {
   beforeDestroy() {
     window.removeEventListener("scroll", this.handleScroll);
   },
+  computed: {
+    isUserLoggedIn() {
+      return userExists()
+    }
+  },
   methods: {
     handleScroll() {
       const header = document.querySelector("header");
@@ -46,6 +74,14 @@ export default {
     toggleMenu() {
       this.isMenuActive = !this.isMenuActive;
     },
+    async logout(){
+      try {
+          await userSignOut()
+          removeUser()
+      } catch (err) {
+          console.log(err)
+      }
+    }
   },
 };
 </script>
@@ -515,5 +551,62 @@ section {
   .sticky {
     padding: 10px 30px;
   }
+}
+
+.dashboard-header{
+    width: 100%;
+    overflow: hidden;
+    height: var(--header-height);
+    font-family: var(--primary-font);
+    color: black;
+}
+
+.header__nav {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 100px;
+    align-items: center;
+}
+
+.header__nav img {
+    width: 20%;
+    height: auto;
+}
+
+.header__menu {
+    display: flex;
+    list-style-type: none;
+    gap: 30px;
+    text-decoration: none;
+    margin: 0;
+}
+
+.seperated-links {
+    display: flex;
+    gap: 15px;
+}
+
+.seperated-links a {
+    color: var(--primary-font-color);
+}
+
+.auth-links {
+    display: flex;
+    gap: 5px;
+    color: var(--secondary-font-color);
+}
+
+.auth-links li a {
+    color: var(--secondary-font-color);
+}
+
+.header__nav ul li a{
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.router-link-exact-active {
+    font-weight: 600;
 }
 </style>
