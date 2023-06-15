@@ -170,7 +170,7 @@ export default {
   height: 45rem;
   margin: -2px 0px;
 
-  background-image: url("../assets/CONTACTBANNER.png");
+  background-image: url("../assets/contact.jpg");
   background-size: cover;
   background-position: center;
   margin-bottom: -70px;
@@ -192,7 +192,7 @@ export default {
 }
 .about-Titlee {
   font-family: "Poppins", sans-serif;
-  font-size: 80px;
+  font-size: 60px;
   font-weight: 600;
   text-align: left;
 }
@@ -488,7 +488,7 @@ button {
   height: 42px;
   background-color: #1d7eed;
   border-radius: 21px;
-    font-size: 14px;
+  font-size: 14px;
   color: #fff;
   text-transform: uppercase;
   -webkit-transition: all 0.4s;

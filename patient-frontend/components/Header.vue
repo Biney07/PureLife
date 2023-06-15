@@ -12,6 +12,9 @@
           <NuxtLink to="/">Home</NuxtLink>
         </li>
         <li>
+          <NuxtLink to="/staf">Stafi</NuxtLink>
+        </li>
+        <li>
           <NuxtLink to="/contact">Kontakti</NuxtLink>
         </li>
         <li>
