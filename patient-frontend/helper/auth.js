@@ -24,7 +24,7 @@ export function getUser() {
 }
 
 export function removeUser() {
-    if(userExists) {
+    if(userExists()) {
         return localStorage.removeItem('patient')
     }
 }

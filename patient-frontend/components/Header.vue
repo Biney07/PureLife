@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <header v-if="!isUserLoggedIn">
+    <header v-if="!isUserLoggedIn || !isDashboardPath">
       <div class="logoheader">
         <img src="../assets/purelife.png" loading="lazy" class="logo-header" />
         <NuxtLink to="/" class="logo">Pure<span>Life</span></NuxtLink>
@@ -20,11 +20,15 @@
         <li>
           <NuxtLink to="/about">About</NuxtLink>
         </li>
-        <li>
+        <li v-if="!isUserLoggedIn">
           <NuxtLink to="/login">Login</NuxtLink>
         </li>
-        <li>
+        <li v-if="!isUserLoggedIn">
           <NuxtLink to="/register">Register</NuxtLink>
+        </li>
+
+        <li v-if="isUserLoggedIn">
+          <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
         </li>
       </ul>
     </header>
@@ -70,7 +74,10 @@ export default {
   computed: {
     isUserLoggedIn() {
       return userExists()
-    }
+    },
+    isDashboardPath() {
+      return this.$route.path.includes("/dashboard");
+    },
   },
   methods: {
     handleScroll() {
