@@ -17,5 +17,9 @@
 
 		public string? PacientiNrTel { get; set; }
 
+		public string? Doktori { get; set; }
+
+		public string? Reparti { get; set; }
+
 	}
 }

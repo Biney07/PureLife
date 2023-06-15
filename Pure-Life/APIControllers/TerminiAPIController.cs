@@ -176,7 +176,45 @@ namespace Pure_Life.APIControllers
 
         }
 
-        [Route("GetTerminiByDateAndId/{date}/{id}")]
+
+		[Route("GetTerminetByPacient/{id}")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetTerminetByPacient(string id)
+		{
+
+			var termini = await _context.Terminet.Include(x=>x.Pacienti).Include(x=>x.Stafi).ThenInclude(x=>x.Lemia).Where(x => x.Pacienti.UId.Equals(id) && !x.IsDeleted).ToListAsync();
+			var result = termini.Select(x => new GetTerminiViewModel
+			{
+				Id = x.Id,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				Status = x.Status ? "I rezervuar" : "I lire",
+				PacientiId = x.PacientiId ?? 0,
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
+				Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : "null",
+				Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri: "null",
+			});
+
+			return Ok(result);
+
+		}
+/*
+		[Route("GetTerminetByPacientPending/{id}")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetTerminetByPacientPending(int id)
+		{
+
+			var termini = await _context.Terminet.Where(x => x.PacientiId == id &&x.Price==0&& !x.IsDeleted).ToListAsync();
+
+			return new JsonResult(termini);
+
+		}*/
+
+		[Route("GetTerminiByDateAndId/{date}/{id}")]
         [HttpGet]
 
         public async Task<IActionResult> GetTerminiByDateAndId(string date, int id)
