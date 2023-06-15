@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Pure_Life.Models.Analiza;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pure_Life.Models
 {
@@ -25,8 +26,9 @@ namespace Pure_Life.Models
         public Termini Termini { get; set; }
 
         public List<TerapiaSherbimet> TerapiaSherbimet { get; set; }
+		public ICollection<TerapiaAnalizaRezultati> TerapiaAnalizaRezultati { get; set; }
 
 
 
-    }
+	}
 }
