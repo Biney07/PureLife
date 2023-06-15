@@ -176,15 +176,15 @@ namespace Pure_Life.APIControllers
 
         }
 
-        [Route("GetTerminiByDate/{date}")]
+        [Route("GetTerminiByDateAndId/{date}/{id}")]
         [HttpGet]
 
-        public async Task<IActionResult> GetTerminiByDate(string date)
+        public async Task<IActionResult> GetTerminiByDateAndId(string date, int id)
         {
             DateTime parsedDate = DateTime.Parse(date);
             var terminiList = await _context.Terminet.ToListAsync();
             var termini = terminiList
-                .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted)
+                .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted && x.StafiId==id)
                 .ToList();
 
             return new JsonResult(termini);
