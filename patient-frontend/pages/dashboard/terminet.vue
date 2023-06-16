@@ -54,6 +54,7 @@
             <label for="email">Email:</label>
             <input required v-model="email" type="email" id="email" class="form-control">
         </div>
+        <p v-if="wrongEmail" class="wrong-email-text text-danger mt-2">{{wrongEmail}}</p>
       </template>
 
       <template v-slot:footer>
@@ -101,6 +102,7 @@ export default {
       showModal: false,
       modalData: null,
       email: null,
+      wrongEmail: null
     }
   },
   watch: {
@@ -183,6 +185,11 @@ export default {
 
             if(user.user.email === this.email) {
                 await rezervoTerminin(this.modalData.id, pacientiResponse.data.id)
+            } else {
+                setInterval(() => {
+                    this.wrongEmail = null
+                }, 3000)
+                this.wrongEmail = "Emaili i shtypur nuk pershtatet me email-in tuaj. Porvoni serish!"
             }
         } catch (err) {
             console.log(err)
@@ -241,6 +248,8 @@ export default {
     border: 3px solid var(--primary-color);
     border-radius: 6px;
     transition: border-color 0.1s ease-in;
+    color: black;
+    font-weight: 500;
 }
 
 .termini-container p:hover{
@@ -274,5 +283,9 @@ export default {
     background: rgba(44, 101, 216, 0.9);
     transition: background-color 0.3s;
     cursor: pointer;
+}
+
+.wrong-email-text{
+    font-weight: 500;
 }
 </style>
