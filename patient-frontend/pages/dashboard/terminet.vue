@@ -236,6 +236,7 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 30px;
+  margin-top: 30px;
 }
 
 @media (max-width: 768px) {
