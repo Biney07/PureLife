@@ -27,6 +27,15 @@ namespace Pure_Life.ViewModel.Terapia
 		public DateTime? ModifiedDate { get; set; }
 
 		public string? ModifiedFrom { get; set; }
+		public List<AnalizaETerapise> Analizat { get; set; }
 
+	}
+
+	public class AnalizaETerapise
+	{
+		public int Id { get; set; }
+		public string EmriAnalizes { get; set; }
+		public double Cmimi { get; set; }
+		public DateTime Data { get; set; }
 	}
 }

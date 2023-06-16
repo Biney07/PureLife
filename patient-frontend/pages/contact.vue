@@ -144,7 +144,6 @@ export default {
 </script>
 
 <style>
-
 .wave-form-background-img {
   height: 45rem;
   margin: -2px 0px;

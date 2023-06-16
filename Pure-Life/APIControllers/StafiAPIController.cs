@@ -47,6 +47,8 @@ namespace Pure_Life.APIControllers
             return await _context.Stafi.ToListAsync();
         }
 
+
+
         // GET: api/StafiAPI/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Stafi>> GetStafi(int id)
@@ -65,9 +67,28 @@ namespace Pure_Life.APIControllers
             return stafi;
         }
 
-        // PUT: api/StafiAPI/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+
+		
+		[HttpGet("GetStafiByLemi/{id}")]
+		public async Task<IActionResult> GetStafiByLemi(int id)
+		{
+			if (_context.Stafi == null)
+			{
+				return NotFound();
+			}
+			var stafi = await _context.Stafi.Where(x=>x.LemiaId == id).ToListAsync();    
+
+			if (stafi == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(stafi);
+		}
+
+		// PUT: api/StafiAPI/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutStafi(int id, [FromBody] EditStafiApiViewModel request)
         {
             var stafi = await _context.Stafi.FindAsync(id);

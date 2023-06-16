@@ -29,6 +29,10 @@ namespace Pure_Life.Data
 
         public DbSet<TerapiaSherbimet> TerapiaSherbimet { get; set; }
 
+       
+
+        public DbSet<TerapiaAnalizaRezultati> TerapiaAnalizaRezultatet { get; set; }
+
 
     }
 }

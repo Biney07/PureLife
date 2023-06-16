@@ -7,5 +7,6 @@
 
         public int LlojiId { get; set; } // Foreign key
         public Lloji Lloji { get; set; } // Navigation property
-    }
+		public ICollection<TerapiaAnalizaRezultati> TerapiaAnalizaRezultati { get; set; }
+	}
 }

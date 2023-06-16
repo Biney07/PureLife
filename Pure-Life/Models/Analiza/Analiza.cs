@@ -19,5 +19,6 @@ namespace Pure_Life.Models.Analiza
 
         // Navigation property
         public ICollection<AnalizaLloji> AnalizaLlojet { get; set; }
+       
     }
 }

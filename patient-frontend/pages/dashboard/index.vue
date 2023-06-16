@@ -53,10 +53,16 @@
 import ProfileCard from "~/components/ProfileCard";
 import DropdownButton from '~/components/DropdownButton.vue';
 export default {
-
     components: {
         ProfileCard,
         DropdownButton
+    },
+    setup() {
+        definePageMeta({
+            middleware: [
+                'auth',
+            ]
+        });
     },
     data() {
         return {

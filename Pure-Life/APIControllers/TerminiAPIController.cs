@@ -88,14 +88,13 @@ namespace Pure_Life.APIControllers
 			return Ok();
 		}
 
-		[Route("RezervoTerminin")]
-		[HttpPut]
+		[HttpPut("RezervoTerminin/{terminiId}/{pacientiId}")]
 		public async Task<IActionResult> RezervoTerminin(int terminiId, int pacientiId)
 		{
 			var termini = await _context.Terminet.Where(x=>x.Id == terminiId && !x.IsDeleted && x.Status==false).FirstOrDefaultAsync();
 			if (termini==null)
 			{
-				return BadRequest("Terminin nuk u gjet");
+				return BadRequest("Termini nuk u gjet ose nuk eshte i lire");
 			}
 
 			termini.PacientiId = pacientiId;
@@ -229,7 +228,23 @@ namespace Pure_Life.APIControllers
 
         }
 
-        [Route("DeleteTermin/{id}")]
+		[Route("GetTerminiByDate/{date}")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetTerminiByDate(string date)
+		{
+			DateTime parsedDate = DateTime.Parse(date);
+			var terminiList = await _context.Terminet.ToListAsync();
+			var termini = terminiList
+				.Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted && x.PacientiId==null)
+				.ToList();
+
+			return new JsonResult(termini);
+
+		}
+
+
+		[Route("DeleteTermin/{id}")]
         [HttpDelete]
 
         public async Task<IActionResult> Delete(int id)
