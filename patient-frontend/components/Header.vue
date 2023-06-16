@@ -34,7 +34,7 @@
 
           </NuxtLink>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><NuxtLink class="dropdown-item" to="/dashboard/profile">Profile</NuxtLink></li>
             <li><a class="dropdown-item" href="#" @click="logout">Sign Out</a></li>
           </ul>
         </li>
@@ -54,7 +54,7 @@
               <NuxtLink to="/dashboard/terminet">Terminet</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/about">Profile</NuxtLink>
+              <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
             </li>
           </div>
           <div class="auth-links">
