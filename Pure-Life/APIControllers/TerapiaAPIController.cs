@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PagedList;
 using Pure_Life.Data;
-using Pure_Life.Migrations;
+
 using Pure_Life.Models;
 using Pure_Life.ViewModel.Terapia;
 using System.Globalization;
