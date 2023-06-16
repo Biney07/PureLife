@@ -40,11 +40,7 @@
             </div>
             <ProfileCard />
         </div>
-        <DropdownButton buttonText="Click me" @item-click="handleItemClick">
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-        </DropdownButton>
+
     </div>
 </template>
   
@@ -103,7 +99,7 @@ input {
 
 .form-container {
     background-color: #fff;
-    padding: 30px;
+    padding: 20px;
     border-radius: 5px;
     width: 35%;
 
@@ -124,24 +120,19 @@ input {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    margin-top: 90px;
 }
 
-.profile-container {
-    flex-direction: column;
-    height: 62vh;
-    background-color: rgb(34, 34, 34);
-    display: flex;
-    padding: 120px 50px 60px 50px;
-}
 
 
 /* CSS */
 .button-35 {
+    margin-left: 18%;
     align-items: center;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: transparent 0 0 0 3px, rgba(255, 255, 255, 0.2) 0 6px 20px;
-    width: 20%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 175px;
     margin-bottom: 9px;
     box-sizing: border-box;
     color: #121212;
@@ -149,7 +140,7 @@ input {
     display: inline-flex;
     flex: 1 1 auto;
     font-family: Inter, sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     font-weight: 700;
     justify-content: center;
     line-height: 1;
@@ -167,6 +158,6 @@ input {
 }
 
 .button-35:hover {
-    box-shadow: #dddddd 0 0 0 3px, transparent 0 0 0 0;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 </style>

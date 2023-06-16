@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="rightcard">
-            <MemberShipStatus :Membership="false"/>
+            <MemberShipStatus :Membership="false" />
             <div class="pacientinfo-right">
                 <h3 class="profile-nameA">ALERGJI</h3>
                 <div class="part-right">
@@ -88,37 +88,45 @@ export default {
 
 .megacard {
     display: flex;
+    justify-content: center;
+  
 }
 
 .card {
     font-family: var(--primary-font);
-    padding: 25px 30px;
-    width: 300px;
+    padding: 15px 20px;
+    /* Reduced padding */
+    width: 30%;
+    margin-right: 5%;
+    /* Reduced width */
     background: #ffffff;
     border-radius: 5px 0px 0px 5px;
     display: flex;
-
-
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+    border-radius: 15px;
 
 }
 
 .rightcard {
     position: relative;
     font-family: var(--primary-font);
-    padding: 25px;
-    width: 350px;
+    padding: 15px;
+    /* Reduced padding */
+    width: 30%;
+    border-radius: 15px;
+    /* Reduced width */
     background: #ffffff;
-    border-radius: 0px 5px 5px 0px;
+    
     display: flex;
     justify-content: flex-end;
-
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
 
 }
 
 .part {
     display: flex;
     align-items: center;
-
 }
 
 .part-right {
@@ -131,14 +139,16 @@ export default {
     display: flex;
     justify-content: left;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 20px;
+    /* Reduced margin */
 }
 
 .pacientinfo-right {
     display: flex;
     justify-content: right;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 20px;
+    /* Reduced margin */
     text-align: right;
 }
 
@@ -146,21 +156,26 @@ export default {
     position: relative;
     background: url("../assets/purelife.png");
     background-size: cover;
-    height: 100px;
+    height: 80px;
+    /* Reduced height */
     border-radius: 5px 5px 0 0;
 }
 
 .about-bold {
     font-weight: 500;
     margin: 0px;
-    font-size: 20px;
-    padding-left: 10px;
+    font-size: 16px;
+    /* Reduced font size */
+    padding-left: 8px;
+    /* Reduced padding */
 }
 
 .profile {
     position: absolute;
-    width: 120px;
-    bottom: -60px;
+    width: 100px;
+    /* Reduced width */
+    bottom: -50px;
+    /* Adjusted position */
     left: 5px;
     border-radius: 50%;
     border: 2px solid var(--blue);
@@ -169,19 +184,24 @@ export default {
 }
 
 .profile-name {
-    font-size: 27px;
-    margin: 10px 0 1px 140px;
+    font-size: 24px;
+    /* Reduced font size */
+    margin: 8px 0 1px 120px;
+    /* Adjusted margin */
     color: var(--blue);
 }
 
 .profile-nameA {
-    font-size: 27px;
-    margin: 40px 0 1px 140px;
+    font-size: 24px;
+    /* Reduced font size */
+    margin: 32px 0 1px 120px;
+    /* Adjusted margin */
     color: var(--blue);
 }
 
 .about {
-    line-height: 1.6;
+    line-height: 1.4;
+    /* Adjusted line height */
     margin: 0px;
 }
 </style>
