@@ -3,7 +3,7 @@
     <div class="terminet">
     <div class="filter-sections">
       <div class="form-group">
-        <div>
+        <div class="filter">
             <label class="date-label" for="date">Zgjedhni Daten:</label>
             <input required v-model="selectedDate" class="date-input" type="date" id="date" placeholder="Zgjedhni Daten:" />
         </div>
@@ -12,7 +12,7 @@
             <img src="https://www.svgrepo.com/show/80156/down-arrow.svg" alt="Arrow" />
         </div>
 
-        <div>
+        <div class="filter">
             <label class="date-label" for="reparti">Reparti:</label>
             <select id="reparti" v-model="terminiData.reparti" class="reparti-input">
             <option value="" disabled selected>Zgjidhni repartin</option>
@@ -24,14 +24,20 @@
             <img src="https://www.svgrepo.com/show/80156/down-arrow.svg" alt="Arrow" />
         </div>
 
-        <div>
+        <div class="filter">
             <label class="date-label" for="doctor">Doktori:</label>
-            <select id="doctor" v-model="terminiData.stafi" class="doctor-input" :disabled="terminiData.reparti === null">
-                <option value="" disabled selected>Zgjedhni Doktorin:</option>
-                <option v-for="doctor in doctors" :value="doctor.id" :key="doctor.id">
-                {{ doctor.emri }} {{ doctor.mbiemri }}
-                </option>
-            </select>
+            <div class="doctor-cards-container">
+              <div
+                v-for="doctor in doctors"
+                :key="doctor.id"
+                class="doctor-cards"
+                @click="selectDoctor(doctor.id)"
+                :class="{ active: terminiData.stafi === doctor.id }"
+              >
+                <img :src="doctor.pictureUrl" alt="Doctor Image" class="doctor-image" />
+                <p class="doctor-name">{{ doctor.emri }} {{ doctor.mbiemri }}</p>
+            </div>
+            </div>
         </div>
       </div>
     </div>
@@ -210,6 +216,10 @@ export default {
         } catch (err) {
             console.log(err)
         }
+    },
+    selectDoctor(stafiId) {
+      this.terminiData.stafi = stafiId
+      console.log(stafiId, this.terminiData)
     }
   }
 }
@@ -326,17 +336,17 @@ export default {
     width: 100%;
 }
 
-.form-group div {
+.form-group .filter {
     display: flex;
     flex-direction: column;
 }
 
 
-.form-group div:not(:first-child) {
+.form-group .filter:not(:first-child) {
     margin-top: 20px;
 }
 
-.date-input, .reparti-input, .doctor-input {
+.date-input, .reparti-input{
     border: 1px solid #abacad;
     padding: 18px 15px;
     margin-top: 5px;
@@ -346,13 +356,6 @@ export default {
 .date-label{
     font-weight: 500;
     font-size: 18px;
-}
-
-.doctor-input {
-  padding-right: 30px;
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 20px;
 }
 
 .doctor-image {
@@ -374,4 +377,39 @@ export default {
   width: 20px;
   height: 20px;
 }
+.doctor-cards-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.doctor-cards{
+  width: 120px;
+  padding: 20px 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  cursor: pointer;
+  transition: box-shadow 0.1s ease-in;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.active{
+  box-shadow: var(--button-background) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+}
+
+.doctor-image{
+  height: 80px;
+  width: 80px;
+}
+
+
 </style>
