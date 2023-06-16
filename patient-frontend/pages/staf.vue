@@ -1,5 +1,8 @@
 <template>
   <div>
+    <ul>
+      <li v-for="stafi in stafiList" :key="stafi.id">{{ stafi.name }}</li>
+    </ul>
     <div class="container">
       <div class="card card0">
         <div class="border">
@@ -11,10 +14,25 @@
   </div>
 </template>
 
+
 <script>
+import agent from '../patient-sdk/user';
+
 export default {
-  name: "MyComponent",
-  // Component options
+  data() {
+    return {
+      stafiList: [],
+    };
+  },
+  async mounted() {
+    try {
+      const allStafi = await agent.Stafi.getAll();
+      this.stafiList = allStafi;
+      console.log('Retrieved Stafi:', allStafi);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  },
 };
 </script>
 

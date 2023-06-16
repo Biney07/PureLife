@@ -26,6 +26,18 @@
         <li v-if="!isUserLoggedIn">
           <NuxtLink to="/register">Register</NuxtLink>
         </li>
+        <li class="dropdown" v-if="isUserLoggedIn">
+          <NuxtLink to="/dashboard" class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink"
+            data-bs-toggle="dropdown" aria-expanded="false">
+
+            <img class="profile-image" src="../assets/profile.jpg" alt="Profile Image" />
+
+          </NuxtLink>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#" @click="logout">Sign Out</a></li>
+          </ul>
+        </li>
 
         <li v-if="isUserLoggedIn">
           <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
@@ -35,34 +47,35 @@
 
     <header class="dashboard-header" v-else>
       <nav class="header__nav">
-          <NuxtLink to="/dashboard"><img src="../assets/purelife color.png" alt="purelife-logo"></NuxtLink>
-          <ul class="header__menu" data-aos="fade-down">
-              <div class="seperated-links">
-                  <li>
-                      <NuxtLink to="/dashboard/terminet">Terminet</NuxtLink>
-                  </li>
-                  <li>
-                      <NuxtLink to="/about">Profile</NuxtLink>
-                  </li>
-              </div>
-              <div class="auth-links">
-                  <li>
-                      <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
-                  </li>
-              </div>
-          </ul>
+        <NuxtLink to="/dashboard"><img src="../assets/purelife color.png" alt="purelife-logo"></NuxtLink>
+        <ul class="header__menu" data-aos="fade-down">
+          <div class="seperated-links">
+            <li>
+              <NuxtLink to="/dashboard/terminet">Terminet</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/about">Profile</NuxtLink>
+            </li>
+          </div>
+          <div class="auth-links">
+            <li>
+              <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
+            </li>
+          </div>
+        </ul>
       </nav>
     </header>
   </div>
 </template>
 
 <script>
-import {userExists, removeUser} from "@/helper/auth"
-import {userSignOut} from "@/patient-sdk/auth"
+import { userExists, removeUser } from "@/helper/auth"
+import { userSignOut } from "@/patient-sdk/auth"
 export default {
   data() {
     return {
       isMenuActive: false,
+      isDropdownOpen: false,
     };
   },
   mounted() {
@@ -87,18 +100,95 @@ export default {
     toggleMenu() {
       this.isMenuActive = !this.isMenuActive;
     },
-    async logout(){
+    async logout() {
       try {
-          await userSignOut()
-          removeUser()
+        await userSignOut()
+        removeUser()
       } catch (err) {
-          console.log(err)
+        console.log(err)
       }
-    }
+    },
+
+    toggleDropdown() {
+      console.log(this.isDropdownOpen);
+      this.isDropdownOpen = !this.isDropdownOpen;
+    },
   },
 };
 </script>
 <style scoped>
+.dropdown {
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.nav-link {
+  display: inline-block !important;
+  color: #000 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+.nav-link:hover {
+  color: #333 !important;
+}
+
+.profile-image {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+}
+
+.dropdown-menu {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  z-index: 9900 !important;
+  display: none !important;
+  min-width: 120px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style-type: none !important;
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+}
+
+.dropdown-menu.show {
+  display: block !important;
+  z-index: 999;
+}
+
+.dropdown-item {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 16px !important;
+  text-decoration: none !important;
+  color: #333 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f8f8 !important;
+  color: #333 !important;
+}
+
+.dropdown-item:focus,
+.dropdown-item:active {
+  background-color: #ebebeb !important;
+  color: #333 !important;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none !important;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+
+
 .navbar {
   box-sizing: border-box;
   padding: 0;
@@ -107,10 +197,12 @@ export default {
   scroll-behavior: smooth;
   z-index: 10;
 }
+
 .logoheader {
   display: flex;
   align-items: center;
 }
+
 .logo-header {
   width: 8%;
   margin-right: 18px;
@@ -142,6 +234,7 @@ export default {
   font-size: 5em;
   color: #fff;
 }
+
 .banner .content p {
   font-size: 1em;
   color: #fff;
@@ -207,10 +300,12 @@ header .navigation {
   display: flex;
   margin-bottom: 0px;
 }
+
 header .navigation li {
   list-style: none;
   margin-left: 30px;
 }
+
 header .navigation li a {
   text-decoration: none;
   color: #ffffff;
@@ -373,6 +468,7 @@ section {
   align-items: center;
   flex-direction: column;
 }
+
 .testimonial .content .box img {
   position: absolute;
   top: 0;
@@ -382,9 +478,11 @@ section {
   object-fit: cover;
   border-radius: 48%;
 }
+
 .testimonial .content .box .text {
   text-align: center;
 }
+
 .testimonial .content .box .text p {
   color: #666;
   font-style: italic;
@@ -472,13 +570,16 @@ section {
 }
 
 @media (max-width: 991px) {
+
   header,
   header .sticky {
     padding: 10px 20px;
   }
+
   header .navigation {
     display: none;
   }
+
   header .navigation.active {
     width: 100%;
     height: calc(100% - 68px);
@@ -491,13 +592,16 @@ section {
     flex-direction: column;
     background: #fff;
   }
+
   header .navigation li {
     margin-left: 0;
   }
+
   header .navigation li a {
     color: #111;
     font-size: 1.6em;
   }
+
   .menutoggle {
     position: relative;
     width: 40px;
@@ -508,118 +612,134 @@ section {
     background-position: center;
     cursor: pointer;
   }
+
   .menutoggle .active {
     background: url(https://i.postimg.cc/yNcK65Gc/close.png);
     background-size: 25px;
     background-repeat: no-repeat;
     background-position: center;
   }
+
   .sticky .menutoggle {
     filter: invert(1);
   }
+
   .navbar section {
     padding: 20px;
   }
+
   .banner .content h2 {
     font-size: 3em;
     color: #fff;
   }
+
   .row {
     flex-direction: column;
   }
+
   .row .col50 {
     position: relative;
     width: 100%;
   }
+
   .row .col50 .imgbx {
     height: 300px;
     margin-top: 20px;
   }
+
   .menu .content {
     margin-top: 20px;
   }
+
   .menu .content .box {
     margin: 10px;
   }
+
   .menu .content .box .imgbx {
     height: 260px;
   }
+
   .titeText {
     font-size: 1.8em;
     text-align: center;
   }
+
   .expert .content {
     margin-top: 20px;
   }
+
   .testimonial .content .box {
     margin: 10px;
     padding: 30px;
   }
+
   .expert .content .box {
     margin: 20px;
   }
+
   .contactform {
     padding: 40px 30px;
   }
+
   .sticky {
     padding: 10px 30px;
   }
 }
 
-.dashboard-header{
-    width: 100%;
-    overflow: hidden;
-    height: var(--header-height);
-    font-family: var(--primary-font);
-    color: black;
+.dashboard-header {
+  width: 100%;
+  overflow: hidden;
+  height: var(--header-height);
+  font-family: var(--primary-font);
+  color: black;
 }
 
 .header__nav {
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 100px;
-    align-items: center;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 100px;
+  align-items: center;
 }
 
 .header__nav img {
-    width: 20%;
-    height: auto;
+  width: 20%;
+  height: auto;
 }
 
 .header__menu {
-    display: flex;
-    list-style-type: none;
-    gap: 30px;
-    text-decoration: none;
-    margin: 0;
+  display: flex;
+  list-style-type: none;
+  gap: 30px;
+  text-decoration: none;
+  margin: 0;
 }
 
 .seperated-links {
-    display: flex;
-    gap: 15px;
+  display: flex;
+  gap: 15px;
 }
 
 .seperated-links a {
-    color: var(--primary-font-color);
+  color: var(--primary-font-color);
 }
 
 .auth-links {
-    display: flex;
-    gap: 5px;
-    color: var(--secondary-font-color);
+  display: flex;
+  gap: 5px;
+  color: var(--secondary-font-color);
 }
 
 .auth-links li a {
-    color: var(--secondary-font-color);
+  color: var(--secondary-font-color);
 }
 
-.header__nav ul li a{
-    font-size: 16px;
-    text-decoration: none;
+.header__nav ul li a {
+  font-size: 16px;
+  text-decoration: none;
 }
 
 .router-link-exact-active {
-    font-weight: 600;
+  font-weight: 600;
 }
 </style>
