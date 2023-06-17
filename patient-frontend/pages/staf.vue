@@ -1,22 +1,20 @@
 <template>
   <div>
     <ul>
-      <li v-for="stafi in stafiList" :key="stafi.id">{{ stafi.name }}</li>
+      <li v-for="stafi in stafiList" :key="stafi.id">{{ stafi.emri }} {{ stafi.mbiemri }}</li>
     </ul>
     <div class="container">
-      <div class="card card0">
+      <div :style="'background-image: url(' + stafi.pictureUrl + ')'" class="card card0">
         <div class="border">
-          <h2>Al Pacino</h2>
-         
+          <h2>{{ stafi.emri }}</h2>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import agent from '../patient-sdk/user';
+import axios from 'axios';
 
 export default {
   data() {
@@ -25,13 +23,18 @@ export default {
     };
   },
   async mounted() {
-    try {
-      const allStafi = await agent.Stafi.getAll();
-      this.stafiList = allStafi;
-      console.log('Retrieved Stafi:', allStafi);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    await this.fetchStafiList();
+  },
+  methods: {
+    async fetchStafiList() {
+      try {
+        const response = await axios.get('https://localhost:7292/api/StafiAPI');
+        this.stafiList = response.data;
+        console.log('Fetched stafi list:', this.stafiList);
+      } catch (error) {
+        console.log('Error while fetching stafi list:', error);
+      }
+    },
   },
 };
 </script>
@@ -49,6 +52,7 @@ export default {
   align-items: center;
   margin: 0 auto;
 }
+
 .border {
   height: 369px;
   width: 290px;
@@ -57,9 +61,11 @@ export default {
   transition: border 1s;
   position: relative;
 }
+
 .border:hover {
   border: 1px solid #fff;
 }
+
 .card {
   height: 379px;
   width: 300px;
@@ -74,19 +80,19 @@ export default {
   align-items: center;
   position: relative;
 }
+
 .card0 {
-  background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg")
-    center center no-repeat;
   background-size: 300px;
 }
+
 .card0:hover {
-  background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg")
-    left center no-repeat;
   background-size: 600px;
 }
+
 .card0:hover h2 {
   opacity: 1;
 }
+
 .card0:hover .fa {
   opacity: 1;
 }
@@ -98,10 +104,12 @@ h2 {
   opacity: 0;
   transition: opacity 1s;
 }
+
 .fa {
   opacity: 0;
   transition: opacity 1s;
 }
+
 .icons {
   position: absolute;
   fill: #fff;

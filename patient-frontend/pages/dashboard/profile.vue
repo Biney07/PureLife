@@ -46,9 +46,22 @@
 
                                         <div class="mb-3">
                                             <label for="nacionalitetiId" class="form-label">Nacionaliteti:</label>
-                                            <input type="number" id="nacionalitetiId" name="nacionalitetiId"
-                                                v-model="patientData.nacionalitetiId" class="form-control">
+                                            <select id="nacionalitetiId" name="nacionalitetiId" v-model="nacionalitetid"
+                                                class="form-control">
+                                                <option v-for="nacionalitet in nacinaliteti" :key="nacionalitet.id"
+                                                    :value="nacionalitet.id">{{ nacionalitet.emri }}</option>
+                                            </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="shtetetid" class="form-label">Shteti:</label>
+                                            <select id="shtetetid" name="shtetetid" v-model="shtetiid" class="form-control">
+                                                <option v-for="shtet in shtetet" :key="shtet.id" :value="shtet.id">{{
+                                                    shtet.emri }}</option>
+                                            </select>
+                                        </div>
+
+
+
                                     </div>
 
                                     <div class="form-column">
@@ -97,7 +110,7 @@
             <div class="termini">
                 <Terminishow />
             </div>
-         
+
         </div>
 
     </div>
@@ -137,14 +150,22 @@ export default {
                     this.patientData.dataLindjes = '';
                 }
             }
-        }
+        },
 
     },
     data() {
         return {
             patientData: {},
-            isFormOpen: false
+            isFormOpen: false,
+            nacinaliteti: {},
+            shtetet: {},
+            nacionalitetid: null,
+            shtetiid: null
         };
+    },
+    created() {
+        this.fetchNationalities();
+        this.fetchQytet();
     },
     mounted() {
 
@@ -160,6 +181,24 @@ export default {
 
 
     methods: {
+        async fetchNationalities() {
+            try {
+                const response = await axios.get('https://localhost:7292/api/ShtetiAPI');
+                this.shtetet = response.data;
+                console.log('Fetched nationalities:', this.shtetet);
+            } catch (error) {
+                console.log('Error while fetching nationalities:', error);
+            }
+        },
+        async fetchQytet() {
+            try {
+                const response = await axios.get('https://localhost:7292/api/Nacionaliteti');
+                this.nacinaliteti = response.data;
+                console.log('Fetched nationalities:', this.nacinaliteti);
+            } catch (error) {
+                console.log('Error while fetching nationalities:', error);
+            }
+        },
         async onFileChange(event) {
             const file = event.target.files[0];
             this.patientData.pictureFile = file;
@@ -179,9 +218,11 @@ export default {
                 formData.append('Qyteti', this.patientData.qyteti);
                 formData.append('Alergji', this.patientData.alergji);
                 formData.append('NrLeternjoftimit', this.patientData.nrLeternjoftimit);
-                formData.append('ShtetiId', this.patientData.shtetiId);
-                formData.append('NacionalitetiId', this.patientData.nacionalitetiId);
-
+                formData.append('ShtetiId', this.shtetiid);
+                formData.append('NacionalitetiId', this.nacionalitetid);
+                for (const [key, value] of formData.entries()) {
+                    console.log(key + ':', value);
+                }
                 // Log the values of the FormData object
 
 
@@ -199,7 +240,7 @@ export default {
                 console.log('Error while updating patient data:', error);
             }
 
-            window.location.reload();
+
 
 
 
@@ -225,15 +266,19 @@ export default {
         },
         closeForm() {
             this.isFormOpen = false;
-        }
+        },
+        selectNationality(nationality) {
+            this.patientData.nacionalitetiId = nationality.id;
+        },
     }
 }
 </script>
 
 <style scoped>
-.termini{
+.termini {
     padding: 70px 90px;
 }
+
 /* Style specific form elements */
 
 input {
