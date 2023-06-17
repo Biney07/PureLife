@@ -107,5 +107,40 @@ namespace Pure_Life.APIControllers
 
 		
 		}
-	}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdatePacientiAPIViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var pacienti = await _context.Pacientet.FindAsync(id);
+
+            if (pacienti == null)
+            {
+                return NotFound();
+            }
+
+            // Encapsulate the data
+            pacienti.NrLeternjoftimit = model.NrLeternjoftimit;
+            pacienti.Emri = model.Emri;
+            pacienti.Mbiemri = model.Mbiemri;
+            pacienti.Gjinia = model.Gjinia;
+            pacienti.DataLindjes = model.DataLindjes;
+            pacienti.Alergji = model.Alergji;
+            pacienti.NrTel = model.NrTel;
+            pacienti.ShtetiId = model.ShtetiId;
+            pacienti.Qyteti = model.Qyteti;
+            pacienti.NacionalitetiId = model.NacionalitetiId;
+            pacienti.Email = model.Email;
+            pacienti.ModifiedDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
+    }
 }

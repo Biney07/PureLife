@@ -1,49 +1,68 @@
 <template>
-    <div class="megacard">
+    <div v-if="Object.keys(patientData).length === 0" class="text-center">
+        <div class="spinner-border text-primary" role="status"
+            style="height:100px; width:100px; margin-top: 100px;color:var(--blue) ">
+
+        </div>
+        <h3 style="color:var(--blue); margin-top:10px">Loading...</h3>
+    </div>
+
+    <div v-else class="megacard">
 
         <div class="card">
             <div class="cover-photo">
                 <img src="../assets/profile.jpg" class="profile">
             </div>
-            <h3 class="profile-name">Albin Saraqi</h3>
+            <h3 class="profile-name">{{ patientData.emri }} {{ patientData.mbiemri }}</h3>
             <div class="pacientinfo">
                 <div class="part">
                     <p class="about">MOSHA:
-                    <p class="about-bold"> 27 Vjet</p>
+                    <p class="about-bold"> {{ age }}</p>
                     </p>
                 </div>
                 <div class="part">
                     <p class="about">GJINIA:
-                    <p class="about-bold"> Mashkull</p>
+                    <p class="about-bold"> {{ patientData.gjinia }}</p>
                     </p>
                 </div>
                 <div class="part">
                     <p class="about"> ID:
-                    <p class="about-bold"> 112333213232</p>
+                    <p class="about-bold"> {{ patientData.nrLeternjoftimit }}</p>
                     </p>
                 </div>
                 <div class="part">
-                    <p class="about">VENDLINDJA
-                    <p class="about-bold"> Prishtine, Kosove</p>
+                    <p class="about">DATA E LINDJES:
+                    <p class="about-bold">{{ new Date(patientData.dataLindjes).toLocaleDateString() }}</p>
+
+                    </p>
+                </div>
+                <div class="part">
+                    <p class="about">VENDLINDJA:
+                    <p class="about-bold">{{ patientData.qyteti }}</p>
+
                     </p>
                 </div>
                 <div class="part">
                     <p class="about">EMAIL:
-                    <p class="about-bold"> saraqialbin@gmail.com</p>
+                    <p class="about-bold">{{ patientData.email }}</p>
+                    </p>
+                </div>
+                <div class="part">
+                    <p class="about">NR TEL:
+                    <p class="about-bold">{{ patientData.nrTel }}</p>
                     </p>
                 </div>
 
             </div>
         </div>
         <div class="rightcard">
-            <MemberShipStatus :Membership="false" />
+            <MemberShipStatus :Membership="patientData.membershipStatus" />
             <div class="pacientinfo-right">
                 <h3 class="profile-nameA">ALERGJI</h3>
                 <div class="part-right">
 
-                    <p class="about-bold"> Poleni
-                        Food( peanut, milk, patlixhan)
-                        Animal( Lopa, ) </p>
+                    <p class="about-bold"> {{ patientData.alergji }}
+                    </p>
 
 
                 </div>
@@ -56,20 +75,65 @@
         </div>
     </div>
 </template>
-
 <script>
-
+import axios from 'axios';
 import HealthStatus from '~/components/HealthStatus.vue';
 import MemberShipStatus from '~/components/MemberShipStatus.vue';
+
 export default {
+    data() {
+        return {
+            patientData: {},
+            age: null
+        };
+    },
+    mounted() {
+        console.log("mounted() called");
+        const useri = JSON.parse(localStorage.getItem('patient'));
+
+        console.log(useri);
+        if (useri && useri.user.uid) {
+            const uid = useri.user.uid;
+            console.log("UID:", uid);
+            this.fetchPatientData(uid);
+        }
+    },
+    methods: {
+        async fetchPatientData(uid) {
+            try {
+                console.log("fetchPatientData() called with UID:", uid);
+                const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
+                this.patientData = response.data;
+                console.log("Fetched patient data:", this.patientData);
+                this.calculateAge(); // Call the calculateAge() method after fetching patient data
+            } catch (error) {
+                console.log("Error while fetching patient data:", error);
+            }
+        },
+        calculateAge() {
+            if (this.patientData.dataLindjes) {
+                const birthDate = new Date(this.patientData.dataLindjes);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age -= 1;
+                }
+
+                this.age = age; // Set the calculated age to the 'age' property
+            }
+        },
+    },
     components: {
         HealthStatus,
         MemberShipStatus
-    },
-
-}
-    ;
+    }
+};
 </script>
+
+
+
 
 <style scoped>
 .gold-div {
@@ -89,14 +153,14 @@ export default {
 .megacard {
     display: flex;
     justify-content: center;
-  
+
 }
 
 .card {
     font-family: var(--primary-font);
     padding: 15px 20px;
     /* Reduced padding */
-    width: 30%;
+    width: 350px;
     margin-right: 5%;
     /* Reduced width */
     background: #ffffff;
@@ -113,11 +177,11 @@ export default {
     font-family: var(--primary-font);
     padding: 15px;
     /* Reduced padding */
-    width: 30%;
+    width: 350px;
     border-radius: 15px;
     /* Reduced width */
     background: #ffffff;
-    
+
     display: flex;
     justify-content: flex-end;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
@@ -150,6 +214,7 @@ export default {
     margin-top: 20px;
     /* Reduced margin */
     text-align: right;
+    justify-content: flex-end;
 }
 
 .cover-photo {
@@ -203,5 +268,6 @@ export default {
     line-height: 1.4;
     /* Adjusted line height */
     margin: 0px;
+    display: flex;
 }
 </style>
