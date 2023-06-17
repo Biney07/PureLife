@@ -75,7 +75,7 @@ namespace Pure_Life.APIControllers
 						StafiId = stafi.Id,
 						PacientiId = null,
 						InsertedDate = currentDateTime,
-						InsertedFrom = _currentUser.GetCurrentUserName(),
+						InsertedFrom = stafi.Emri,
 					};
 					terminiList.Add(termini);
 				}
