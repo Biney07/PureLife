@@ -221,14 +221,27 @@ namespace Pure_Life.APIControllers
         public async Task<IActionResult> GetTerminiByDateAndId(string date, int id)
         {
             DateTime parsedDate = DateTime.Parse(date);
-            var terminiList = await _context.Terminet.ToListAsync();
+            var terminiList = await _context.Terminet.Include(x=>x.Pacienti).ToListAsync();
             var termini = terminiList
                 .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted && x.StafiId==id)
                 .ToList();
+			var result = termini.Select(x => new GetTerminiViewModel
+			{
+				Id = x.Id,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				Status = x.Status ? "I rezervuar" : "I lire",
+				StatusPaid = x.StatusPaid ? "I paguar" : "I pa paguar",
+				PacientiId = x.PacientiId ?? 0,
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
+				Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : "null",
+				Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri : "null",
+			});
+			return Ok(result);
 
-            return new JsonResult(termini);
-
-        }
+		}
 
 		[Route("GetTerminiByDate/{date}")]
 		[HttpGet]
