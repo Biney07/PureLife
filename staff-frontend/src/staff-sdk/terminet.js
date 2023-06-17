@@ -5,7 +5,12 @@ export function getTerminet(id) {
     return axios.get(`${API_URL}/api/TerminiAPI/GetTerminiByStaf/${id}`)
 }
 
-export function getTerminetByDate(date) {
-    return axios.get(`${API_URL}/api/TerminiAPI/GetTerminiByDate/${date}`)
+export function getTerminetByDateAndStaff(date, id) {
+    return axios.get(`${API_URL}/api/TerminiAPI/GetTerminiByDateAndId/${date}/${id}`)
 }
+
+export function deleteTermini(id) {
+    return axios.delete(`${API_URL}/api/TerminiAPI/DeleteTermin/${id}`)
+}
+
 

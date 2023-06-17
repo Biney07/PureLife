@@ -14,43 +14,35 @@
     >
 
       <template v-slot:day-content="{ day, attributes }">
-        <div @click="showDetails(day)">
+        <div class="day-cell" @click="showDetails(day)">
           <span>{{ day.day }}</span>
           <div
             v-for="attr in attributes"
             :key="attr.id"
           >
-            <p
-              class="reparti-text"
-            >
-              Reparti: {{ attr.customData.reparti }}
-            </p>
              <p
               class="staff-name"
             >
-              Emri: {{ attr.customData.staffName }}
+              Dr: {{ attr.customData.staffName }}, {{ attr.customData.reparti }}
             </p>
            
           </div>
         </div>
       </template>
     </v-calendar>
-    <Modal
-      v-if="showModal && modalData.attributes.length"
-      @close="closeModal"
-    >
-      <template v-slot:header>
-        Data: {{modalData.ariaLabel}}
-      </template>
 
-      <template v-if="modalData.attributes" v-slot:body>
+    <mdb-modal v-if="showModal && modalData.attributes.length" @close="showModal = false">
+      <mdb-modal-header>
+        <mdb-modal-title>Data: {{modalData.ariaLabel}}</mdb-modal-title>
+      </mdb-modal-header>
+      <mdb-modal-body>
         <div
           v-for="attr in modalData.attributes"
           :key="attr.id"
           class="mb-4"
         >
           <p class="reparti-modal-text">
-            Reparti: {{ attr.customData.reparti }}
+            Reparti: {{ attr.customData.reparti }}, Kati: {{ attr.customData.repartiKati }}
           </p>
           
           <p
@@ -60,18 +52,23 @@
           </p>
           
         </div>
-      </template>
-    </Modal>
+      </mdb-modal-body>
+      <mdb-modal-footer>
+        <mdb-btn color="danger" @click.native="showModal = false">Close</mdb-btn>
+      </mdb-modal-footer>
+    </mdb-modal>
+
+
   </div>
 </template>
 
 <script>
 import { getAllShifts } from "../staff-sdk/kujdestarite"
 import { mapGetters } from 'vuex'
-import Modal from '@/components/Modal.vue';
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue'
 export default {
   components: {
-    Modal,
+    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn,
   },
   data() {
     // const month = new Date().getMonth();
@@ -105,11 +102,13 @@ export default {
             const [year, month, date] = dateString.split('-');
             const reparti = item.reparti;
             const stafi = item.stafiEmriMbiemri;
+            const kati = item.kati;
             return {
                 customData: {
                     staffId: item.stafiId,
                     reparti: reparti,
-                    staffName: stafi
+                    staffName: stafi,
+                    repartiKati: kati
                 },
                 dates: new Date(parseInt(year), parseInt(month - 1), parseInt(date))
             };
@@ -136,7 +135,7 @@ export default {
   --day-border: 1px solid #b8c2cc;
   --day-border-highlight: 1px solid #b8c2cc;
   --day-width: 150px;
-  --day-height: 150px;
+  --day-height: 100px;
   --weekday-bg: #f8fafc;
   --weekday-border: 1px solid #eaeaea;
 
@@ -188,7 +187,7 @@ export default {
     font-weight: 500;
     color: black;
     background: rgb(107,98,255, 0.9);
-    border-radius: 20px;
+    border-radius: 6px;
     font-size: 12px;
 }
 
@@ -214,7 +213,7 @@ export default {
 }
 
 .reparti-modal-text{
-    font-size: 25px;
+    font-size: 23px;
     padding: 0;
     margin: 0;
     margin-bottom: 5px;
@@ -225,5 +224,10 @@ export default {
     border-radius: 5px;
     background: rgb(241,201,137);
     font-weight: 500;
+    font-size: 16px;
+}
+
+.day-cell{
+  cursor: pointer;
 }
 </style>

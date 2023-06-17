@@ -13,6 +13,11 @@ import VueGoodTablePlugin from 'vue-good-table';
 
 // import the styles
 import 'vue-good-table/dist/vue-good-table.css'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 
 Vue.use(VueGoodTablePlugin);
 

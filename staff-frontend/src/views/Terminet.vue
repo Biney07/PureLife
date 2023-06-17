@@ -19,26 +19,48 @@
         >
 
             <template v-slot:table-row="props">
-                 <span v-if="props.column.field == 'status'">
+                <span v-if="props.column.field == 'pacienti'">
+                   {{props.row.pacienti ? props.row.pacienti : "I parezervuar" }}
+                </span>
+                <span v-if="props.column.field == 'status'">
                    {{!props.row.status ? "I lire" : "I rezervuar"}}
                 </span>
 
                 <span v-if="props.column.field == 'startTime'">
-                   {{props.row.startTime.split(' ')[1] + ' ' + props.row.startTime.split(' ')[2]}}
+                   {{props.row.startTime.split(' ')[1].slice(0, -3) + ' - ' + props.row.endTime.split(' ')[1].slice(0, -3) + ' ' + props.row.endTime.split(' ')[2]}}
                 </span>
 
-                <span v-if="props.column.field == 'endTime'">
-                   {{props.row.endTime.split(' ')[1] + ' ' + props.row.endTime.split(' ')[2]}}
+                <span @click="triggerModal(props.row)" v-if="props.column.field == 'moreOptions'">
+                   <b-icon icon="trash-fill" variant="danger" class="delete-icon"></b-icon>
                 </span>
             </template>
         </vue-good-table>
+
+
+    <mdb-modal v-if="showModal && modalData" @close="showModal = false">
+      <mdb-modal-header>
+        <mdb-modal-title>Anulo Terminin: {{modalData.pacienti}}, {{modalData.startTime.split(' ')[1].slice(0, -3) + ' - ' + modalData.endTime.split(' ')[1].slice(0, -3) + ' ' + modalData.endTime.split(' ')[2]}}</mdb-modal-title>
+      </mdb-modal-header>
+      <mdb-modal-body>
+        <p>A jeni te sigurte qe deshironi te anuloni kete termin?</p>
+      </mdb-modal-body>
+      <mdb-modal-footer>
+        <mdb-btn color="danger" @click.native="showModal = false">Close</mdb-btn>
+        <mdb-btn color="primary" @click.native="deleteTermin">Anulo</mdb-btn>
+      </mdb-modal-footer>
+    </mdb-modal>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue'
+import {deleteTermini} from "../staff-sdk/terminet"
 export default {
   name: 'my-component',
+  components: {
+    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn
+  },
   data(){
     return {
         columns: [
@@ -47,12 +69,9 @@ export default {
                 field: 'pacienti',
             },
             {
-                label: 'Fillon',
+                label: 'Orari',
                 field: 'startTime',
-            },
-            {
-                label: 'Mbaron',
-                field: 'endTime',
+                width: '250px',
             },
             {
                 label: 'Statusi',
@@ -61,11 +80,13 @@ export default {
             {
                 label: '',
                 field: 'moreOptions',
-                width: '20px',
+                width: '100px',
             },
         ],
         date: null,
-        selectedDate: null
+        selectedDate: null,
+        showModal: false,
+        modalData: null
     }
   },
   mounted() {
@@ -94,19 +115,26 @@ export default {
   },
   methods: {
     async fetchTerminet() {
-        await this.$store.dispatch('fetchTerminetByDate', this.selectedDate)
-        // await this.changeDate({currentPage: 1, currentPerPage: 12})
+        // eslint-disable-next-line no-console
+        console.log(this.user.user.data.id)
+        await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.user.user.data.id})
     },
-    // async changeDate(params) {
-    //     const currentPageRows = await this.terminet.slice(
-    //         (params.currentPage - 1) * params.currentPerPage,
-    //         params.currentPage * params.currentPerPage
-    //     );
-    //     const startTimeValues = currentPageRows.map((row) => row.startTime);
-    //     this.date = startTimeValues[0].split(" ")[0]
-    //     // eslint-disable-next-line no-console
-    //     console.log(this.date)
-    // },
+    triggerModal(termin) {
+        this.showModal = true;
+        this.modalData = termin;
+
+    },
+    async deleteTermin() {
+        try {
+            await deleteTermini(this.modalData.id)
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log(err)
+        } finally {
+            this.fetchTerminet()
+            this.showModal = false
+        }
+    }
   }
 };
 </script>
@@ -155,6 +183,14 @@ export default {
     background: rgb(241,201,137);
     border-radius: 8px;
     padding: 5px 10px;
+}
+
+.delete-icon {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 </style>
