@@ -8,6 +8,7 @@
 
 		public string EndTime { get; set; }
         public string Status { get; set; }
+		public string StatusPaid { get; set; }
 
 		public int? PacientiId { get; set; }
 

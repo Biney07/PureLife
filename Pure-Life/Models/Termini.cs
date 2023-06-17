@@ -12,8 +12,9 @@ namespace Pure_Life.Models
         public string EndTime { get; set; }
 
         public bool Status { get; set; }
+        public bool StatusPaid { get; set; }
 
-        public double Price { get; set; }
+		public double Price { get; set; }
 
         public string InsertedFrom { get; set; }
 
