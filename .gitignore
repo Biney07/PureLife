@@ -370,3 +370,4 @@ appsettings.Development.json
 
 **/Migrations/*
 /Migrations
+staff-frontend/yarn.lock

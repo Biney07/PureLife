@@ -27,20 +27,24 @@
           <NuxtLink to="/register">Register</NuxtLink>
         </li>
         <li class="dropdown" v-if="isUserLoggedIn">
-          <NuxtLink to="/dashboard" class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink"
-            data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="profilinav">
+            <div class="dropdown-toggle" role="button" @click="toggleContainer" aria-expanded="false">
+              <img class="profile-image" src="../assets/profile.jpg" alt="Profile Image" />
+              <div :class="{ 'whitecontainer-on': isContainerVisible, 'whitecontainer-off': !isContainerVisible }">
+                <div class="buttons">
+                  <NuxtLink class="btn" to="/dashboard/profile">Profile</NuxtLink>
+                  <NuxtLink class="btn" @click="logout" to="/login">Logout</NuxtLink>
 
-            <img class="profile-image" src="../assets/profile.jpg" alt="Profile Image" />
+                </div>
+              </div>
+            </div>
+          </div>
 
-          </NuxtLink>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><NuxtLink class="dropdown-item" to="/dashboard/profile">Profile</NuxtLink></li>
-            <li><a class="dropdown-item" href="#" @click="logout">Sign Out</a></li>
-          </ul>
+
         </li>
 
         <li v-if="isUserLoggedIn">
-          <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
+
         </li>
       </ul>
     </header>
@@ -59,7 +63,8 @@
           </div>
           <div class="auth-links">
             <li>
-              <NuxtLink @click="logout" to="/login">Logout</NuxtLink>
+              <NuxtLink to="/">Home
+              </NuxtLink>
             </li>
           </div>
         </ul>
@@ -69,13 +74,17 @@
 </template>
 
 <script>
+
+
+
+
 import { userExists, removeUser } from "@/helper/auth"
 import { userSignOut } from "@/patient-sdk/auth"
 export default {
   data() {
     return {
       isMenuActive: false,
-      isDropdownOpen: false,
+      isContainerVisible: false
     };
   },
   mounted() {
@@ -103,20 +112,48 @@ export default {
     async logout() {
       try {
         await userSignOut()
-        removeUser()
+        removeUser();
+        window.location.reload();
       } catch (err) {
         console.log(err)
       }
     },
 
-    toggleDropdown() {
-      console.log(this.isDropdownOpen);
-      this.isDropdownOpen = !this.isDropdownOpen;
+    toggleContainer() {
+      console.log(this.isContainerVisible);
+      this.isContainerVisible = !this.isContainerVisible;
     },
   },
 };
 </script>
 <style scoped>
+.profilinav {
+  position: relative;
+}
+
+.whitecontainer-off {
+  display: none;
+}
+
+.whitecontainer-on {
+  margin-top: 10px;
+  display: block !important;
+  right: 0;
+  top: 20;
+  position: absolute;
+  width: 100px;
+  background-color: white;
+}
+
+
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
 .dropdown {
   position: relative !important;
   display: inline-block !important;
@@ -241,20 +278,23 @@ export default {
 }
 
 .btn {
-  font-size: 1.5em;
-  color: #fff;
+
+  font-size: 0.9em !important;
+  color: #fff !important;
   background: #1c41ea;
-  display: inline-block;
   padding: 10px 30px;
   text-transform: uppercase;
-  margin-top: 20px;
   text-decoration: none;
-  letter-spacing: 2px;
   transition: 0.5s;
+  border-radius: 0px;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  border: 0.5px black !important;
 }
 
 .btn:hover {
-  letter-spacing: 5px;
+  letter-spacing: 1px;
 }
 
 header {
@@ -299,6 +339,7 @@ header .navigation {
   position: relative;
   display: flex;
   margin-bottom: 0px;
+  align-items: center;
 }
 
 header .navigation li {
@@ -703,7 +744,7 @@ section {
 }
 
 .header__nav img {
-  width: 20%;
+  width: 25%;
   height: auto;
 }
 
@@ -735,7 +776,7 @@ section {
 }
 
 .header__nav ul li a {
-  font-size: 16px;
+  font-size: 19px;
   text-decoration: none;
 }
 

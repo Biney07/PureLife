@@ -139,19 +139,23 @@ export default {
         };
     },
     mounted() {
-  
+
         const useri = JSON.parse(localStorage.getItem('patient'));
 
-       
+
         if (useri && useri.user.uid) {
             const uid = useri.user.uid;
-           
+
             this.fetchPatientData(uid);
         }
     },
 
 
     methods: {
+        async onFileChange(event) {
+            const file = event.target.files[0];
+            this.patientData.pictureFile = file;
+        },
         async updatePatientData(event) {
             event.preventDefault();
 
@@ -171,7 +175,7 @@ export default {
                 formData.append('NacionalitetiId', this.patientData.nacionalitetiId);
 
                 // Log the values of the FormData object
-               
+
 
                 const response = await axios.put(
                     `https://localhost:7292/api/PacientiAPI/${this.patientData.id}`,
@@ -196,10 +200,10 @@ export default {
 
         async fetchPatientData(uid) {
             try {
-             
+
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
-                
+
 
             } catch (error) {
                 console.log("Error while fetching patient data:", error);

@@ -217,7 +217,7 @@ export default {
 }
 
 .back-link a{
-    font-size: 14px;
+    font-size: 19px;
     color: var(--primary-font-color);
     width: fit-content;
     border-bottom: 1px solid #E2E6EB;   
