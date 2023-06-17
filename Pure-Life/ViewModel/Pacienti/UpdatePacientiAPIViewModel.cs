@@ -6,9 +6,9 @@ namespace Pure_Life.ViewModel.Pacienti
 {
     public class UpdatePacientiAPIViewModel
     {
-        public int? Id { get; set; }
+      
 
-        public string? UId { get; set; }
+/*        public string? UId { get; set; }*/
         public string NrLeternjoftimit { get; set; }
 
         [Required]

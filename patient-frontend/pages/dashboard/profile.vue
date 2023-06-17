@@ -157,7 +157,7 @@ export default {
 
             try {
                 const formData = new FormData();
-                formData.append('Id', this.patientData.id);
+               
                 formData.append('PictureFile', this.patientData.pictureFile);
                 formData.append('Emri', this.patientData.emri);
                 formData.append('Mbiemri', this.patientData.mbiemri);
@@ -167,9 +167,11 @@ export default {
                 formData.append('Qyteti', this.patientData.qyteti);
                 formData.append('Alergji', this.patientData.alergji);
                 formData.append('NrLeternjoftimit', this.patientData.nrLeternjoftimit);
-                formData.append('ShtetiId', this.patientData.shtetiId);
-                formData.append('NacionalitetiId', this.patientData.nacionalitetiId);
-
+                formData.append('ShtetiId', 1);
+              
+                for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
                 // Log the values of the FormData object
                
 
@@ -187,7 +189,7 @@ export default {
                 console.log('Error while updating patient data:', error);
             }
 
-            window.location.reload();
+ ;
 
 
 

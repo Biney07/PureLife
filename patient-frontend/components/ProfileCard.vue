@@ -9,7 +9,7 @@
 
     <div v-else class="megacard">
 
-        <div class="card">
+        <div class="card">  
             <div class="cover-photo">
                 <img :src="patientData.pictureUrl" class="profile">
 
@@ -97,6 +97,7 @@ export default {
             const uid = useri.user.uid;
        
             this.fetchPatientData(uid);
+            
         }
     },
     methods: {
@@ -105,8 +106,10 @@ export default {
                
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
-           
+                console.log(this.patientData);
+               
                 this.calculateAge(); // Call the calculateAge() method after fetching patient data
+              
             } catch (error) {
                 console.log("Error while fetching patient data:", error);
             }
