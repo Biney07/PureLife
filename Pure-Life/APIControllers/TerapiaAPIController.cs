@@ -274,7 +274,7 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
-		[HttpPut]
+		[HttpPut("Edit/{id}/{stafiId}")]
 		public async Task<IActionResult> Edit(int id, EditTerapiaViewModel model, int stafiId)
 		{
 			var terapia = await _context.Terapia
