@@ -430,36 +430,55 @@ namespace Pure_Life.APIControllers
 
 
 		[HttpGet("GetTerapiaByTermin/{id}")]
-
 		public async Task<IActionResult> GetTerapiaByTermin(int id)
 		{
-
-
-
-			var terapite = await _context.Terapia
+			var terapia = await _context.Terapia
 				.Include(t => t.Termini)
 					.ThenInclude(t => t.Stafi)
 				.Include(t => t.Termini)
 					.ThenInclude(t => t.Pacienti)
+				.Include(t => t.TerapiaSherbimet)
+					.ThenInclude(t => t.Sherbimet)
+				.Include(t => t.TerapiaAnalizaRezultati)
+					.ThenInclude(t => t.AnalizaLloji)
+						.ThenInclude(a => a.Analiza)
 				.Where(t => t.TerminiId == id)
 				.FirstOrDefaultAsync();
 
+			if (terapia == null)
+			{
+				return NotFound(); // Return appropriate response when terapia is not found
+			}
+
 			var result = new GetTerapiaViewModel
 			{
-				Id = terapite.Id,
-				Pacienti = $"{terapite.Termini.Pacienti.Emri} {terapite.Termini.Pacienti.Mbiemri}",
-				NrLeternjoftimit = terapite.Termini.Pacienti.NrLeternjoftimit,
-				Koha = $"{terapite.Termini.StartTime} - {terapite.Termini.EndTime}",
-				Diagnoza = terapite.Diagnoza,
-				Pershkrimi = terapite.Pershkrimi,
-				Barnat = terapite.Barnat,
+				Id = terapia.Id,
+				Pacienti = $"{terapia.Termini.Pacienti.Emri} {terapia.Termini.Pacienti.Mbiemri}",
+				NrLeternjoftimit = terapia.Termini.Pacienti.NrLeternjoftimit,
+				Koha = $"{terapia.Termini.StartTime} - {terapia.Termini.EndTime}",
+				Diagnoza = terapia.Diagnoza,
+				Pershkrimi = terapia.Pershkrimi,
+				Barnat = terapia.Barnat,
 				TerminiId = id,
-				Doktori = $"Dr {terapite.Termini.Stafi.Emri} {terapite.Termini.Stafi.Mbiemri}",
-				InsertedFrom = terapite.InsertedFrom,
-				InsertedDate = terapite.InsertedDate,
-				ModifiedDate = terapite.ModifiedDate,
-				ModifiedFrom = terapite.ModifiedFrom
+				Doktori = $"Dr {terapia.Termini.Stafi.Emri} {terapia.Termini.Stafi.Mbiemri}",
+				InsertedFrom = terapia.InsertedFrom,
+				InsertedDate = terapia.InsertedDate,
+				ModifiedDate = terapia.ModifiedDate,
+				ModifiedFrom = terapia.ModifiedFrom,
+				Sherbimet = terapia.TerapiaSherbimet != null
+					? terapia.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList()
+					: null,
+				Analizat = terapia.TerapiaAnalizaRezultati.Select(y => y.AnalizaLloji.Analiza).Distinct().Select(terapia => new AnalizaETerapise
+				{
+					Id = terapia.Id,
+					EmriAnalizes = terapia.Emri,
+					Cmimi = terapia.Cmimi,
+					Data = terapia.Data
+				}).ToList()
 			};
+
+			
+
 			return Ok(result);
 		}
 

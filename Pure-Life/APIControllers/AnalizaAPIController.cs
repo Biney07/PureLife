@@ -14,7 +14,12 @@ namespace Pure_Life.APIControllers
 		{
 			_context= context;
 		}
-
+		[HttpGet("Index")]
+		public IActionResult Index()
+		{
+			var analizat =  _context.Analizat.ToList();
+			return Ok(analizat);
+		}
 		/*[HttpGet]
 		public ActionResult<IEnumerable<GetAnalizaAPIViewModel>> GetAnaliza()
 		{
