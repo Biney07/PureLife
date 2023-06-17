@@ -94,6 +94,10 @@
                 </div>
             </div>
             <ProfileCard />
+            <div class="termini">
+                <Terminishow />
+            </div>
+         
         </div>
 
     </div>
@@ -104,10 +108,14 @@
 import axios from "axios";
 import ProfileCard from "~/components/ProfileCard";
 import DropdownButton from '~/components/DropdownButton.vue';
+import Terminishow from '~/components/TerminetShow.vue';
+
 export default {
     components: {
         ProfileCard,
-        DropdownButton
+        DropdownButton,
+        Terminishow
+
     },
     computed: {
         formattedDataLindjes: {
@@ -223,6 +231,9 @@ export default {
 </script>
 
 <style scoped>
+.termini{
+    padding: 70px 90px;
+}
 /* Style specific form elements */
 
 input {
