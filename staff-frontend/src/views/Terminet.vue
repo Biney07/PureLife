@@ -20,26 +20,36 @@
 
             <template v-slot:table-row="props">
                 <span v-if="props.column.field == 'pacienti'">
-                   {{props.row.pacienti ? props.row.pacienti : "I parezervuar" }}
+                   {{props.row.pacientiName}} {{props.row.pacientiLastName}}
                 </span>
                 <span v-if="props.column.field == 'status'">
-                   {{!props.row.status ? "I lire" : "I rezervuar"}}
+                   {{props.row.status}}
                 </span>
 
                 <span v-if="props.column.field == 'startTime'">
                    {{props.row.startTime.split(' ')[1].slice(0, -3) + ' - ' + props.row.endTime.split(' ')[1].slice(0, -3) + ' ' + props.row.endTime.split(' ')[2]}}
                 </span>
 
-                <span @click="triggerModal(props.row)" v-if="props.column.field == 'moreOptions'">
-                   <b-icon icon="trash" variant="danger" class="delete-icon"></b-icon>
+                <span v-if="props.column.field == 'moreOptions'">
+                    <mdb-dropdown end tag="li" class="nav-item">
+                        <mdb-dropdown-toggle right tag="a" navLink color="secondary-color-dark" slot="toggle" waves-fixed>
+                            <template #button-content>
+                                <mdb-icon icon="ellipsis-h" class="mr-3" />
+                            </template>
+                        </mdb-dropdown-toggle>
+                        <mdb-dropdown-menu>
+                            <mdb-dropdown-item @click="triggerDeleteModal(props.row)"><mdb-icon icon="trash" class="mr-3" />Delete</mdb-dropdown-item>
+                            <mdb-dropdown-item @click="triggerEditModal(props.row)"><mdb-icon icon="pen" class="mr-3" />Krijo Terapine</mdb-dropdown-item>
+                        </mdb-dropdown-menu>
+                    </mdb-dropdown>
                 </span>
             </template>
         </vue-good-table>
 
 
-    <mdb-modal v-if="showModal && modalData" @close="showModal = false">
+    <mdb-modal v-if="showDeleteModal && modalData" @close="showDeleteModal = false">
       <mdb-modal-header>
-        <mdb-modal-title>Anulo Terminin: {{modalData.pacienti}}, {{modalData.startTime.split(' ')[1].slice(0, -3) + ' - ' + modalData.endTime.split(' ')[1].slice(0, -3) + ' ' + modalData.endTime.split(' ')[2]}}</mdb-modal-title>
+        <mdb-modal-title>Anulo Terminin: {{modalData.pacientiName}} {{modalData.pacientiLastName}}, {{modalData.startTime.split(' ')[1].slice(0, -3) + ' - ' + modalData.endTime.split(' ')[1].slice(0, -3) + ' ' + modalData.endTime.split(' ')[2]}}</mdb-modal-title>
       </mdb-modal-header>
       <mdb-modal-body>
         <p>A jeni te sigurte qe deshironi te anuloni kete termin?</p>
@@ -48,7 +58,7 @@
         <p
             type="button"
             class="close-button"
-            @click="showModal = false;"
+            @click="showDeleteModal = false;"
         >
             Close
         </p>
@@ -61,17 +71,71 @@
         </p>
       </mdb-modal-footer>
     </mdb-modal>
+
+    <mdb-modal v-if="showEditModal && modalData" @close="showEditModal = false">
+      <mdb-modal-header>
+        <mdb-modal-title>Krijo Terapine: {{modalData.pacientiName}} {{modalData.pacientiLastName}}, {{modalData.startTime.split(' ')[1].slice(0, -3) + ' - ' + modalData.endTime.split(' ')[1].slice(0, -3) + ' ' + modalData.endTime.split(' ')[2]}}</mdb-modal-title>
+      </mdb-modal-header>
+      <mdb-modal-body>
+        <form>
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example1">Pershkrimi:</label>
+                <textarea required rows="4" v-model="terapia.pershkrimi" class="form-control" placeholder="Pershkrimi" />
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example1">Diagnoza:</label>
+                <textarea required rows="4" v-model="terapia.diagnoza" class="form-control" placeholder="Diagnoza" />
+            </div>
+
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example2">Barnat:</label>
+                <input required placeholder="Barnat" v-model="terapia.barnat" class="form-control" />
+            </div>
+
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example2">Sherbimi:</label>
+                <v-select required multiple v-model="terapia.sherbimetEKryera" :options="sherbimetOptions" :reduce="sherbimi => sherbimi.id" label="emri" />
+            </div>
+
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example2">Analizat e kryera:</label>
+                <v-select required multiple v-model="terapia.analizatECaktuara" :options="analizatOptions" :reduce="analiza => analiza.id" label="emri" />
+            </div>
+        </form>
+      </mdb-modal-body>
+      <mdb-modal-footer>
+        <p
+            type="button"
+            class="close-button"
+            @click="showEditModal = false;"
+        >
+            Close
+        </p>
+        <p
+            type="button"
+            class="anulo-button"
+            @click="krijoTerapine"
+        >
+            Save
+        </p>
+      </mdb-modal-footer>
+    </mdb-modal>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue'
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbIcon } from 'mdbvue'
 import {deleteTermini, createTerminet} from "../staff-sdk/terminet"
+import { getAllServices } from "../staff-sdk/sherbimet"
+import { getAnalizat } from "../staff-sdk/analizat"
+import {createTerapine} from "../staff-sdk/terapia"
 export default {
   name: 'my-component',
   components: {
-    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter
+    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbIcon
   },
   data(){
     return {
@@ -92,14 +156,25 @@ export default {
             {
                 label: '',
                 field: 'moreOptions',
-                width: '100px',
+                width: '20px',
             },
         ],
         date: null,
         selectedDate: null,
-        showModal: false,
+        showDeleteModal: false,
         modalData: null,
         currentDate: null,
+        showEditModal: false,
+        sherbimet: [],
+        analizat: [],
+        terapia: {
+            pershkrimi: null,
+            diagnoza: null, 
+            barnat: null,
+            terminiId: null,
+            sherbimetEKryera: null,
+            analizatECaktuara: null,
+        }
     }
   },
   mounted() {
@@ -116,6 +191,11 @@ export default {
   watch: {
     selectedDate() {
         this.fetchTerminet(this.selectedDate)
+    },
+    showEditModal(newValue) {
+        if(newValue === true) {
+            this.fetchSherbimetDheAnalizat()
+        }
     }
   },
   computed: {
@@ -124,16 +204,27 @@ export default {
     }),
     terminet() {
         return this.$store.state.terminet.terminet.data
+    },
+    sherbimetOptions() {
+        return this.sherbimet
+    },
+    analizatOptions() {
+        return this.analizat
     }
   },
   methods: {
     async fetchTerminet() {
         await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.user.user.data.id})
     },
-    triggerModal(termin) {
-        this.showModal = true;
+    triggerDeleteModal(termin) {
+        this.showDeleteModal = true;
         this.modalData = termin;
 
+    },
+    triggerEditModal(termin) {
+        this.showEditModal = true;
+        this.modalData = termin;
+        this.terapia.terminiId = termin.id
     },
     async deleteTermin() {
         try {
@@ -143,7 +234,7 @@ export default {
             console.log(err)
         } finally {
             this.fetchTerminet()
-            this.showModal = false
+            this.showDeleteModal = false
         }
     },
     async createNewTerminet() {
@@ -155,6 +246,43 @@ export default {
         } finally {
             await this.fetchTerminet()
         }
+    },
+    async fetchSherbimetDheAnalizat() {
+        try {
+            const sherbimetResponse = await getAllServices()
+            this.sherbimet = sherbimetResponse.data
+            const analizatResponse = await getAnalizat()
+            this.analizat = analizatResponse.data
+            // eslint-disable-next-line no-console
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log(err)
+        }
+    },
+
+    async krijoTerapine() {
+        let sherbimetString = this.terapia.sherbimetEKryera.join(", ");
+        let analizatString = this.terapia.analizatECaktuara.join(", ");
+
+        this.terapia.sherbimetEKryera = sherbimetString
+        this.terapia.analizatECaktuara = analizatString
+        try {
+            await createTerapine(this.terapia)
+            this.reset()
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log(err)
+        }
+
+    },
+    reset() {
+        for (var key in this.terapia) {
+            if (this.terapia.hasOwnProperty(key)) {
+                this.terapia[key] = null;
+            }
+        }
+
+        this.showEditModal = false
     }
   }
 };
@@ -216,37 +344,55 @@ export default {
 }
 
 .close-button{
-        background: #f64e60;
-        width: fit-content;
-        padding: 10px 20px;
-        border-radius: 10px;
-        color: white;
-        transition: background-color 0.3s;
-        font-size: 1rem;
-        font-weight: 500;
-    }
+    background: #f64e60;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    font-weight: 500;
+}
 
-    .close-button:hover{
-        background: #ee2d41;
-        transition: background-color 0.3s;
-        cursor: pointer;
-    }
+.close-button:hover{
+    background: #ee2d41;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
 
-    .anulo-button{
-        background: rgb(107,98,255, 0.9);;
-        width: fit-content;
-        padding: 10px 20px;
-        border-radius: 10px;
-        color: white;
-        transition: background-color 0.3s;
-        font-size: 1rem;
-        font-weight: 500;
-    }
+.anulo-button{
+    background: rgb(107,98,255, 0.9);;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    font-weight: 500;
+}
 
-    .anulo-button:hover{
-        background: rgb(107,98,255, 1);;
-        transition: background-color 0.3s;
-        cursor: pointer;
-    }
+.anulo-button:hover{
+    background: rgb(107,98,255, 1);;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+input.form-control, textarea.form-control {
+  border: none;
+  background: #f3f6f9;
+  border-radius: 8px;
+  min-height: 40px;
+  transition: background-color 0.3s;
+  padding: auto 15px;
+  margin-bottom: 20px;
+}
+
+.form-control:focus {
+  border: none;
+  outline: none;
+  background: #ebedf3;
+  box-shadow: none;
+  transition: background-color 0.3s;
+}
 
 </style>
