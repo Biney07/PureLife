@@ -23,7 +23,7 @@
              <p
               class="staff-name"
             >
-              Dr: {{ attr.customData.staffName }}, {{ attr.customData.reparti }}
+              <span>Dr: {{ attr.customData.staffName }}, {{ attr.customData.reparti }}</span>
             </p>
            
           </div>
@@ -140,7 +140,7 @@ export default {
 /deep/ .custom-calendar.vc-container {
   --day-border: 1px solid #b8c2cc;
   --day-border-highlight: 1px solid #b8c2cc;
-  --day-width: 150px;
+  --day-width: 100%;
   --day-height: 100px;
   --weekday-bg: #f8fafc;
   --weekday-border: 1px solid #eaeaea;
@@ -238,19 +238,44 @@ export default {
 }
 
 .close-button{
-        background: #f64e60;
-        width: fit-content;
-        padding: 10px 20px;
-        border-radius: 10px;
-        color: white;
-        transition: background-color 0.3s;
-        font-size: 1rem;
-        font-weight: 500;
-    }
+  background: #f64e60;
+  width: fit-content;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+  font-weight: 500;
+}
 
-    .close-button:hover{
-        background: #ee2d41;
-        transition: background-color 0.3s;
-        cursor: pointer;
-    }
+.close-button:hover{
+  background: #ee2d41;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 450px) {
+  main, div{
+    padding: 0 !important;
+  }
+  .calendar-container {
+    width: 100%;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+  }
+
+  /deep/ .custom-calendar.vc-container {
+    --day-border: 1px solid #b8c2cc;
+    --day-border-highlight: 1px solid #b8c2cc;
+    --day-width: 100%;
+    --day-height: 80px;
+    --weekday-bg: #f8fafc;
+    --weekday-border: 1px solid #eaeaea;
+
+    border-radius: 0;
+    width: 100%;
+  }
+
+}
 </style>
