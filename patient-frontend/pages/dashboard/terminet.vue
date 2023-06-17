@@ -5,7 +5,7 @@
       <div class="form-group">
         <div class="filter">
             <label class="date-label" for="date">Zgjedhni Daten:</label>
-            <input required v-model="selectedDate" class="date-input" type="date" id="date" placeholder="Zgjedhni Daten:" />
+            <input :min="currentDate" required v-model="selectedDate" class="date-input" type="date" id="date" placeholder="Zgjedhni Daten:" />
         </div>
         
         <div class="arrow-down">
@@ -19,12 +19,12 @@
             <option v-for="reparti in repartet" :value="reparti.id" :key="reparti.id">{{ reparti.emri }}</option>
             </select>
         </div>
-
+        
         <div class="arrow-down">
             <img src="https://www.svgrepo.com/show/80156/down-arrow.svg" alt="Arrow" />
         </div>
 
-        <div class="filter">
+        <div class="filter" v-if="doctors.length">
             <label class="date-label" for="doctor">Doktori:</label>
             <div class="doctor-cards-container">
               <div
@@ -39,19 +39,24 @@
             </div>
             </div>
         </div>
+        <div class="filter" v-if="!doctors.length && terminiData.reparti">
+            <p class="filter-doctor-warning">Nuk kemi staf ne kete repart!</p>
+        </div>
       </div>
     </div>
 
     <div class="terminet-cards">
-        <div v-if="!terminet.length" class="terminet-warning">
-            <h1>Nuk ka termine te krijuara per daten e zgjedhur</h1>
-            <p>Ju lutemi qe paraprakisht te plotesoni fushat me larte!</p>
-        </div>
-
-        <div class="termini-container" v-else>
+        <div class="termini-container" v-if="terminet.length">
             <div @click="showDetails(termini)" class="termini-text-container" v-for="termini in terminet" :key="termini.id">
                 <p>{{termini.startTime.split(' ')[1].slice(0, -3) + ' ' + termini.startTime.split(' ')[2]}} - {{termini.endTime.split(' ')[1].slice(0, -3) + ' ' + termini.endTime.split(' ')[2]}}</p>
             </div>
+        </div>
+        <div v-else-if="!terminiData.reparti || !terminiData.stafi" class="terminet-warning">
+            <h2>Ju lutemi qe paraprakisht te plotesoni fushat per filtrim!</h2>
+        </div>
+        <div v-else class="terminet-warning">
+            <h2>Nuk ka termine te lira per daten e zgjedhur</h2>
+            <p>Ju lutemi qe paraprakisht te plotesoni fushat me larte!</p>
         </div>
     </div>
 
@@ -122,7 +127,8 @@ export default {
       showModal: false,
       modalData: null,
       email: null,
-      wrongEmail: null
+      wrongEmail: null,
+      currentDate: null,
     }
   },
   watch: {
@@ -138,6 +144,7 @@ export default {
         this.terminiData.stafi = null;
       }
       this.fetchStafi()
+      this.terminiData.stafi = null
     },
     "terminiData.stafi"(newStaff) {
         if(newStaff === null) {
@@ -153,6 +160,8 @@ export default {
     month = month < 10 ? `0${month}` : month;
     let day = currentDate.getDate();
     day = day < 10 ? `0${day}` : day;
+
+    this.currentDate = `${year}-${month}-${day}`
 
     this.selectedDate = `${year}-${month}-${day}`;
 
@@ -264,6 +273,7 @@ export default {
 }
 
 .terminet-warning{
+    margin: 0 auto;
     text-align: center;
     font-family: var(--primary-font);
 }
@@ -411,5 +421,11 @@ export default {
   width: 80px;
 }
 
-
+.filter-doctor-warning{
+  color: red;
+  font-weight: 500;
+  text-align: center;
+  font-size: 18px;
+  font-family: var(--primary-font);
+}
 </style>
