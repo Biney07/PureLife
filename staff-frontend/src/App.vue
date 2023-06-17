@@ -41,8 +41,6 @@ import {
 import routes from './helpers/sidebarRoutes'
 import navbarRoutes from './helpers/navbarRoutes'
 import { mapGetters } from 'vuex'
-import { getLocalStorage } from "./helpers/auth"
-import {createTerminet} from './staff-sdk/terminet'
 export default {
   name: "AdminTemplate",
   components: {
@@ -54,8 +52,6 @@ export default {
     return {
       activeItem: 1,
       minimized: true,
-      terminet: [],
-      userId: null
     };
   },
   computed: {
@@ -75,24 +71,11 @@ export default {
 
   },
   async mounted() {
-    const currentDate = new Date(); // Get the current date
-    const year = currentDate.getFullYear();
-    let month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
-    month = month < 10 ? `0${month}` : month; // Pad the month with leading zero if needed
-    let day = currentDate.getDate();
-    day = day < 10 ? `0${day}` : day; // Pad the day with leading zero if needed
-
-    this.selectedDate = `${year}-${month}-${day}`;
 
 
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
     }
-
-    this.userId = getLocalStorage()
-    // eslint-disable-next-line no-console
-    console.log(this.userId)
-    await this.fetchTerminet();
   },
   mixins: [waves],
   methods: {
@@ -105,30 +88,6 @@ export default {
     signOut() {
       this.$store.dispatch('signOut')
     },
-    async fetchTerminet() {
-        // eslint-disable-next-line no-console
-        if(this.userId) {
-          const response = await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.userId.id})
-          this.terminet = response.data
-        }
-
-        if(this.terminet.length == 0) {
-          await this.createNewTerminet()
-        }
-        // eslint-disable-next-line no-console
-    },
-    async createNewTerminet() {
-      if(this.userId) {
-        // eslint-disable-next-line no-console
-        console.log(this.userId.id)
-        try {
-          await createTerminet(this.userId.id)
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.log(err)
-        }
-      }
-    }
   },
 };
 </script>
