@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Pure_Life.Data;
 using Pure_Life.Models;
+using Pure_Life.Services;
 using Pure_Life.ViewModel;
 using Pure_Life.ViewModel.Stafi;
 using Pure_Life.ViewModels;
@@ -27,13 +28,15 @@ namespace Pure_Life.APIControllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ImageService _imageService;
 
-        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, SignInManager<ApplicationUser> signInManager)
+        public StafiAPIController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, SignInManager<ApplicationUser> signInManager, ImageService imageService)
         {
             _context = context;
             _userManager = userManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
 
         // GET: api/StafiAPI

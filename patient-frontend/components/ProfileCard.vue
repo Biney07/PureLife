@@ -11,7 +11,8 @@
 
         <div class="card">
             <div class="cover-photo">
-                <img src="../assets/profile.jpg" class="profile">
+                <img :src="patientData.pictureUrl" class="profile">
+
             </div>
             <h3 class="profile-name">{{ patientData.emri }} {{ patientData.mbiemri }}</h3>
             <div class="pacientinfo">
@@ -88,23 +89,23 @@ export default {
         };
     },
     mounted() {
-        console.log("mounted() called");
+   
         const useri = JSON.parse(localStorage.getItem('patient'));
 
-        console.log(useri);
+       
         if (useri && useri.user.uid) {
             const uid = useri.user.uid;
-            console.log("UID:", uid);
+       
             this.fetchPatientData(uid);
         }
     },
     methods: {
         async fetchPatientData(uid) {
             try {
-                console.log("fetchPatientData() called with UID:", uid);
+               
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
-                console.log("Fetched patient data:", this.patientData);
+           
                 this.calculateAge(); // Call the calculateAge() method after fetching patient data
             } catch (error) {
                 console.log("Error while fetching patient data:", error);

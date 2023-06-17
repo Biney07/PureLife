@@ -16,6 +16,12 @@
                                 <div class="form-row">
                                     <div class="form-column">
                                         <div class="mb-3">
+                                            <label for="pictureUrl" class="form-label">Upload Picture:</label>
+                                            <input type="file" id="pictureUrl" name="pictureUrl" @change="onFileChange"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="mb-3">
                                             <label for="emri" class="form-label">Emri:</label>
                                             <input type="text" id="emri" name="emri" v-model="patientData.emri"
                                                 class="form-control">
@@ -27,17 +33,17 @@
                                                 class="form-control">
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email:</label>
-                                            <input type="email" id="email" name="email" v-model="patientData.email"
-                                                class="form-control">
-                                        </div>
+
 
                                         <div class="mb-3">
                                             <label for="gjinia" class="form-label">Gjinia:</label>
-                                            <input type="text" id="gjinia" name="gjinia" v-model="patientData.gjinia"
+                                            <select id="gjinia" name="gjinia" v-model="patientData.gjinia"
                                                 class="form-control">
+                                                <option value="Mashkull">Mashkull</option>
+                                                <option value="Femer">Femer</option>
+                                            </select>
                                         </div>
+
                                         <div class="mb-3">
                                             <label for="nacionalitetiId" class="form-label">Nacionaliteti:</label>
                                             <input type="number" id="nacionalitetiId" name="nacionalitetiId"
@@ -133,71 +139,67 @@ export default {
         };
     },
     mounted() {
-        console.log("mounted() called");
+  
         const useri = JSON.parse(localStorage.getItem('patient'));
 
-        console.log(useri);
+       
         if (useri && useri.user.uid) {
             const uid = useri.user.uid;
-            console.log("UID:", uid);
+           
             this.fetchPatientData(uid);
         }
     },
 
 
     methods: {
-        async updateDataLindjes(event) {
-            const selectedDate = event.target.value;
-            if (selectedDate) {
-                const [year, month, day] = selectedDate.split('-');
-                this.patientData.dataLindjes = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-            } else {
-                this.patientData.dataLindjes = '';
-            }
-        },
         async updatePatientData(event) {
             event.preventDefault();
 
-
             try {
-                // Prepare the updated patient data
-                const updatedData = {
-                    emri: this.patientData.emri,
-                    mbiemri: this.patientData.mbiemri,
-                    email: this.patientData.email,
-                    gjinia: this.patientData.gjinia,
-                    dataLindjes: this.patientData.dataLindjes,
-                    nrTel: this.patientData.nrTel,
-                    qyteti: this.patientData.qyteti,
-                    alergji: this.patientData.alergji,
-                    nrLeternjoftimit: this.patientData.nrLeternjoftimit,
-                    shtetiId: this.patientData.shtetiId,
-                    nacionalitetiId: this.patientData.nacionalitetiId
+                const formData = new FormData();
+                formData.append('Id', this.patientData.id);
+                formData.append('PictureFile', this.patientData.pictureFile);
+                formData.append('Emri', this.patientData.emri);
+                formData.append('Mbiemri', this.patientData.mbiemri);
+                formData.append('Gjinia', this.patientData.gjinia);
+                formData.append('DataLindjes', this.patientData.dataLindjes);
+                formData.append('NrTel', this.patientData.nrTel);
+                formData.append('Qyteti', this.patientData.qyteti);
+                formData.append('Alergji', this.patientData.alergji);
+                formData.append('NrLeternjoftimit', this.patientData.nrLeternjoftimit);
+                formData.append('ShtetiId', this.patientData.shtetiId);
+                formData.append('NacionalitetiId', this.patientData.nacionalitetiId);
 
-                };
-                console.log(this.patientData.dataLindjes);
-                console.log(updatedData);
-                // Make the POST request to update the patient data
+                // Log the values of the FormData object
+               
+
                 const response = await axios.put(
                     `https://localhost:7292/api/PacientiAPI/${this.patientData.id}`,
-                    updatedData
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
                 );
 
-                // Handle the response if needed
-
-                console.log("Patient data updated successfully:", response.data);
-
             } catch (error) {
-                console.log("Error while updating patient data:", error);
+                console.log('Error while updating patient data:', error);
             }
+
             window.location.reload();
+
+
+
+
         },
+
         async fetchPatientData(uid) {
             try {
-                console.log("fetchPatientData() called with UID:", uid);
+             
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
-                console.log("Fetched patient data:", this.patientData);
+                
 
             } catch (error) {
                 console.log("Error while fetching patient data:", error);

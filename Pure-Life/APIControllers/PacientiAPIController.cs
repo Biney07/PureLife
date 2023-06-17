@@ -14,11 +14,14 @@ namespace Pure_Life.APIControllers
     {
         private readonly ApplicationDbContext _context;
         private ICurrentUser _currentUser;
+        private readonly ImageService _imageService;
 
-        public PacientiAPIController(ApplicationDbContext context, ICurrentUser currentUser)
+
+        public PacientiAPIController(ApplicationDbContext context, ICurrentUser currentUser, ImageService imageService)
         {
             _context = context;
             _currentUser = currentUser;
+            _imageService= imageService;
         }
 
         [HttpPost]
@@ -81,10 +84,12 @@ namespace Pure_Life.APIControllers
 		{
 			var pacienti = await _context.Pacientet.Where(x => x.UId == uId).FirstOrDefaultAsync();
 
+            
 			var result =  new GetPacientiViewModel
 			{
 				Id = pacienti.Id,
 				UId = pacienti.UId,
+                PictureUrl = pacienti.PictureUrl,
 				NrLeternjoftimit = pacienti.NrLeternjoftimit,
 				Emri = pacienti.Emri,
 				Mbiemri = pacienti.Mbiemri,
@@ -108,7 +113,7 @@ namespace Pure_Life.APIControllers
 		
 		}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdatePacientiAPIViewModel model)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdatePacientiAPIViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -122,6 +127,12 @@ namespace Pure_Life.APIControllers
                 return NotFound();
             }
 
+            if (model.PictureFile != null)
+            {
+                var result = await _imageService.AddPhotoAsync(model.PictureFile);
+                pacienti.PictureUrl = result.Url.ToString();
+            }
+
             // Encapsulate the data
             pacienti.NrLeternjoftimit = model.NrLeternjoftimit;
             pacienti.Emri = model.Emri;
@@ -133,14 +144,13 @@ namespace Pure_Life.APIControllers
             pacienti.ShtetiId = model.ShtetiId;
             pacienti.Qyteti = model.Qyteti;
             pacienti.NacionalitetiId = model.NacionalitetiId;
-            pacienti.Email = model.Email;
+          
             pacienti.ModifiedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
             return Ok();
         }
-
 
     }
 }

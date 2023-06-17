@@ -33,10 +33,10 @@ namespace Pure_Life.ViewModel.Pacienti
 
         public int? NacionalitetiId { get; set; }
 
-        [Required]
-        public string Email { get; set; }
+        
+    
+        public IFormFile? PictureFile { get; set; }
 
-      
 
 
     }

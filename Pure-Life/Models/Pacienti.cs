@@ -21,7 +21,7 @@ namespace Pure_Life.Models
         public bool MembershipStatus { get; set; }
         public int? ShtetiId { get; set; }
         [ForeignKey("ShtetiId")]
-
+        public string? PictureUrl { get; set; }
         public string? Qyteti { get; set; }
         public int? NacionalitetiId { get; set; }
         [ForeignKey("NacionalitetiId")]

@@ -11,7 +11,7 @@ namespace Pure_Life.ViewModel.Pacienti
 		public string? UId { get; set; }
 		public string? NrLeternjoftimit { get; set; }
 		public string Emri { get; set; }
-
+		public string PictureUrl { get;set; }
 		public string Mbiemri { get; set; }
 		public string? Gjinia { get; set; }
 		public DateTime? DataLindjes { get; set; }
