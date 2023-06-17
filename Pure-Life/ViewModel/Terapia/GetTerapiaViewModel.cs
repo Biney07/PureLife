@@ -8,6 +8,8 @@ namespace Pure_Life.ViewModel.Terapia
 
 		public string Pacienti { get; set; }
 
+		public int TerminiId { get; set; }
+
 		public string NrLeternjoftimit { get; set; }
 		public string Koha { get; set; }
 
