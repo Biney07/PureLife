@@ -3,8 +3,8 @@
     <div class="terminet-table">
         <div class="terminet-header">
             <div class="starter-text">
-                <p>Terminet</p>
-                <p>{{selectedDate}}</p>
+                <p class="starter-text-title">Terminet</p>
+                <p v-show="!terminet.length && currentDate.getDate() == selectedDate.split('-').at(-1)" @click="createNewTerminet">Krijo Terminet</p>
             </div>
             <input class="date-input" type="date" v-model="selectedDate">
         </div>
@@ -67,7 +67,7 @@
 <script>
 import {mapGetters} from "vuex"
 import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue'
-import {deleteTermini} from "../staff-sdk/terminet"
+import {deleteTermini, createTerminet} from "../staff-sdk/terminet"
 export default {
   name: 'my-component',
   components: {
@@ -98,15 +98,16 @@ export default {
         date: null,
         selectedDate: null,
         showModal: false,
-        modalData: null
+        modalData: null,
+        currentDate: null,
     }
   },
   mounted() {
-    const currentDate = new Date(); // Get the current date
-    const year = currentDate.getFullYear();
-    let month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
+    this.currentDate = new Date(); // Get the current date
+    const year = this.currentDate.getFullYear();
+    let month = this.currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
     month = month < 10 ? `0${month}` : month; // Pad the month with leading zero if needed
-    let day = currentDate.getDate();
+    let day = this.currentDate.getDate();
     day = day < 10 ? `0${day}` : day; // Pad the day with leading zero if needed
 
     this.selectedDate = `${year}-${month}-${day}`;
@@ -127,8 +128,6 @@ export default {
   },
   methods: {
     async fetchTerminet() {
-        // eslint-disable-next-line no-console
-        console.log(this.user.user.data.id)
         await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.user.user.data.id})
     },
     triggerModal(termin) {
@@ -145,6 +144,16 @@ export default {
         } finally {
             this.fetchTerminet()
             this.showModal = false
+        }
+    },
+    async createNewTerminet() {
+        try {
+          await createTerminet(this.user.user.data.id)
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err)
+        } finally {
+            await this.fetchTerminet()
         }
     }
   }
@@ -172,7 +181,7 @@ export default {
     align-items: center;
 }
 
-.starter-text p {
+.starter-text .starter-text-title {
     font-size: 28px;
     padding: 0;
     margin: 0;
@@ -187,6 +196,7 @@ export default {
     border-radius: 8px;
     background: #1c80c8;
     color: white;
+    cursor: pointer;
 }
 
 .date-input{
