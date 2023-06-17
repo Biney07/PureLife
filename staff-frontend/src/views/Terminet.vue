@@ -31,7 +31,7 @@
                 </span>
 
                 <span @click="triggerModal(props.row)" v-if="props.column.field == 'moreOptions'">
-                   <b-icon icon="trash-fill" variant="danger" class="delete-icon"></b-icon>
+                   <b-icon icon="trash" variant="danger" class="delete-icon"></b-icon>
                 </span>
             </template>
         </vue-good-table>
@@ -45,8 +45,20 @@
         <p>A jeni te sigurte qe deshironi te anuloni kete termin?</p>
       </mdb-modal-body>
       <mdb-modal-footer>
-        <mdb-btn color="danger" @click.native="showModal = false">Close</mdb-btn>
-        <mdb-btn color="primary" @click.native="deleteTermin">Anulo</mdb-btn>
+        <p
+            type="button"
+            class="close-button"
+            @click="showModal = false;"
+        >
+            Close
+        </p>
+        <p
+            type="button"
+            class="anulo-button"
+            @click="deleteTermin"
+        >
+            Anulo
+        </p>
       </mdb-modal-footer>
     </mdb-modal>
   </div>
@@ -54,12 +66,12 @@
 
 <script>
 import {mapGetters} from "vuex"
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue'
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue'
 import {deleteTermini} from "../staff-sdk/terminet"
 export default {
   name: 'my-component',
   components: {
-    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn
+    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter
   },
   data(){
     return {
@@ -192,5 +204,39 @@ export default {
     font-weight: 600;
     cursor: pointer;
 }
+
+.close-button{
+        background: #f64e60;
+        width: fit-content;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: white;
+        transition: background-color 0.3s;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .close-button:hover{
+        background: #ee2d41;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+
+    .anulo-button{
+        background: rgb(107,98,255, 0.9);;
+        width: fit-content;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: white;
+        transition: background-color 0.3s;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .anulo-button:hover{
+        background: rgb(107,98,255, 1);;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
 
 </style>

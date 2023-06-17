@@ -54,7 +54,13 @@
         </div>
       </mdb-modal-body>
       <mdb-modal-footer>
-        <mdb-btn color="danger" @click.native="showModal = false">Close</mdb-btn>
+        <p
+            type="button"
+            class="close-button"
+            @click="showModal = false;"
+        >
+            Close
+        </p>
       </mdb-modal-footer>
     </mdb-modal>
 
@@ -65,10 +71,10 @@
 <script>
 import { getAllShifts } from "../staff-sdk/kujdestarite"
 import { mapGetters } from 'vuex'
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue'
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue'
 export default {
   components: {
-    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn,
+    mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter,
   },
   data() {
     // const month = new Date().getMonth();
@@ -230,4 +236,21 @@ export default {
 .day-cell{
   cursor: pointer;
 }
+
+.close-button{
+        background: #f64e60;
+        width: fit-content;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: white;
+        transition: background-color 0.3s;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .close-button:hover{
+        background: #ee2d41;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
 </style>
