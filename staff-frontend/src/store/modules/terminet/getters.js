@@ -1,3 +1,3 @@
 export const getTerminet = (state) => {
-    return state;
+    return state.terminet;
 }

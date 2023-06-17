@@ -5,6 +5,10 @@ export function getTerminet(id) {
     return axios.get(`${API_URL}/api/TerminiAPI/GetTerminiByStaf/${id}`)
 }
 
+export function createTerminet(id) {
+    return axios.post(`${API_URL}/api/TerminiAPI/Create/${id}`)
+}
+
 export function getTerminetByDateAndStaff(date, id) {
     return axios.get(`${API_URL}/api/TerminiAPI/GetTerminiByDateAndId/${date}/${id}`)
 }

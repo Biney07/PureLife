@@ -34,9 +34,7 @@ namespace Pure_Life.APIControllers
         }
 
 
-	
-		[Route("Create")]
-		[HttpPost]
+		[HttpPost("Create/{stafiId}")]
 		public async Task<IActionResult> Create(int stafiId)
 		{
 			TimeSpan[] timeSlots = new TimeSpan[]

@@ -6,7 +6,7 @@ export const fetchTerminetByStaff = ({commit}, staffId) => {
         .then((response) => {
             // eslint-disable-next-line no-console
             console.log(response)
-            commit('storeTerminet', response.data)
+            commit('storeTerminetByStaff', response.data)
             resolve(response)
         })
         .catch(error => { reject(error) })

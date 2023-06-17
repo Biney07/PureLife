@@ -8,7 +8,7 @@
       <a class="logo-wrapper"><img alt="" class="img-fluid" src="./assets/purelife color.png"/></a>
       <mdb-list-group class="list-group-flush">
         <router-link v-for="(route, index) in filteredRoutes" :key="index" :to="route.path" @click.native="activeItem = index + 1">
-          <mdb-list-group-item v-if="!route.authRequired" :action="true" :class="{ active: activeItem === index + 1, 'custom-list-group-item': index === 4 }">
+          <mdb-list-group-item v-if="!route.authRequired" :action="true" :class="{ active: activeItem === index + 1 }">
             <mdb-icon :icon="route.icon" class="mr-3 icon-shrink"/>
             <span>{{ route.name }}</span>
           </mdb-list-group-item>
@@ -41,7 +41,8 @@ import {
 import routes from './helpers/sidebarRoutes'
 import navbarRoutes from './helpers/navbarRoutes'
 import { mapGetters } from 'vuex'
-
+import { getLocalStorage } from "./helpers/auth"
+import {createTerminet} from './staff-sdk/terminet'
 export default {
   name: "AdminTemplate",
   components: {
@@ -53,6 +54,8 @@ export default {
     return {
       activeItem: 1,
       minimized: true,
+      terminet: [],
+      userId: null
     };
   },
   computed: {
@@ -63,7 +66,7 @@ export default {
       return navbarRoutes
     },
     ...mapGetters({
-      user: 'getUser'
+      user: 'getUser',
     }),
     filteredRoutes() {
       const userRole = this.user?.user?.data?.roletId;
@@ -71,10 +74,25 @@ export default {
     },
 
   },
-  mounted() {
+  async mounted() {
+    const currentDate = new Date(); // Get the current date
+    const year = currentDate.getFullYear();
+    let month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
+    month = month < 10 ? `0${month}` : month; // Pad the month with leading zero if needed
+    let day = currentDate.getDate();
+    day = day < 10 ? `0${day}` : day; // Pad the day with leading zero if needed
+
+    this.selectedDate = `${year}-${month}-${day}`;
+
+
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
     }
+
+    this.userId = getLocalStorage()
+    // eslint-disable-next-line no-console
+    console.log(this.userId)
+    await this.fetchTerminet();
   },
   mixins: [waves],
   methods: {
@@ -86,6 +104,30 @@ export default {
     },
     signOut() {
       this.$store.dispatch('signOut')
+    },
+    async fetchTerminet() {
+        // eslint-disable-next-line no-console
+        if(this.userId) {
+          const response = await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.userId.id})
+          this.terminet = response.data
+        }
+
+        if(this.terminet.length == 0) {
+          await this.createNewTerminet()
+        }
+        // eslint-disable-next-line no-console
+    },
+    async createNewTerminet() {
+      if(this.userId) {
+        // eslint-disable-next-line no-console
+        console.log(this.userId.id)
+        try {
+          await createTerminet(this.userId.id)
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err)
+        }
+      }
     }
   },
 };
