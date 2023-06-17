@@ -30,26 +30,33 @@ const routes = [
       role: [roles.MJEK]
     },
     {
-      path: '/tables',
-      name: 'Tables',
-      icon: 'table',
+      path: '/terapite',
+      name: 'Terapite',
+      icon: 'clipboard',
       authRequired: false,
       role: [roles.MJEK]
     },
-    {
-      path: '/maps',
-      name: 'Maps',
-      icon: 'map',
-      authRequired: false,
-      role: [roles.MJEK]
-    },
-    {
-      path: '/404',
-      name: '404',
-      icon: 'exclamation',
-      authRequired: false,
-      role: [roles.MJEK, roles.LABORANT]
-    },
+    // {
+    //   path: '/tables',
+    //   name: 'Tables',
+    //   icon: 'table',
+    //   authRequired: false,
+    //   role: [roles.MJEK]
+    // },
+    // {
+    //   path: '/maps',
+    //   name: 'Maps',
+    //   icon: 'map',
+    //   authRequired: false,
+    //   role: [roles.MJEK]
+    // },
+    // {
+    //   path: '/404',
+    //   name: '404',
+    //   icon: 'exclamation',
+    //   authRequired: false,
+    //   role: [roles.MJEK, roles.LABORANT]
+    // },
   ]
   
   export default routes

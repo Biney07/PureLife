@@ -23,8 +23,8 @@
         <div class="profile-form-content">
           <div class="profile-image-container pl-0 mb-4">
             <img :src="userData.pictureUrl" alt="User Profile Image" class="profile-image" />
-            <p class="profile-save-button">Change Image</p>
-            <input type="file" ref="fileInput" style="display:none">
+            <!-- <p class="profile-save-button">Change Image</p>
+            <input type="file" ref="fileInput" style="display:none"> -->
           </div>
           <form>
             <div class="form-outline">
@@ -103,18 +103,20 @@
 <script>
 import {getAllNationalities, getAllCountries} from "../staff-sdk/nacionaliteti"
 import {fetchCurrentUser} from "../staff-sdk/user"
+import {getLemiaById} from "../staff-sdk/lemia.js"
 export default {
   data() {
     return {
       userData: null,
       nationalities: null,
-      countries: null
+      countries: null,
     }
   },
   async mounted() {
     await this.fetchNationalities()
     await this.fetchCountries()
     await this.getCurrentUser();
+    await this.getSpecializimin()
   },
   methods: {
     async fetchNationalities() {
@@ -152,6 +154,16 @@ export default {
         // eslint-disable-next-line no-console
         this.userData = response?.data
       } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      }
+    },
+    async getSpecializimin() {
+      try {
+        const response = await getLemiaById(this.userData.lemiaId)
+        // eslint-disable-next-line no-console
+        this.userData.lemia = response.data.emri
+      } catch(err) {
         // eslint-disable-next-line no-console
         console.log(err)
       }
