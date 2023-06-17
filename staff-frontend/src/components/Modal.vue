@@ -11,7 +11,7 @@
           class="btn-close"
           @click="close"
         >
-          X
+          x
         </button>
       </header>
 
