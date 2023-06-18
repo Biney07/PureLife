@@ -316,6 +316,7 @@ namespace Pure_Life.APIControllers
 			terapia.Pershkrimi = model.Pershkrimi;
 			terapia.Diagnoza = model.Diagnoza;
 			terapia.Barnat = model.Barnat;
+		
 			var newEntries = sherbimetIdList.Select(sherbimetId => new TerapiaSherbimet
 			{
 				TerapiaId = id,
@@ -338,6 +339,8 @@ namespace Pure_Life.APIControllers
 .ThenInclude(ts => ts.Sherbimet)
 .Where(t => t.Id == terapia.Id)
 .ToListAsync();
+
+
 			var result = terapite.Select(x => new GetTerapiaViewModel
 			{
 				Id = x.Id,
@@ -348,7 +351,17 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
 				Sherbimet = x.TerapiaSherbimet != null
-			? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
+					? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
+				/*				SherbimetObj = x.TerapiaSherbimet != null
+					? x.TerapiaSherbimet.Select(s => new Pure_Life.ViewModel.Terapia.Sherbimet
+					{
+						Id = s.Sherbimet.Id,
+						Emri = s.Sherbimet.Emri
+					}).ToList()
+					: null,*/
+
+
+				/*SherbimetIds = x.TerapiaSherbimet.*/
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
 				InsertedFrom = x.InsertedFrom,
 				InsertedDate = x.InsertedDate,

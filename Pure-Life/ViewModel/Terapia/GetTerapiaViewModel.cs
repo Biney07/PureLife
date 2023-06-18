@@ -24,6 +24,9 @@ namespace Pure_Life.ViewModel.Terapia
 		public double Cmimi { get; set; }
 
 		public List<string> Sherbimet { get; set; }
+
+		public List<Sherbimet> SherbimetObj { get; set; }
+
 		public string InsertedFrom { get; set; }
 
 		public DateTime InsertedDate { get; set; }
@@ -41,5 +44,10 @@ namespace Pure_Life.ViewModel.Terapia
 		public string EmriAnalizes { get; set; }
 		public double Cmimi { get; set; }
 		public DateTime Data { get; set; }
+	}
+	public class Sherbimet
+	{
+		public int Id { get; set; }
+		public string Emri { get; set; }
 	}
 }
