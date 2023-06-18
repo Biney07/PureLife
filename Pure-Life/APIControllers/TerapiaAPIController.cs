@@ -165,7 +165,7 @@ namespace Pure_Life.APIControllers
 					})
 					.ToListAsync();
 			}
-
+		
 			List<int> sherbimetIds = new List<int>();
 
 			foreach (var sherbimId in model.SherbimetEKryera.Split(','))
@@ -215,6 +215,8 @@ namespace Pure_Life.APIControllers
 				.Where(x => x.Id == terapia.Id)
 				.FirstOrDefaultAsync();
 
+			var analizatESapoKryera = _context.TerapiaAnalizaRezultatet.Include(x => x.AnalizaLloji).ThenInclude(x => x.Analiza).Where(x => terapiaAnalizaRezultatet.Select(x => x.Id).Contains(x.Id)).ToList();
+
 			var result = new GetTerapiaViewModel
 			{
 				Id = terapiaa.Id,
@@ -228,7 +230,24 @@ namespace Pure_Life.APIControllers
 					.Where(s => sherbimetIds.Contains(s.Id))
 					.Select(s => s.Emri)
 					.ToListAsync(),
-				Doktori = $"Dr {terapiaa.Termini.Stafi.Emri} {terapiaa.Termini.Stafi.Mbiemri}",
+				/*	Analizat = analizatESapoKryera.Select(x=>x.AnalizaLloji.Analiza).Distinct().Select(x=> new AnalizaETerapise
+					{
+						Id = x.Id,
+						EmriAnalizes = x.Emri,
+						Cmimi = x.Cmimi,
+					}).ToList(),*/
+				Analizat = analizatESapoKryera
+	.Select(x => x.AnalizaLloji?.Analiza)
+	.Where(a => a != null)
+	.Distinct()
+	.Select(a => new AnalizaETerapise
+	{
+		Id = a.Id,
+		EmriAnalizes = a.Emri,
+		Cmimi = a.Cmimi
+	})
+	.ToList(),
+			Doktori = $"Dr {terapiaa.Termini.Stafi.Emri} {terapiaa.Termini.Stafi.Mbiemri}",
 				InsertedFrom = terapiaa.InsertedFrom,
 				InsertedDate = terapiaa.InsertedDate,
 				ModifiedDate = terapiaa.ModifiedDate,
@@ -254,6 +273,7 @@ namespace Pure_Life.APIControllers
 				Diagnoza = x.Diagnoza,
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
+				Cmimi = x.Termini.Price,
 				TerminiId = x.TerminiId,
 				Sherbimet = x.TerapiaSherbimet != null
 				? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
@@ -370,6 +390,7 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
 				TerminiId = x.TerminiId,
+				Cmimi = x.Termini.Price,
 				Sherbimet = x.TerapiaSherbimet != null
 			? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
@@ -419,6 +440,7 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
 				TerminiId = x.TerminiId,
+				Cmimi = x.Termini.Price,
 				Sherbimet = x.TerapiaSherbimet != null
 		? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
@@ -460,6 +482,7 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
 				TerminiId = x.TerminiId,
+				Cmimi = x.Termini.Price,
 				Sherbimet = x.TerapiaSherbimet != null
 				? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
@@ -497,6 +520,7 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = x.Pershkrimi,
 				Barnat = x.Barnat,
 				TerminiId = x.TerminiId,
+				Cmimi = x.Termini.Price,
 				Sherbimet = x.TerapiaSherbimet != null
 			? x.TerapiaSherbimet.Select(s => s.Sherbimet.Emri).ToList() : null,
 				Doktori = $"Dr {x.Termini.Stafi.Emri} {x.Termini.Stafi.Mbiemri}",
@@ -533,6 +557,7 @@ namespace Pure_Life.APIControllers
 				Pershkrimi = terapite.Pershkrimi,
 				Barnat = terapite.Barnat,
 				TerminiId = terapite.TerminiId,
+				Cmimi = terapite.Termini.Price,
 				Doktori = $"Dr {terapite.Termini.Stafi.Emri} {terapite.Termini.Stafi.Mbiemri}",
 				InsertedFrom = terapite.InsertedFrom,
 				InsertedDate = terapite.InsertedDate,
@@ -573,6 +598,7 @@ namespace Pure_Life.APIControllers
 				Diagnoza = terapia.Diagnoza,
 				Pershkrimi = terapia.Pershkrimi,
 				Barnat = terapia.Barnat,
+				Cmimi = terapia.Termini.Price,
 				TerminiId = id,
 				Doktori = $"Dr {terapia.Termini.Stafi.Emri} {terapia.Termini.Stafi.Mbiemri}",
 				InsertedFrom = terapia.InsertedFrom,

@@ -21,6 +21,8 @@ namespace Pure_Life.ViewModel.Terapia
 
 		public string Doktori { get; set; }
 
+		public double Cmimi { get; set; }
+
 		public List<string> Sherbimet { get; set; }
 		public string InsertedFrom { get; set; }
 
