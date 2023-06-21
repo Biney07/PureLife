@@ -24,5 +24,29 @@ namespace Pure_Life.APIControllers
 			return count;
 
 		}
+
+		[HttpGet("TotaliTermineveEPerfunduara/{stafiId}")]
+		public int TotaliTermineveEPerfunduara(int stafiId)
+		{
+			var terminetCount = _context.Terminet.Count(x => x.Price > 0 && x.StafiId==stafiId);
+			return terminetCount;
+
+		}
+		[HttpGet("NumriTermineveTeRezervuara/{stafiId}")]
+		public int NumriTermineveTeRezervuara(int stafiId)
+		{
+			var terminetCount = _context.Terminet.Count(x => x.Price == 0 && x.StafiId == stafiId && x.PacientiId!=null);
+			return terminetCount;
+
+		}
+
+
+		[HttpGet("TotaliTerapiveTePerfunduara/{stafiId}")]
+		public int TotaliTerapiveTePerfunduara(int stafiId)
+		{
+			var terminetCount = _context.Terminet.Count(x => x.Price > 0 && x.StafiId == stafiId);
+			return terminetCount;
+
+		}
 	}
 }
