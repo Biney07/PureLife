@@ -49,6 +49,7 @@ export default {
     return {
       messages: [],
       loading: false,
+      userMessage : '',
     };
   },
   
