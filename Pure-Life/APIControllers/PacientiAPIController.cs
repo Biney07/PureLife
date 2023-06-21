@@ -161,7 +161,7 @@ namespace Pure_Life.APIControllers
 
 			var terminet = await _context.Terminet.Where(x => x.StafiId == stafId && x.PacientiId != null).Select(x => new GetPacientiViewModel
             {
-                Id = x.Pacienti.Id,
+               UId = x.Pacienti.UId,
                 Emri = x.Pacienti.Emri,
                 Mbiemri = x.Pacienti.Mbiemri,
                 Email = x.Pacienti.Email
