@@ -85,28 +85,40 @@ export default {
     data() {
         return {
             patientData: {},
-            age: null
+            age: null,
+            hasNullValues: true // Add a new field to track null values
+
         };
     },
     mounted() {
-   
+
         const useri = JSON.parse(localStorage.getItem('patient'));
 
-       
+
         if (useri && useri.user.uid) {
             const uid = useri.user.uid;
-       
+
             this.fetchPatientData(uid);
         }
     },
     methods: {
         async fetchPatientData(uid) {
             try {
-               
+
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
-           
+
                 this.calculateAge(); // Call the calculateAge() method after fetching patient data
+                const values = Object.values(this.patientData);
+                const excludedProperties = ['modifiedDate', 'modifiedFrom'];
+
+                this.hasNullValues = values.some((value, index) => {
+                    const propertyName = Object.keys(this.patientData)[index];
+                    return value === null && !excludedProperties.includes(propertyName);
+                });
+
+                console.log(this.hasNullValues);
+
             } catch (error) {
                 console.log("Error while fetching patient data:", error);
             }

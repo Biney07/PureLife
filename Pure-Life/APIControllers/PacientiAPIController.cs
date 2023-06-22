@@ -102,10 +102,7 @@ namespace Pure_Life.APIControllers
 				Qyteti = pacienti.Qyteti,
 				NacionalitetiId = pacienti.NacionalitetiId,
 				Email = pacienti.Email,
-				InsertedDate =pacienti.InsertedDate,
-				ModifiedDate = pacienti.ModifiedDate,
-				ModifiedFrom =pacienti.ModifiedFrom,
-				IsDeleted = pacienti.IsDeleted
+			
 			};
 
 			return new JsonResult(result);

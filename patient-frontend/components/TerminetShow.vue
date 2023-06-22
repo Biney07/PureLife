@@ -1,4 +1,9 @@
 <template>
+    <div
+        style="position: fixed; top: 150px; right: 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25); display: flex; align-items: flex-end; flex-direction: column; padding:10px 30px">
+        <h3 class="profile-nameA">Borxhi Total:</h3>
+        <h3 class="profile-nameB">{{ calculateTotalDebt }}€</h3>
+    </div>
     <div>
         <div v-if="isFormOpen" class="form-overlay">
             <div class="form-container">
@@ -10,7 +15,7 @@
                     <h1 class="mtitle">TERAPIA</h1>
                     <div class="spacebetween">
                         <h3 class="capitalize">{{ terapia.pacienti }}</h3>
-                        <h3 class="capitalize">Termin Id: {{ terapia.terminiId }}</h3>
+
                     </div>
 
                     <div class="left-part">
@@ -21,7 +26,7 @@
                         <h5 class="title">Barnat:</h5>
                         <h4 class="parag">{{ terapia.barnat }}</h4>
                         <h5 class="title">Çmimi:</h5>
-                        <h4 class="cmimi">50 €</h4>
+                        <h4 class="cmimi">{{ terapia.cmimi }} Euro</h4>
                     </div>
 
                     <div class="right-part">
@@ -39,8 +44,7 @@
                                 <tr>
                                     <th scope="col">Emri Analizes</th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
+
                                     <th scope="col">View</th>
 
                                 </tr>
@@ -48,14 +52,12 @@
                             <tbody>
                                 <tr v-for="analiza in terapia.analizat" :key="analiza.id">
                                     <td>{{ analiza.emriAnalizes }}</td>
-                                    <td>{{ analiza.cmimi }}</td>
-                                    <td>{{ new Date(analiza.data.split('T')[0]).toLocaleDateString('en-US', {
-                                        day: 'numeric',
-                                        month: 'long', year: 'numeric'
-                                    }) }}</td>
+                                    <td>{{ analiza.cmimi }} €</td>
 
-                                    <td>{{ analiza.data.split('T')[1].substring(0, 5) }}</td>
-                                    <td> <button class="btn btn-primary" style="background-color: var(--blue);" @click="analizaopen(analiza.id)">View</button></td>
+                                    <td> <button class="btn btn-primary" style="background-color: var(--blue);"
+                                            @click="analizaopen(analiza.id)">View</button></td>
+
+
                                 </tr>
                             </tbody>
                         </table>
@@ -77,8 +79,7 @@
                 <thead>
                     <tr>
 
-                        <th>Emri i Pacientit</th>
-                        <th>Mbiemri i Pacientit</th>
+
                         <th>Doktori</th>
                         <th>Data</th>
                         <th>Ora e Fillimit</th>
@@ -91,17 +92,26 @@
                 <tbody>
                     <tr v-for="termin in termini" :key="termin.id">
 
-                        <td>{{ termin.pacientiName }}</td>
-                        <td>{{ termin.pacientiLastName }}</td>
+
                         <td>{{ termin.doktori }}</td>
-                        <td>{{ termin.reparti }}</td>
                         <td>{{ getDate(termin.startTime) }}</td>
                         <td>{{ getTime(termin.startTime) }}</td>
                         <td>{{ getTime(termin.endTime) }}</td>
-                        <td>{{ termin.statusPaid }}</td>
-                        <td>
-                            <button class="btn btn-primary" @click="openForm(termin.id)">View</button>
+                        <td>{{ termin.reparti }}</td>
+                        <td :class="getStatusClass(termin.statusPaid)">{{ termin.statusPaid }}</td>
+                        <td v-if="isPaidVisible(termin.statusPaid)">
+                            <button class="btn " style="background-color: purple; color:white"
+                                @click="openForm(termin.id)">View</button>
                         </td>
+                        <td v-if="isUnpaidVisible(termin.statusPaid)">
+                            <button class="btn" style="background-color: navy; color:white" @click="payNow(termin.id)"
+                                :disabled="isLoading">
+                                <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                                <span v-else>Pay Now</span>
+                            </button>
+                        </td>
+
                     </tr>
                 </tbody>
             </table>
@@ -118,9 +128,10 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            termini: {},
+            termini: [],
             terapia: {},
             loading: true,
+            isLoading: false,
             selectedTerminId: null,
             isFormOpen: false
         };
@@ -144,6 +155,10 @@ export default {
         }
     },
     methods: {
+
+        getStatusClass(status) {
+            return status === 'I paguar' ? 'paid' : 'unpaid';
+        },
         getDate(dateTime) {
             return new Date(dateTime).toLocaleDateString();
         },
@@ -168,11 +183,85 @@ export default {
             this.isFormOpen = false;
             this.selectedTerminId = null;
             this.terapia = null;
+        },
+        payNow(id) {
+            this.isLoading = true; // Activate the loading state
+
+            const url = `https://localhost:7292/api/TerminiAPI/${id}`;
+            const data = {
+                statusPaid: true
+            };
+
+            axios.put(url, data)
+                .then(response => {
+                    console.log('StatusPaid updated successfully.');
+                    // Perform any additional actions upon successful update
+
+                    setTimeout(() => {
+                        this.isLoading = false; // Deactivate the loading state after 2 seconds
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error('Error updating StatusPaid:', error);
+                    // Handle any errors that occur during the update process
+                    this.isLoading = false; // Deactivate the loading state
+                });
+            window.location.reload();
+        }
+
+    },
+    computed: {
+        calculateTotalDebt() {
+            let total = 0;
+
+            for (const termin of this.termini) {
+                if (termin.statusPaid === 'I pa paguar') {
+                    total += termin.price;
+                }
+
+            }
+
+            return total;
+        },
+        isPaidVisible() {
+            return (statusPaid) => statusPaid === 'I paguar';
+        },
+        isUnpaidVisible() {
+            return (statusPaid) => statusPaid === 'I pa paguar';
         }
     }
+
+
 };
 </script>
 <style scoped>
+.profile-nameA {
+    font-size: 24px;
+    /* Reduced font size */
+    margin: 0px;
+    /* Adjusted margin */
+    color: var(--blue);
+}
+
+.profile-nameB {
+    font-size: 54px;
+    font-weight: 200;
+    /* Reduced font size */
+    margin: 0px;
+    /* Adjusted margin */
+    color: var(--blue);
+}
+
+.paid {
+    background-color: rgb(159, 240, 159);
+    color: green;
+}
+
+.unpaid {
+    background-color: rgb(243, 150, 150);
+    color: rgb(138, 3, 3);
+}
+
 .cmimi {
     background-color: var(--blue);
     color: white;

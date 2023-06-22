@@ -23,7 +23,7 @@ export default {
         },
         title() {
             if (this.Membership == false) {
-                return "Normal";
+                return "None";
             } else if (this.Membership == true) {
                 return "Premium";
             }

@@ -5,8 +5,8 @@
 		public int Id { get; set; }
 
 		public string StartTime { get; set; }
-
-		public string EndTime { get; set; }
+        public double Price { get; set; }
+        public string EndTime { get; set; }
         public string Status { get; set; }
 		public string StatusPaid { get; set; }
 

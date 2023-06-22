@@ -27,7 +27,9 @@
           <NuxtLink to="/register">Register</NuxtLink>
         </li>
         <li class="dropdown" v-if="isUserLoggedIn">
+
           <div class="profilinav">
+            <img src="../assets/Triangle.svg" style="width: 20px;" alt="">
             <div class="dropdown-toggle" role="button" @click="toggleContainer" aria-expanded="false">
               <img class="profile-image" src="../assets/profile.jpg" alt="Profile Image" />
               <div :class="{ 'whitecontainer-on': isContainerVisible, 'whitecontainer-off': !isContainerVisible }">
@@ -55,7 +57,7 @@
         <ul class="header__menu" data-aos="fade-down">
           <div class="seperated-links">
             <li>
-              <NuxtLink to="/dashboard/terminet">Terminet</NuxtLink>
+              <NuxtLink to="/dashboard/terminet" style="background-color: lightblue; color: navy; border-radius: 10px; padding: 10px; white-space: nowrap;">Rezervo terminin</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
@@ -131,8 +133,13 @@ export default {
 </script>
 <style scoped>
 .profilinav {
+  display: flex;
   position: relative;
 }
+.profile-image:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Apply box shadow on hover */
+}
+
 
 .whitecontainer-off {
   display: none;
