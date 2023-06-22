@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,33 +24,53 @@ namespace Pure_Life.Controllers
             _currentUser = currentUser;
         }
 
-		// GET: Kujdestarite
-		/*   public async Task<IActionResult> Index()
-		   {
-			   var kujdestarite = await _context.Kujdestarite
-								   .Include(k => k.Stafi)
-								   .Where(k => k.IsDeleted==false || k.Data>DateTime.Now)
-								   .OrderBy(k=>k.Data>=DateTime.Now)
-								   .ToListAsync();
-			   return View(kujdestarite);
-		   }*/
-		public async Task<IActionResult> Index()
-		{
-			var now = DateTime.Now;
+        // GET: Kujdestarite
 
-			var kujdestarite = await _context.Kujdestarite
-				.Include(k => k.Stafi)
-				.Where(k => !k.IsDeleted && k.Data >= now.Date)
-				.OrderBy(k => k.Data == now.Date ? 0 : (k.Data > now.Date ? 1 : 2))
-				.ThenBy(k => k.Data)
-				.ToListAsync();
+        public async Task<IActionResult> Index()
+        {
+            var now = DateTime.Now;
 
-			return View(kujdestarite);
-		}
+            var kujdestarite = await _context.Kujdestarite
+                .Include(k => k.Stafi)
+                .Where(k => !k.IsDeleted && k.Data >= now.Date)
+                .OrderBy(k => k.Data == now.Date ? 0 : (k.Data > now.Date ? 1 : 2))
+                .ThenBy(k => k.Data)
+                .ToListAsync();
 
+            return View(kujdestarite);
+        }
+        /*		public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+                {
+                    var now = DateTime.Now;
+                    ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+                    ViewData["EmriSortParm"] = sortOrder == "Emri" ? "emri_desc" : "Emri";
 
-		// GET: Kujdestarite/Details/5
-		public async Task<IActionResult> Details(int? id)
+                    if (searchString != null)
+                    {
+                        pageNumber = 1;
+                    }
+                    else
+                    {
+                        searchString = currentFilter;
+                    }
+                    var kujdestarite = await _context.Kujdestarite
+                        .Include(k => k.Stafi)
+                        .Where(k => !k.IsDeleted && k.Data >= now.Date)
+                        .OrderBy(k => k.Data == now.Date ? 0 : (k.Data > now.Date ? 1 : 2))
+                        .ThenBy(k => k.Data)
+                        .ToListAsync();
+
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        kujdestarite = kujdestarite.Where(kujdestarite => (kujdestarite.Stafi.Emri.Contains(searchString)
+                                               || kujdestarite.Stafi.Mbiemri.Contains(searchString)) && kujdestarite.IsDeleted==false && kujdestarite.Stafi.IsDeleted==false);
+                    }
+
+                    return View(kujdestarite);
+                }*/
+
+        // GET: Kujdestarite/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Kujdestarite == null)
             {

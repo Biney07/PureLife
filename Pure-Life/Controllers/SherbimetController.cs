@@ -23,19 +23,65 @@ namespace Pure_Life.Controllers
 			_currentUser = currentUser;
 		}
 
-		// GET: Sherbimet
-		public async Task<IActionResult> Index()
-		{
-			return View(await _context.Sherbimet.Where(x => x.IsDeleted == false).ToListAsync()); 
-		}
+        // GET: Sherbimet
+        /*		public async Task<IActionResult> Index()
+                {
+                    return View(await _context.Sherbimet.Where(x => x.IsDeleted == false).ToListAsync()); 
+                }
+        */
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["EmriSortParm"] = sortOrder == "Emri" ? "emri_desc" : "Emri";
+            // Add other sort parameters for Sherbimet properties if needed
 
-			/*return _context.Sherbimet != null ?
-						View(await _context.Sherbimet.Where(x => x.IsDeleted == false).ToListAsync()) :
-						Problem("Entity set 'ApplicationDbContext.Sherbimet'  is null.");*/
-		
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
 
-		// GET: Sherbimet/Details/5
-		public async Task<IActionResult> Details(int id)
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            var sherbimetList = from s in _context.Sherbimet
+                                select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                sherbimetList = sherbimetList.Where(s => s.Emri.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    sherbimetList = sherbimetList.OrderByDescending(s => s.Emri);
+                    break;
+                case "Emri":
+                    sherbimetList = sherbimetList.OrderBy(s => s.Emri);
+                    break;
+                // Add cases for sorting Sherbimet properties if needed
+                default:
+                    sherbimetList = sherbimetList.OrderBy(s => s.InsertedDate);
+                    break;
+            }
+
+            var pageSize = 3;
+            var sherbimetListWithSorting = await PaginatedList<Sherbimet>.CreateAsync(sherbimetList.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+            return View(sherbimetListWithSorting);
+        }
+
+        /*return _context.Sherbimet != null ?
+                    View(await _context.Sherbimet.Where(x => x.IsDeleted == false).ToListAsync()) :
+                    Problem("Entity set 'ApplicationDbContext.Sherbimet'  is null.");*/
+
+
+        // GET: Sherbimet/Details/5
+        public async Task<IActionResult> Details(int id)
 		{
 			if (id == null || _context.Sherbimet == null)
 			{

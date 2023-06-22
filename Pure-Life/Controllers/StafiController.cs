@@ -6,12 +6,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
 using Pure_Life.ViewModel.Email;
 using Pure_Life.ViewModel.Stafi;
+
 
 namespace Pure_Life.Controllers
 {
@@ -114,8 +116,10 @@ namespace Pure_Life.Controllers
             return View(stafiListWithSorting);
         }
 
-        // GET: Stafi/Details/5
-        public async Task<IActionResult> Details(int? id)
+		
+
+		// GET: Stafi/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {

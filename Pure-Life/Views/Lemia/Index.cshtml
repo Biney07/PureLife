@@ -10,12 +10,9 @@
         <div class="card-title">
             <h3 class="card-label">
                 Lëmitë
-
             </h3>
         </div>
         <div class="card-toolbar">
-            <!--begin::Dropdown-->
-            <!--end::Dropdown-->
             <!--begin::Button-->
             <a asp-action="Create" class="btn btn-primary font-weight-bolder">
                 <span class="svg-icon svg-icon-md">
@@ -32,26 +29,39 @@
             <!--end::Button-->
         </div>
     </div>
+    <div style="width:40%; margin: 30px 0px 10px 20px">
+        
+<form asp-action="Index" asp-controller="Lemia" method="get">
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Find by name" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to Full List</a>
+            </div>
+        </div>
+    </div>
+</form>
+    </div>
     <table class="table">
         <thead class="thead-dark">
             <tr>
                 <th>#</th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Emri)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["EmriSortParm"]">Emri</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.InsertedFrom)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["InsertedFromSortParm"]">Inserted From</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.InsertedDate)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["InsertedDateSortParm"]">Inserted Date</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ModifiedDate)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ModifiedDateSortParm"]">Modified Date</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ModifiedFrom)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ModifiedFromSortParm"]">Modified From</a>
                 </th>
-
                 <th>Actions</th>
             </tr>
         </thead>
@@ -61,7 +71,6 @@
             }
             @foreach (var item in Model)
             {
-                
                 <tr>
                     <td>@row</td>
                     <td class="align-middle">
@@ -79,20 +88,12 @@
                     <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.ModifiedFrom)
                     </td>
-
                     <td nowrap="" class="align-middle">
-
-
-
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-clean btn-icon" title="Edit details">
                             <i class="la la-edit"></i>
                         </a>
                         <a data-id="@item.Id" data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-icon delete-button" title="Delete">
-
-                            <i class="la la-trash" ></i>
-
-                            
-
+                            <i class="la la-trash"></i>
                         </a>
                     </td>
                 </tr>
@@ -100,15 +101,17 @@
             }
         </tbody>
     </table>
+</div>
 
-    @Html.Partial("Delete")
-    @section Scripts {
-      <script>
-        $(function() {
-          $('.delete-button').click(function() {
-            var id = $(this).data('id');
-            $('#delete-form').attr('action', '/Lemia/Delete/' + id);
-          });
+@Html.Partial("Delete")
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.delete-button').click(function () {
+                var id = $(this).data('id');
+                $('#delete-form').attr('action', '/Lemia/Delete/' + id);
+            });
         });
-      </script>
+    </script>
 }

@@ -9,11 +9,18 @@ namespace ChatGPT_CSharp.Controllers
 	[ApiController]
 	public class OpenAIAPIController : ControllerBase
 	{
+		private readonly IConfiguration _configuration;
+
+		public OpenAIAPIController(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		[HttpGet("use-chat")]
 		public async Task<IActionResult> UseChatGPT(string query)
 		{
 			string outputResult = "";
-			var openai = new OpenAIAPI("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");
+			var openai = new OpenAIAPI(_configuration["OpenAI:APIKey"]);
 			CompletionRequest completionRequest = new CompletionRequest();
 			completionRequest.Prompt = query+ " , te mjeku i ciles lemi duhet te shkoj zgjedh nga keto dhe tregoni arsyen: Pediatri\r\nKardiologji\r\nGinekologji\r\nDermatologji\r\nNefrologji\r\nEndokrinologji\r\nNeurologji\r\nOnkologji\r\nHematologji\r\nRadiologji\r\nKirurgji\r\nAnesteziologji\r\nPsikiatri\r\nOrtopedi\r\nOftalmologji\r\nUrologji\r\nPulmonologji\r\nKardiokirurgji\r\nReumatologji\r\nInfektive\r\n?";
 			completionRequest.Model = OpenAI_API.Models.Model.DavinciText;

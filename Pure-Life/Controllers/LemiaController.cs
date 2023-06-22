@@ -22,16 +22,62 @@ namespace Pure_Life.Controllers
             _currentUser= currentUser;
         }
 
-        // GET: Lemias
-        public async Task<IActionResult> Index()
-        {
-              return _context.Lemia != null ? 
-                          View(await _context.Lemia.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Lemia'  is null.");
-        }
+		// GET: Lemias
+		/* public async Task<IActionResult> Index()
+		 {
+			   return _context.Lemia != null ? 
+						   View(await _context.Lemia.ToListAsync()) :
+						   Problem("Entity set 'ApplicationDbContext.Lemia'  is null.");
+		 }*/
 
-        // GET: Lemias/Details/5
-        public async Task<IActionResult> Details(int? id)
+		public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+		{
+			ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+			ViewData["EmriSortParm"] = sortOrder == "Emri" ? "emri_desc" : "Emri";
+			// Add other sort parameters for Lemia properties if needed
+
+			ViewData["CurrentFilter"] = searchString;
+			ViewData["CurrentSort"] = sortOrder;
+
+			if (searchString != null)
+			{
+				pageNumber = 1;
+			}
+			else
+			{
+				searchString = currentFilter;
+			}
+
+			var lemiaList = from l in _context.Lemia
+							select l;
+
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				lemiaList = lemiaList.Where(l => l.Emri.Contains(searchString));
+			}
+
+			switch (sortOrder)
+			{
+				case "name_desc":
+					lemiaList = lemiaList.OrderByDescending(l => l.Emri);
+					break;
+				case "Emri":
+					lemiaList = lemiaList.OrderBy(l => l.Emri);
+					break;
+				// Add cases for sorting Lemia properties if needed
+				default:
+					lemiaList = lemiaList.OrderBy(l => l.InsertedDate);
+					break;
+			}
+
+			var pageSize = 3;
+			var lemiaListWithSorting = await PaginatedList<Lemia>.CreateAsync(lemiaList.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+			return View(lemiaListWithSorting);
+		}
+
+		// GET: Lemias/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Lemia == null)
             {
