@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
+require('dotenv').config();
 const axios = require('axios');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -37,7 +38,7 @@ const io = socketIO(server,{
 });
 
 
-const mongoURL = 'mongodb+srv://purelife:purelife123@chat-cluster.adyxral.mongodb.net/';
+const mongoURL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chat-cluster.adyxral.mongodb.net/`;
 
 // Connect to MongoDB
 mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
