@@ -39,7 +39,7 @@ const routes = [
     {
       path: '/bisedat',
       name: 'Bisedat',
-      icon: 'message',
+      icon: 'comment-dots',
       authRequired: false,
       role: [roles.MJEK]
     },

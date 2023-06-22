@@ -3,7 +3,7 @@
     <div>
       <Contacts @fetchContactMessages="fetchMessages" />
     </div>
-    <div class="message-container">
+    <div v-if="chatData.recipientId" class="message-container">
       <div
         :class="{ sender: message.senderType === 'doctor', recipient: message.senderType === 'patient' }"
         class="message"
@@ -13,10 +13,13 @@
         {{ message.messageBody }}
       </div>
     </div>
-    <div class="input-container">
-      <input v-model="chatData.messageBody" type="text" placeholder="Send message" />
-      <button @click="sendMessage">Send</button>
+    <div v-else class="message-container-warning">
+        <h2>Ju lutemi qe ne fillim te klikoni ne pacientin e caktuar</h2>
     </div>
+    <form v-if="chatData.recipientId" @submit.prevent="sendMessage" class="input-container">
+      <input v-model="chatData.messageBody" type="text" placeholder="Send message" />
+      <button>Send</button>
+    </form>
   </div>
 </template>
 
@@ -96,6 +99,18 @@ export default {
   display: flex;
   flex-direction: column;
   margin: auto;
+}
+
+.message-container-warning{
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  height: 465px;
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .message-container {
