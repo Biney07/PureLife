@@ -1,5 +1,8 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
+import dotenv from 'dotenv'
 
+// Load environment variables from .env file
+dotenv.config()
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
@@ -17,11 +20,13 @@ export default defineNuxtConfig({
     'nuxt-socket-io',
   ],
   io: {
-    // module options
     sockets: [{
       name: 'main',
       url: 'http://localhost:5000'
     }]
-  }
+  },
+  env: {
+    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
+  },
 })
-

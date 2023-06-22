@@ -1,4 +1,6 @@
 <template>
+    <SweetAlert v-if="showSweetAlert" :message="alertMessage" :type="alertType" :duration="2000" />
+
     <div class="dashboard">
         <div class="profile-container">
 
@@ -110,10 +112,11 @@
             <div class="termini">
                 <Terminishow />
             </div>
+          
 
         </div>
 
-    </div>
+    </div>q
 </template>
   
 
@@ -122,12 +125,14 @@ import axios from "axios";
 import ProfileCard from "~/components/ProfileCard";
 import DropdownButton from '~/components/DropdownButton.vue';
 import Terminishow from '~/components/TerminetShow.vue';
+import SweetAlert from '~/components/SweetAlert.vue';
 
 export default {
     components: {
         ProfileCard,
         DropdownButton,
-        Terminishow
+        Terminishow,
+        SweetAlert
 
     },
     computed: {
@@ -160,7 +165,11 @@ export default {
             nacinaliteti: {},
             shtetet: {},
             nacionalitetid: null,
-            shtetiid: null
+            shtetiid: null,
+            showSweetAlert: true,
+            alertMessage: 'Your Profile is complete',
+            alertType: 'success',
+            hasNullValues: true,
         };
     },
     created() {
@@ -177,6 +186,7 @@ export default {
 
             this.fetchPatientData(uid);
         }
+
     },
 
 
@@ -252,7 +262,16 @@ export default {
 
                 const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
                 this.patientData = response.data;
+                console.log(this.patientData);
+                this.nacionalitetid = this.patientData.nacionalitetiId;
+                this.shtetiid = this.patientData.shtetiId;
+                const values = Object.values(this.patientData);
+                const excludedProperties = ['modifiedDate', 'modifiedFrom'];
 
+                this.hasNullValues = values.some((value, index) => {
+                    const propertyName = Object.keys(this.patientData)[index];
+                    return value === null && !excludedProperties.includes(propertyName);
+                });
 
             } catch (error) {
                 console.log("Error while fetching patient data:", error);
@@ -275,6 +294,7 @@ export default {
 </script>
 
 <style scoped>
+
 .termini {
     padding: 70px 90px;
 }
@@ -294,9 +314,6 @@ input {
     margin: 0px 10px;
 }
 
-.dashboard {
-    height: 100vh;
-}
 
 .form-overlay {
     position: fixed;
