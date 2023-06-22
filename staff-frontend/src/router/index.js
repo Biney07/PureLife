@@ -10,6 +10,7 @@ import Login from '../views/auth/Login'
 import Kujdestarite from '../views/Kujdestarite'
 import Terminet from '../views/Terminet'
 import Terapite from '../views/Terapite'
+import Chat from '../views/Chat'
 
 Vue.use(VueRouter)
 
@@ -83,6 +84,13 @@ const router = new VueRouter({
       name: 'Terapite',
       component: Terapite,
       props: {page: 9},
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/bisedat',
+      name: 'Bisedat',
+      component: Chat,
+      props: {page: 10},
       meta: { requiresAuth: true }
     },
   ]

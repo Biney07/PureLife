@@ -12,6 +12,16 @@ export default defineNuxtConfig({
       src: '~/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
       body: true
     }
-  ]
+  ],
+  modules: [
+    'nuxt-socket-io',
+  ],
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:5000'
+    }]
+  }
 })
 
