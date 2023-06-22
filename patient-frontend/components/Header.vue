@@ -60,6 +60,9 @@
             <li>
               <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/dashboard/chat">Bisedat</NuxtLink>
+            </li>
           </div>
           <div class="auth-links">
             <li>

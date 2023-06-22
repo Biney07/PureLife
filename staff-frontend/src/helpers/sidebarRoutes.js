@@ -36,6 +36,13 @@ const routes = [
       authRequired: false,
       role: [roles.MJEK]
     },
+    {
+      path: '/bisedat',
+      name: 'Bisedat',
+      icon: 'message',
+      authRequired: false,
+      role: [roles.MJEK]
+    },
     // {
     //   path: '/tables',
     //   name: 'Tables',
