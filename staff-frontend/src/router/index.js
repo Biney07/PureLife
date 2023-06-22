@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 
 import * as auth from '../helpers/auth'
 import store from '../store'
-
 import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/Profile'
 import Login from '../views/auth/Login'
@@ -98,19 +97,20 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
-      store.dispatch('authenticateUser').then((response) => {
-        if (response.status === 200) {
-            store.commit('storeUser', auth.getUser());
-            next();
-        } else {
-            next('/login');
-        }
-      }).catch(() => {
-        next('/login');
-      });
+      const isAuthenticated = checkAuthentication();
+      if (isAuthenticated) {
+          store.commit('storeUser', auth.getUser());
+          next();
+      } else {
+          next('/login');
+      }
   } else {
     next();
   }
 });
 
+function checkAuthentication() {
+    if(auth.userExists()) return true
+    return false;
+}
 export default router;

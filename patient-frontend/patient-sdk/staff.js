@@ -8,3 +8,7 @@ export function getAllStaff() {
 export function getStaffByLemi(lemiaId) {
     return axios.get(`${API_URL}/api/StafiAPI/GetStafiByLemi/${lemiaId}`)
 }
+
+export function getStaffThatVisitedPatient(pacientiId) {
+    return axios.get(`${API_URL}/api/StafiAPI/GetStaffThatVisitedPacient/${pacientiId}`)
+}

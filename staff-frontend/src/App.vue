@@ -41,6 +41,7 @@ import {
 import routes from './helpers/sidebarRoutes'
 import navbarRoutes from './helpers/navbarRoutes'
 import { mapGetters } from 'vuex'
+import * as auth from "./helpers/auth.js"
 export default {
   name: "AdminTemplate",
   components: {
@@ -71,7 +72,10 @@ export default {
 
   },
   async mounted() {
-
+    this.authenticate()
+    setInterval(() => {
+        this.authenticate()
+    }, 60 * 60 * 1000)
 
     if(this.$route.matched.length){
       this.activeItem = this.$route.matched[0].props.default.page;
@@ -88,6 +92,18 @@ export default {
     signOut() {
       this.$store.dispatch('signOut')
     },
+    async authenticate() {
+      this.$store.dispatch('authenticateUser').then((response) => {
+        if (response.status === 200) {
+            this.$store.commit('storeUser', auth.getLocalStorage());
+        } else {
+            auth.removeUser()
+        }
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      });
+    }
   },
 };
 </script>

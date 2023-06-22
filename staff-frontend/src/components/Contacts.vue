@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getPacientet } from "../staff-sdk/pacienti";
+import { getPacientVisitedByStaff } from "../staff-sdk/pacienti";
 
 export default {
   data() {
@@ -26,7 +26,7 @@ export default {
   methods: {
     async fetchPatients() {
         try {
-            const response = await getPacientet();
+            const response = await getPacientVisitedByStaff(this.$store.state.authenticate.user.data.id);
             this.contacts = response.data
         } catch (err) {
             // eslint-disable-next-line no-console

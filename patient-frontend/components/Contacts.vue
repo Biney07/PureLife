@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { getAllStaff } from "@/patient-sdk/staff";
-
+import { getStaffThatVisitedPatient } from "@/patient-sdk/staff";
+import {getPacienti} from "@/patient-sdk/auth"
 export default {
   data() {
     return {
@@ -17,16 +17,23 @@ export default {
       selectedContact: null,
       contactSelected: {
         recipientId: null
-      }
+      },
+      user: null
     };
   },
-  mounted() {
-    this.fetchPatients();
+  async mounted() {
+    const user = JSON.parse(localStorage.getItem('patient'));
+    if (user?.user?.uid) {
+        const response = await getPacienti(user.user.uid);
+        this.user = response.data
+        console.log(this.user)
+        this.fetchStaff();
+    }
   },
   methods: {
-    async fetchPatients() {
+    async fetchStaff() {
         try {
-            const response = await getAllStaff();
+            const response = await getStaffThatVisitedPatient(this.user.id);
             this.contacts = response.data
         } catch (err) {
             // eslint-disable-next-line no-console
