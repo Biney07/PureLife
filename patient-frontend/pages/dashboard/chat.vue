@@ -3,16 +3,19 @@
     <div>
       <Contacts @fetchContactMessages="fetchMessages" />
     </div>
-    <div class="message-container">
+    <div v-if="chatData.recipientId" class="message-container">
       <div :class="{ sender: message.senderType === 'patient', recipient: message.senderType === 'doctor' }" class="message" v-for="message in reversedMessages" :key="message.id">
         {{ message.messageBody }}
         <!-- <small>{{message.timeStamp}}</small> -->
       </div>
-    </div>  
-    <div class="input-container">
-      <input v-model="chatData.messageBody" type="text" placeholder="Send message" />
-      <button @click="sendMessage">Send</button>
     </div>
+    <div v-else class="message-container-warning">
+        <h2>Ju lutemi qe ne fillim te klikoni ne stafin e caktuar</h2>    
+    </div> 
+    <form v-if="chatData.recipientId" @submit.prevent="sendMessage" class="input-container">
+      <input v-model="chatData.messageBody" type="text" placeholder="Send message" />
+      <button>Send</button>
+    </form>
   </div>
 </template>
 
@@ -98,6 +101,20 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 7% auto;
+}
+
+.message-container-warning{
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  height: 465px;
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-weight: 500;
+  font-family: var(--primary-font);
 }
 
 .message-container {
