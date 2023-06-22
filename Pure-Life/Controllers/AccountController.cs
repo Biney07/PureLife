@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Pure_Life.Data;
 using Pure_Life.Models;
@@ -7,6 +8,7 @@ using Pure_Life.ViewModels;
 
 namespace Pure_Life.Controllers
 {
+	
 	public class AccountController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
@@ -28,9 +30,9 @@ namespace Pure_Life.Controllers
 
 				return View(new LoginViewModel());
 			}
-			return View("~/Views/Home/Index.cshtml");
-			
-		}
+            return RedirectToAction("Index", "Admin");
+
+        }
 
 
 		[HttpPost]

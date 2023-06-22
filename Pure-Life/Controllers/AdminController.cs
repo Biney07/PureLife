@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
@@ -8,6 +9,7 @@ using Pure_Life.ViewModels;
 
 namespace Pure_Life.Controllers
 {
+ 
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;

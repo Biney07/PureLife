@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Pure_Life.ViewModel.DitetEPushimeve;
 
 namespace Pure_Life.Controllers
 {
+    [Authorize(Roles = "ADMIN")]
     public class DitetEPushimeveController : Controller
     {
         private readonly ApplicationDbContext _context;

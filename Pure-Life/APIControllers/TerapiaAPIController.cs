@@ -282,17 +282,47 @@ namespace Pure_Life.APIControllers
 				InsertedDate = x.InsertedDate,
 				ModifiedDate = x.ModifiedDate,
 				ModifiedFrom = x.ModifiedFrom,
-				Analizat = x.TerapiaAnalizaRezultati.Select(y=> y.AnalizaLloji.Analiza).Distinct().Select(x=> new AnalizaETerapise
+				Analizat = x.TerapiaAnalizaRezultati.Select(y=> y.AnalizaLloji.Analiza).Distinct().Select(y=> new AnalizaETerapise
 				{
-					Id = x.Id,
-					EmriAnalizes = x.Emri,
-					Cmimi = x.Cmimi,
-					Data = x.Data
+					Id = y.Id,
+					EmriAnalizes = y.Emri,
+					Cmimi = y.Cmimi,
+					Data = y.Data
 				}).ToList()
 			}).ToListAsync();
 
 			return Ok(result);
 		}
+
+		[HttpGet("GetAnalizenETerapise/{terapiaId}/{analizaId}")]
+
+		public async Task<IActionResult> GetAnalizenETerapise (int terapiaId, int analizaId)
+		{
+			var result = await _context.Terapia.Where(x => x.Id == terapiaId).Select(x => new RezultatetEAnalizaveViewModel
+			{
+                EmriAnalizes = x.TerapiaAnalizaRezultati.Where(y=> y.AnalizaLloji.AnalizaId == analizaId).Select(y=> y.AnalizaLloji.Analiza.Emri).FirstOrDefault(),
+				EmriMbiemriPacientit = $"{x.Termini.Pacienti.Emri} {x.Termini.Pacienti.Mbiemri}",
+				Data = x.Termini.StartTime.ToString(),
+				ListaRezultateve = x.TerapiaAnalizaRezultati.Where(y => y.AnalizaLloji.AnalizaId == analizaId).Select(y=> new ListaRezultateve{
+                    TerapiaAnalizaRezultatiId = y.Id, //kur don me ba update rezultatin e dergon qet id, edhe ne baze te saj e merr prej tabeles TerapiaAnalizaRezultati.Where(x=> x.Id == TerapiaAnalizaRezultatiId).First() edhe e bon update Rezultati
+                    EmriLlojitTeAnalizes = y.AnalizaLloji.Lloji.Emri,
+					Rezultati = y.Rezultati,
+					VleratReferente = y.AnalizaLloji.Lloji.VleratReferente
+                }).ToList(),
+            }).FirstOrDefaultAsync();
+
+			return Ok(result);
+        }
+
+		[HttpPut("FillTheResult/{terapiaRezultatiId}/{rezultatiShkruar}")]
+		public async Task<IActionResult> FillTheResult(int terapiaRezultatiId,string rezultatiShkruar)
+		{
+			var rezultati = await _context.TerapiaAnalizaRezultatet.Where(x=>x.Id == terapiaRezultatiId).FirstOrDefaultAsync();
+			rezultati.Rezultati = rezultatiShkruar;
+			await _context.SaveChangesAsync();
+			return Ok(rezultati);
+		}
+	
 
 		[HttpPut("Edit/{id}/{stafiId}")]
 		public async Task<IActionResult> Edit(int id, EditTerapiaViewModel model, int stafiId)

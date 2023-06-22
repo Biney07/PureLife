@@ -390,6 +390,7 @@ namespace Pure_Life.APIControllers
 				Emri = x.Stafi.Emri,
 				Mbiemri = x.Stafi.Mbiemri,
 				EmailZyrtar = x.Stafi.EmailZyrtar,
+                ImgUrl = x.Stafi.PictureUrl
              
 			}).Distinct().ToListAsync();
 

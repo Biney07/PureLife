@@ -13,10 +13,10 @@ namespace Pure_Life.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+       /* public IActionResult Index()
         {
             return View();
-        }
+        }*/
 
         public IActionResult Privacy()
         {
