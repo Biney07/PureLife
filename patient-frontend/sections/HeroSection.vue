@@ -1,3 +1,5 @@
+
+
 <template>
   <section class="banner" id="banner">
     <div class="content">
@@ -16,45 +18,82 @@
       <button class="rezervo-termin">Rezero Termin!</button>
 
       <div class="ai-chat">
+  
         <div class="message-space">
-          <div class="message">
-            <img src="../assets/ai-user.svg" alt="" />
-            <p>
-              Nëse keni probleme me zemër, duhet të shkosh tek një mjek
-              kardiolog. Mjeku kardiolog është specialisti i trajtimit të
-              sëmundjeve të zemrës dhe sistemit kardiovaskular.
-            </p>
-          </div>
-          <div class="message">
-            <img src="../assets/ai-user.svg" alt="" />
-            <p>
-              Ju nevojitet te zgjidhni nje termin me te larte ne kategorine
-              kardiologjike. Ju mund te beni kete duke shkuar ne faqen tone te
-              internetit ose duke na telefonuar ne numrin +383 49 401 551.
-            </p>
-          </div>
-        </div>
-        <div class="question-input">
-          <span class="question-text"
-            >Kam therje ne zemer tek cili doktor duhet te shkoj??</span
-          >
-          <div class="search-button">
-            <img src="@/assets/search.svg" alt="search" />
-          </div>
-        </div>
-        <small class="register-invite"
-          >Per te perdorur sherbimet e inteligjences artificiale regjistrohuni
-          <span>ketu</span>.</small
-        >
+    <div v-for="message in messages" :key="message.content" class="message">
+      <img v-if="message.sender === 'ai'" src="../assets/purelife.png" style="width: 30px;" alt="" />
+      <img v-if="message.sender === 'user'" src="../assets/ai-user.svg"  alt="" />
+      <p>{{ message.content }}</p>
+      <div v-if="loading" class="loader"></div>
+    </div>
+  </div>
+  <div class="question-input">
+  <input v-model="userMessage" @keyup.enter="submitMessage" type="text" placeholder="Kam therje ne zemer tek cili doktor duhet te shkoj?">
+  <div class="search-button" @click="submitMessage">
+    <img src="@/assets/search.svg" alt="search" />
+
+  </div>
+
+</div>
+
+
       </div>
     </div>
   </section>
 </template>
-
 <script>
-export default {};
-</script>
+import axios from 'axios';
 
+export default {
+  data() {
+    return {
+      messages: [],
+      loading: false,
+      userMessage : '',
+    };
+  },
+  
+  methods: {
+  submitMessage() {
+    if (this.userMessage) {
+      this.sendMessage(this.userMessage);
+      this.userMessage = '';
+    }
+  },
+  async sendMessage(text) {
+  // Push user message to the messages array
+  this.messages.push({
+    sender: 'user',
+    content: text,
+  });
+
+  try {
+    // Set loading to true before making the API call
+    this.loading = true;
+
+    // Send a POST request to the ChatGPT API
+    const response = await axios.get('https://localhost:7292/api/OpenAIAPI/use-chat?query=' + text);
+
+    // Push the AI's response to the messages array
+    this.messages.push({
+      sender: 'ai',
+      content: response.data,
+    });
+  } catch (error) {
+    // Handle API error
+    console.error(error);
+  } finally {
+    // Set loading to false after the API call is completed
+    this.loading = false;
+  }
+},
+  // Other component methods
+}
+
+  
+  // Other component methods
+}
+</script>
 <style scoped>
 
 .banner {
@@ -146,10 +185,11 @@ export default {};
   align-items: center;
   height: 400px;
   margin-top: 50px;
-  width: 55%;
+  width: 70vw;
 }
 
 .message-space {
+  width: 110%;
   height: 300px;
   border: 1px solid black;
   background: linear-gradient(
@@ -165,10 +205,11 @@ export default {};
   overflow-y: auto;
   padding: 10px;
   gap: 10px;
+  position: relative;
 }
 
 .message {
-  padding: 0 10px;
+
   display: flex;
   align-items: center;
   gap: 15px;
@@ -177,16 +218,21 @@ export default {};
 
 .message p {
   font-size: 16px;
+  margin-bottom: 0;
 }
 
 .question-input {
+  display: flex;
   height: 60px;
   border: 1px solid black;
-  border-radius: 5px;
-  width: 100%;
+  border-radius: 8px;
+  width: 110%;
   margin: 10px 0;
   position: relative;
   background: white;
+  overflow: hidden;
+  padding-left: 8px;
+
 }
 
 .question-text {
@@ -194,6 +240,7 @@ export default {};
   top: 50%;
   transform: translateY(-50%);
   left: 10px;
+  padding-left: 8px;
 }
 
 .register-invite {
@@ -217,4 +264,28 @@ export default {};
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 }
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--button-background);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  align-self: center;
+  margin-top: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 </style>

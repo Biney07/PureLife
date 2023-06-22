@@ -152,5 +152,25 @@ namespace Pure_Life.APIControllers
             return Ok();
         }
 
+
+        [HttpGet("GetPacientVisitedByStaf/{stafId}")]
+
+        public async Task<IActionResult> GetPacientVisitedByStaf(int stafId)
+        {
+           /* var stafi = await _context.Stafi.FindAsync(stafId);*/
+
+			var terminet = await _context.Terminet.Where(x => x.StafiId == stafId && x.PacientiId != null).Select(x => new GetPacientiViewModel
+            {
+                UId = x.Pacienti.UId,
+                Emri = x.Pacienti.Emri,
+                Mbiemri = x.Pacienti.Mbiemri,
+                Email = x.Pacienti.Email
+			}).Distinct().ToListAsync();
+
+			return Ok(terminet);
+
+        }
+
+
     }
 }

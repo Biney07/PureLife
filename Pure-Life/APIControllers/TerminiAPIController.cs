@@ -128,9 +128,9 @@ namespace Pure_Life.APIControllers
 				Status = x.Status ? "I rezervuar" : "I lire",
 				StatusPaid = x.StatusPaid ? "I paguar" : "I pa paguar",
 				PacientiId = x.PacientiId ?? 0,
-				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
-				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
-				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel: "null",
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : " ",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : " ",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel: " ",
 			});
 
 
@@ -155,9 +155,9 @@ namespace Pure_Life.APIControllers
 				Status = x.Status ? "I rezervuar" : "I lire",
 				StatusPaid = x.StatusPaid ? "I paguar" : "I pa paguar",
 				PacientiId = x.PacientiId ?? 0,
-				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
-				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
-				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : " ",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : " ",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : " ",
 			});
 
 
@@ -233,11 +233,11 @@ namespace Pure_Life.APIControllers
 				Status = x.Status ? "I rezervuar" : "I lire",
 				StatusPaid = x.StatusPaid ? "I paguar" : "I pa paguar",
 				PacientiId = x.PacientiId ?? 0,
-				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : "null",
-				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : "null",
-				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : "null",
-				Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : "null",
-				Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri : "null",
+				PacientiName = x.Pacienti != null ? x.Pacienti.Emri : " ",
+				PacientiLastName = x.Pacienti != null ? x.Pacienti.Mbiemri : " ",
+				PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : " ",
+				Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : " ",
+				Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri : " ",
 			});
 			return Ok(result);
 

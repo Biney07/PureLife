@@ -15,6 +15,7 @@ using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
 using Pure_Life.ViewModel;
+using Pure_Life.ViewModel.Pacienti;
 using Pure_Life.ViewModel.Stafi;
 using Pure_Life.ViewModels;
 
@@ -377,10 +378,27 @@ namespace Pure_Life.APIControllers
         }
 
 
+		[HttpGet("GetStaffThatVisitedPacient/{pacientId}")]
+
+		public async Task<IActionResult> GetPacientVisitedByStaf(int pacientId)
+		{
+			/*var pacienti = await _context.Pacientet.FindAsync(pacientId);*/
+
+			var terminet = await _context.Terminet.Where(x => x.PacientiId == pacientId && x.StafiId != null).Select(x => new GetStafiViewModel
+			{
+				Id = x.Stafi.Id,
+				Emri = x.Stafi.Emri,
+				Mbiemri = x.Stafi.Mbiemri,
+				EmailZyrtar = x.Stafi.EmailZyrtar,
+             
+			}).Distinct().ToListAsync();
+
+			return Ok(terminet);
+
+		}
 
 
-
-        private bool StafiExists(int id)
+		private bool StafiExists(int id)
         {
             return (_context.Stafi?.Any(e => e.Id == id)).GetValueOrDefault();
         }
