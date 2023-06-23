@@ -1,5 +1,10 @@
 <template>
-  <section id="dashboard">
+<div>
+  <div v-show="loading" class="loading-spinner">
+    <b-spinner width="200px" variant="primary" label="Spinning"></b-spinner>
+  </div>
+
+  <section v-if="!loading" id="dashboard">
     <mdb-card class="mb-4">
       <mdb-card-body class="d-sm-flex justify-content-between">
         <h4 class="mb-sm-0 pt-2">
@@ -7,7 +12,7 @@
         </h4>
       </mdb-card-body>
     </mdb-card>
-    <section class="mt-lg-5">
+    <section v-if="data" class="mt-lg-5">
       <mdb-row>
         <mdb-col xl="3" md="6" class="mb-r">
           <mdb-card cascade class="cascading-admin-card">
@@ -16,7 +21,7 @@
               <div class="data">
                 <p>TOTALI I PACIENTEVE</p>
                 <h4>
-                  <strong>{{data.totaliPacienteve}}</strong>
+                  <strong>{{data.numriTotalIPacienteve}}</strong>
                 </h4>
               </div>
             </div>
@@ -29,7 +34,7 @@
               <div class="data">
                 <p>TOTALI I TERMINEVE TE KRIJUARA</p>
                 <h4>
-                  <strong>{{data.totaliTermineve}}</strong>
+                  <strong>{{data.totaliTermineveEPerfunduara}}</strong>
                 </h4>
               </div>
             </div>
@@ -42,7 +47,7 @@
               <div class="data">
                 <p>TOTALI I TERMINEVE TE REZERVUARA</p>
                 <h4>
-                  <strong>{{data.totaliTermineveRezervuara}}</strong>
+                  <strong>{{data.numriTermineveTeRezervuara}}</strong>
                 </h4>
               </div>
             </div>
@@ -55,7 +60,7 @@
               <div class="data">
                 <p>TOTALI I TERAPIVE TE KRIJUARA</p>
                 <h4>
-                  <strong>{{data.totaliTerapive}}</strong>
+                  <strong>{{data.totaliTerapiveTePerfunduara}}</strong>
                 </h4>
               </div>
             </div>
@@ -63,12 +68,26 @@
         </mdb-col>
       </mdb-row>
     </section>
+    <section>
+      <mdb-row class="mt-5">
+          <mdb-col md="12" class="mb-4">
+              <mdb-card>
+                  <mdb-card-body>
+                      <div style="display: block">
+                        <mdb-bar-chart :data="barChartData" :options="barChartOptions" :height="500"/>
+                      </div>
+                  </mdb-card-body>
+              </mdb-card>
+          </mdb-col>
+      </mdb-row>
+    </section>
   </section>
+</div>
 </template>
 
 <script>
-import { mdbRow, mdbCol, mdbCard, mdbCardBody, mdbIcon} from 'mdbvue'
-import { getTotalinEPacienteve, getTotalinTermineveRezervuara, getTotalinTermineve, getTotaliTerapive } from "../staff-sdk/statistikat"
+import { mdbRow, mdbCol, mdbCard, mdbCardBody, mdbIcon, mdbBarChart } from 'mdbvue'
+import { getStatistics, getMonthlyTerminet } from "../staff-sdk/statistikat"
 export default {
   name: 'Dashboard',
   components: {
@@ -77,33 +96,20 @@ export default {
     mdbCard,
     mdbCardBody,
     mdbIcon,
+    mdbBarChart,
   },
   data () {
     return {
-      data: {
-        totaliPacienteve: null,
-        totaliTermineve: null,
-        totaliTermineveRezervuara: null,
-        totaliTerapive: null
-      },
+      loading: true,
+      data: null,
       currentUser: this.$store.state.authenticate.user.data.id,
       barChartData: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        labels: ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nentor', 'Dhjetor'],
         datasets: [
           {
-            label: '#1',
-            data: [12, 39, 3, 50, 2, 32, 84],
+            label: 'Numri I Termineve te Perfunduara',
+            data: [],
             backgroundColor: 'rgba(245, 74, 85, 0.5)',
-            borderWidth: 1
-          }, {
-            label: '#2',
-            data: [56, 24, 5, 16, 45, 24, 8],
-            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-            borderWidth: 1
-          }, {
-            label: '#3',
-            data: [12, 25, 54, 3, 15, 44, 3],
-            backgroundColor: 'rgba(245, 192, 50, 0.5)',
             borderWidth: 1
           }
         ]
@@ -112,86 +118,13 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{
-            barPercentage: 1,
-            gridLines: {
-              display: true,
-              color: 'rgba(0, 0, 0, 0.1)'
-            }
-          }],
           yAxes: [{
             gridLines: {
               display: true,
               color: 'rgba(0, 0, 0, 0.1)'
             },
-            ticks: {
-              beginAtZero: true
-            }
           }]
         }
-      },
-
-      lineChartData: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-        datasets: [
-          {
-            label: '#1',
-            backgroundColor: 'rgba(245, 74, 85, 0.5)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-            label: '#2',
-            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-            data: [12, 42, 121, 56, 24, 12, 2]
-          },
-          {
-            label: '#3',
-            backgroundColor: 'rgba(245, 192, 50, 0.5)',
-            data: [2, 123, 154, 76, 54, 23, 5]
-          }
-        ]
-      },
-      lineChartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [{
-            gridLines: {
-              display: true,
-              color: 'rgba(0, 0, 0, 0.1)'
-            }
-          }],
-          yAxes: [{
-            gridLines: {
-              display: true,
-              color: 'rgba(0, 0, 0, 0.1)'
-            }
-          }]
-        }
-      },
-      radarChartData: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-        datasets: [
-          {
-            label: '#1',
-            backgroundColor: 'rgba(245, 74, 85, 0.5)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-            label: '#2',
-            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-            data: [12, 42, 121, 56, 24, 12, 2]
-          },
-          {
-            label: '#3',
-            backgroundColor: 'rgba(245, 192, 50, 0.5)',
-            data: [2, 123, 154, 76, 54, 23, 5]
-          }
-        ]
-      },
-      radarChartOptions: {
-        responsive: true,
-        maintainAspectRatio: false
       },
     }
   },
@@ -200,23 +133,21 @@ export default {
   },
   methods: {
     async fetchStatistikat() {
+      this.loading = true
       try {
-        const pacientResponse = await getTotalinEPacienteve(this.currentUser)
-        const terminetResponse = await getTotalinTermineve(this.currentUser)
-        const terapiaResponse = await getTotaliTerapive(this.currentUser)
-        const terminetRezervuara = await getTotalinTermineveRezervuara(this.currentUser)
+        const response = await getStatistics(this.currentUser)
+        this.data = response.data
 
-        this.data.totaliPacienteve = pacientResponse.data
-        this.data.totaliTermineve = terminetResponse.data
-        this.data.totaliTermineveRezervuara = terminetRezervuara.data
-        this.data.totaliTerapive = terapiaResponse.data
-
-        // eslint-disable-next-line no-console
-        console.log(this.data)
+        const monthlyDataResponse = await getMonthlyTerminet(this.currentUser)
+        for(let i =0;i<monthlyDataResponse.data.length;i++) {
+          this.barChartData.datasets[0].data.push(monthlyDataResponse.data[i].numriTermineveTePerfunduara)
+        }
         
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err)
+      } finally {
+        this.loading = false
       }
     },
   }
@@ -229,7 +160,7 @@ export default {
   margin: 20px 0;
 }
 .cascading-admin-card .admin-up {
-  margin-left: 3%;
+  margin-left: 2%;
   margin-right: 4%;
   margin-top: -20px;
 }
@@ -264,5 +195,17 @@ export default {
 }
 .classic-admin-card .card-body h4 {
   margin-top: 10px;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 </style>
