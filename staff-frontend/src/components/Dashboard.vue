@@ -32,7 +32,7 @@
             <div class="admin-up">
               <mdb-icon icon="chart-line" class="warning-color"/>
               <div class="data">
-                <p>TOTALI I TERMINEVE TE KRIJUARA</p>
+                <p>TERMINET E KRIJUARA</p>
                 <h4>
                   <strong>{{data.totaliTermineveEPerfunduara}}</strong>
                 </h4>
@@ -45,7 +45,7 @@
             <div class="admin-up">
               <mdb-icon icon="chart-pie" class="light-blue lighten-1"/>
               <div class="data">
-                <p>TOTALI I TERMINEVE TE REZERVUARA</p>
+                <p>TERMINET E REZERVUARA</p>
                 <h4>
                   <strong>{{data.numriTermineveTeRezervuara}}</strong>
                 </h4>
@@ -58,7 +58,7 @@
             <div class="admin-up">
               <mdb-icon icon="chart-bar" class="red accent-2"/>
               <div class="data">
-                <p>TOTALI I TERAPIVE TE KRIJUARA</p>
+                <p>TERAPITE E KRIJUARA</p>
                 <h4>
                   <strong>{{data.totaliTerapiveTePerfunduara}}</strong>
                 </h4>
