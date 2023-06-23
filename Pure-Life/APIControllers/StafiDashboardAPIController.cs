@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pure_Life.Data;
+using Pure_Life.ViewModel.Stafi;
 
 namespace Pure_Life.APIControllers
 {
@@ -13,40 +15,31 @@ namespace Pure_Life.APIControllers
 
 		public StafiDashboardAPIController(ApplicationDbContext context)
 		{
-			_context= context;
+			_context = context;
 		}
 
-		[HttpGet("NumriTotalIPacienteve/{stafiId}")]
-		public int NumriTotalIPacienteve(int stafiId)
+	
+
+		[HttpGet("StafiStatistikat/{stafiId}")]
+
+		public async Task<IActionResult> StafiStatistikat (int stafiId)
 		{
-			var pacientet = _context.Pacientet.Select(x => x.Id).ToList();
-			var count = _context.Terminet.Where(x => x.StafiId == stafiId && pacientet.Contains(x.Pacienti.Id)).Select(x => x.Pacienti.Id).Distinct().Count();
-			return count;
+            var pacientet = await _context.Pacientet.Select(x => x.Id).ToListAsync();
+            var numriTotalIPacienteve = await _context.Terminet.Where(x => x.StafiId == stafiId && pacientet.Contains(x.Pacienti.Id)).Select(x => x.Pacienti.Id).Distinct().CountAsync();
+            var terminetEPerfunduara = await _context.Terminet.CountAsync(x => x.Price > 0 && x.StafiId == stafiId);
+            var terminetERezervuara =  await _context.Terminet.CountAsync(x => x.Price == 0 && x.StafiId == stafiId && x.PacientiId != null);
 
-		}
+			var result = new StafiDashboardViewModel()
+			{
+				NumriTotalIPacienteve = numriTotalIPacienteve,
+				NumriTermineveTeRezervuara = terminetERezervuara,
+				TotaliTermineveEPerfunduara = terminetEPerfunduara,
+				TotaliTerapiveTePerfunduara = terminetEPerfunduara
+			};
 
-		[HttpGet("TotaliTermineveEPerfunduara/{stafiId}")]
-		public int TotaliTermineveEPerfunduara(int stafiId)
-		{
-			var terminetCount = _context.Terminet.Count(x => x.Price > 0 && x.StafiId==stafiId);
-			return terminetCount;
+			return Ok(result);	
 
-		}
-		[HttpGet("NumriTermineveTeRezervuara/{stafiId}")]
-		public int NumriTermineveTeRezervuara(int stafiId)
-		{
-			var terminetCount = _context.Terminet.Count(x => x.Price == 0 && x.StafiId == stafiId && x.PacientiId!=null);
-			return terminetCount;
-
-		}
-
-
-		[HttpGet("TotaliTerapiveTePerfunduara/{stafiId}")]
-		public int TotaliTerapiveTePerfunduara(int stafiId)
-		{
-			var terminetCount = _context.Terminet.Count(x => x.Price > 0 && x.StafiId == stafiId);
-			return terminetCount;
-
-		}
+        }	
+			
 	}
 }
