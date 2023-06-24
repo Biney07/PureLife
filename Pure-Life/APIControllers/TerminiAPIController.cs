@@ -72,6 +72,7 @@ namespace Pure_Life.APIControllers
                         EndTime = (currentDate.Date + timeSlot.Add(new TimeSpan(0, 30, 0))).ToString(),
                         Status = false,
                         StatusPaid = false,
+                        HasTherapy= false,
                         Price = 0,
                         StafiId = stafi.Id,
                         PacientiId = null,
