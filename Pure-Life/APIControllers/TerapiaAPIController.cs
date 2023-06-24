@@ -197,7 +197,7 @@ namespace Pure_Life.APIControllers
 			return Ok(result);
 		}
 
-		[HttpGet("GetAnalizenETerapise/{terapiaId}/{analizaId}")]
+		[HttpGet("GetAnalizenETerapise/{analizaId}/{terapiaId}")]
 
 		public async Task<IActionResult> GetAnalizenETerapise (int terapiaId, int analizaId)
 		{
