@@ -51,11 +51,13 @@
                             </thead>
                             <tbody>
                                 <tr v-for="analiza in terapia.analizat" :key="analiza.id">
+                                    
                                     <td>{{ analiza.emriAnalizes }}</td>
                                     <td>{{ analiza.cmimi }} €</td>
-
-                                    <td> <button class="btn btn-primary" style="background-color: var(--blue);"
-                                            @click="analizaopen(analiza.id)">View</button></td>
+                                    <td>
+                                        <button class="btn btn-primary" style="background-color: var(--blue);"
+                                            @click="analizaopen(analiza.id, terapia.id)">View</button>
+                                    </td>
 
 
                                 </tr>
@@ -155,6 +157,11 @@ export default {
         }
     },
     methods: {
+        analizaopen(analizaId, terapiaId) {
+            localStorage.setItem('analizaData', JSON.stringify({ analizaId, terapiaId }));
+            window.location.href = "http://localhost:3000/dashboard/analiza";
+        },
+
 
         getStatusClass(status) {
             return status === 'I paguar' ? 'paid' : 'unpaid';

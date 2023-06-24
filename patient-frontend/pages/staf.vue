@@ -1,7 +1,11 @@
 <template>
   <div>
     <ul>
-      <li v-for="stafi in stafiList" :key="stafi.id">{{ stafi.emri }} {{ stafi.mbiemri }}</li>
+     
+      <li v-for="stafi in stafiList" :key="stafi.id">
+        {{ stafi.emri }} {{ stafi.mbiemri }}
+        <pre>{{ stafi }}</pre> <!-- Add this line -->
+      </li>
     </ul>
     <div class="container">
       <div :style="'background-image: url(' + stafi.pictureUrl + ')'" class="card card0">

@@ -1,34 +1,39 @@
 <template>
-<div class="login">
-  <div class="login-page">
-    <p class="back-link"><NuxtLink to="/">Back to Homepage</NuxtLink></p>
-    <h1 class="page-title">To log in, enter your email and password</h1>
-    <form @submit.prevent="userLogin" class="input-form" action="">
-        <div>
-            <label class="email-label" for="email">Email Address</label>
-            <input required v-model="userData.email" class="email-input" type="email" id="email" placeholder="Email Address" />
+    <div class="login">
+        <div class="login-page">
+            <p class="back-link">
+                <NuxtLink to="/">Back to Homepage</NuxtLink>
+            </p>
+            <h1 class="page-title">To log in, enter your email and password</h1>
+            <form @submit.prevent="userLogin" class="input-form" action="">
+                <div>
+                    <label class="email-label" for="email">Email Address</label>
+                    <input required v-model="userData.email" class="email-input" type="email" id="email"
+                        placeholder="Email Address" />
+                </div>
+
+                <div>
+                    <label class="password-label" for="password">Password</label>
+                    <input required v-model="userData.password" class="password-input" type="password" id="password"
+                        placeholder="Password" />
+                </div>
+
+                <button class="login-button">Continue</button>
+            </form>
+            <div class="border-line">
+                <span>or</span>
+            </div>
+
+            <button class="google-button">
+                <img src="@/assets/google.svg" alt="google">
+                Continue with Google
+            </button>
+            <p class="redirect-link">New to PureLife? <NuxtLink to="/register"><span>Create an account</span></NuxtLink>
+            </p>
+
         </div>
 
-        <div>
-            <label class="password-label" for="password">Password</label>
-            <input required v-model="userData.password" class="password-input"  type="password" id="password" placeholder="Password" />
-        </div>
-
-        <button class="login-button">Continue</button>
-    </form>
-    <div class="border-line">
-        <span>or</span>
     </div>
-
-    <button class="google-button">
-        <img src="@/assets/google.svg" alt="google">
-        Continue with Google
-    </button>
-    <p class="redirect-link">New to PureLife? <NuxtLink to="/register"><span>Create an account</span></NuxtLink></p>
-
-  </div>
-
-</div>
 </template>
 
 <script>
@@ -45,14 +50,14 @@ export default {
     },
     methods: {
         async userLogin() {
-            try{
+            try {
                 const response = await signin(this.userData)
                 storeUser(JSON.stringify(response))
             } catch (err) {
                 console.log(err)
             } finally {
                 this.reset()
-                this.$router.push({path: "/dashboard"});
+                this.$router.push({ path: "/dashboard/profile" });
             }
         },
         reset() {
@@ -82,7 +87,7 @@ export default {
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
-.page-title{
+.page-title {
     font-weight: 500;
     font-size: 23px;
     color: var(--primary-font-color);
@@ -102,25 +107,28 @@ export default {
     gap: 5px;
 }
 
-.password-label, .email-label{
+.password-label,
+.email-label {
     font-size: 18px;
     font-weight: 500;
 }
 
-.password-input, .email-input {
+.password-input,
+.email-input {
     border: 1px solid #E2E6EB;
     padding: 18px 15px;
     margin-top: 5px;
     font-size: 18px;
 }
 
-.password-input::placeholder, .email-input::placeholder {
-   color: var(--primary-font-color);
-   font-size: 16px;
-   font-weight: 500;
+.password-input::placeholder,
+.email-input::placeholder {
+    color: var(--primary-font-color);
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.login-button{
+.login-button {
     margin-top: 10px;
     padding: 16px 0;
     font-size: 16px;
@@ -132,40 +140,40 @@ export default {
     transition: background-color 0.3s ease-in;
 }
 
-.login-button:hover{
+.login-button:hover {
     transition: background-color 0.3s ease-in;
     background: rgba(183, 203, 233, 1);
 }
 
 .border-line {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .border-line::before,
 .border-line::after {
-  content: "";
-  flex-grow: 1;
-  border-bottom: 1px solid #E2E6EB;
+    content: "";
+    flex-grow: 1;
+    border-bottom: 1px solid #E2E6EB;
 }
 
 .border-line::before {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .border-line::after {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .border-line span {
-  padding: 0 10px;
-  color: var(--primary-font-color);
-  font-size: 16px;
-  font-weight: 500;
+    padding: 0 10px;
+    color: var(--primary-font-color);
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.google-button{
+.google-button {
     margin-top: 20px;
     position: relative;
     width: 100%;
@@ -179,12 +187,12 @@ export default {
     font-weight: 500;
 }
 
-.google-button img{
+.google-button img {
     position: absolute;
     left: 10px;
 }
 
-.redirect-link{
+.redirect-link {
     font-size: 15px;
     font-weight: 500;
     color: var(--primary-font-color);
@@ -195,26 +203,26 @@ export default {
     transform: translateX(-50%);
 }
 
-.redirect-link a{
+.redirect-link a {
     color: #1F6CD6;
     border-bottom: 1px solid #1F6CD6;
     text-decoration: none;
 }
 
-.back-link a{
+.back-link a {
     font-size: 19px;
     color: var(--primary-font-color);
     width: fit-content;
-    border-bottom: 1px solid #E2E6EB;   
-    transition: border 0.3s; 
+    border-bottom: 1px solid #E2E6EB;
+    transition: border 0.3s;
     text-decoration: none;
 }
 
-.back-link a:hover{
+.back-link a:hover {
     cursor: pointer;
     color: black;
-    border-bottom: 1px solid #606061;  
-    transition: border 0.3s; 
+    border-bottom: 1px solid #606061;
+    transition: border 0.3s;
 }
 
 @media screen and (max-width: 500px) {
@@ -222,10 +230,8 @@ export default {
         height: 100vh;
     }
 
-    .redirect-link{
+    .redirect-link {
         width: 100%;
         bottom: 0;
     }
-}
-
-</style>
+}</style>
