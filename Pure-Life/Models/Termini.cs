@@ -24,6 +24,8 @@ namespace Pure_Life.Models
 
         public string? ModifiedFrom { get; set; }
 
+        public bool HasTherapy { get; set; }
+
         public bool IsDeleted { get; set; }
 
         [ForeignKey("PacientiId")]

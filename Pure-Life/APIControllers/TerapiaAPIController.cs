@@ -22,113 +22,7 @@ namespace Pure_Life.APIControllers
 		{
 			_context = context;
 		}
-		/*
-				[HttpPost]
-				public async Task<IActionResult> Create(AddTerapiaViewModel model)
-				{
-					if (!ModelState.IsValid)
-					{
-						return BadRequest(ModelState);
-					}
-
-					*//*   DateTime parsedDateTime = DateTime.Parse(model.StartDate);
-
-					   var terminiList = await _context.Terminet.ToListAsync();*/
-
-		/*      var termini = terminiList
-				  .FirstOrDefault(x => DateTime.Parse(x.StartTime) == parsedDateTime && !x.IsDeleted);*//*
-
-		var termini = _context.Terminet
-			.FirstOrDefault(x => x.Id == model.TerminiId && !x.IsDeleted);
-
-		if (termini == null)
-		{
-			return NotFound("Termini not found");
-		}
-
-		List<int> analizaIds = model.AnalizatECaktuara.Split(',').Select(x => int.Parse(x)).ToList();
-
-		List<TerapiaAnalizaRezultati> terapiaAnalizaRezultatet = await _context.AnalizatLlojet.Where(x => analizaIds.Contains(x.AnalizaId)).Select(x => new TerapiaAnalizaRezultati
-		{
-			AnalizaLlojiId = x.Id
-			//TerapiaId //kjo veqse mbushet ma poshte kur te krijohet terapia
-			//Rezultati // rezultati mbushet mas anej kurdo qe te osht nevoja
-		}).ToListAsync();
-
-
-		List<int> sherbimetIds = new List<int>();
-
-		foreach (var sherbimId in model.SherbimetEKryera.Split(','))
-		{
-			var cleanedId = new string(sherbimId.Where(char.IsDigit).ToArray());
-
-			if (!string.IsNullOrEmpty(cleanedId) && int.TryParse(cleanedId, out int id))
-			{
-				sherbimetIds.Add(id);
-			}
-		}
-
-		List<TerapiaSherbimet> terapiaSherbimet = sherbimetIds.Select(sherbimId => new TerapiaSherbimet
-		{
-			SherbimetId = sherbimId
-		}).ToList();
-
-		var stafi = await _context.Stafi.Where(x => x.Id == termini.StafiId).FirstOrDefaultAsync();
-		var terapia = new Terapia()
-		{
-			Pershkrimi = model.Pershkrimi,
-			Diagnoza = model.Diagnoza,
-			Barnat = model.Barnat,
-			TerminiId = termini.Id,
-			InsertedDate = DateTime.Now,
-			InsertedFrom = stafi.EmailZyrtar,
-			TerapiaSherbimet = terapiaSherbimet,
-			TerapiaAnalizaRezultati = terapiaAnalizaRezultatet
-		};
-
-		await _context.Terapia.AddAsync(terapia);
-		await _context.SaveChangesAsync();
-
-
-
-		decimal totalPrice = await _context.Sherbimet
-.Where(s => sherbimetIds.Contains(s.Id))
-.SumAsync(s => s.Cmimi);
-
-		var terminiPrice = await _context.Terminet.FirstOrDefaultAsync(x => x.Id == termini.Id);
-		terminiPrice.Price = (double)totalPrice;
-		await _context.SaveChangesAsync();
-
-		var terapiaa = await _context.Terapia
-			.Include(t => t.Termini)
-				.ThenInclude(t => t.Stafi)
-			.Include(t => t.Termini)
-				.ThenInclude(t => t.Pacienti)
-			.Where(x => x.Id == terapia.Id)
-			.FirstOrDefaultAsync();
-
-		var result = new GetTerapiaViewModel
-		{
-			Id = terapiaa.Id,
-			Pacienti = $"{terapiaa.Termini.Pacienti.Emri} {terapiaa.Termini.Pacienti.Mbiemri}",
-			NrLeternjoftimit = terapiaa.Termini.Pacienti.NrLeternjoftimit,
-			Koha = $"{terapiaa.Termini.StartTime} - {terapiaa.Termini.EndTime}",
-			Diagnoza = terapiaa.Diagnoza,
-			Pershkrimi = terapiaa.Pershkrimi,
-			Barnat = terapiaa.Barnat,
-			Sherbimet = await _context.Sherbimet
-			.Where(s => sherbimetIds.Contains(s.Id))
-			.Select(s => s.Emri)
-			.ToListAsync(),
-			Doktori = $"Dr {terapiaa.Termini.Stafi.Emri} {terapiaa.Termini.Stafi.Mbiemri}",
-			InsertedFrom = terapiaa.InsertedFrom,
-			InsertedDate = terapiaa.InsertedDate,
-			ModifiedDate = terapiaa.ModifiedDate,
-			ModifiedFrom = terapiaa.ModifiedFrom
-		};
-		return Ok(result);
-	}
-*/
+	
 		[HttpPost]
 		public async Task<IActionResult> Create(AddTerapiaViewModel model)
 		{
@@ -138,18 +32,19 @@ namespace Pure_Life.APIControllers
 			}
 
 			var termini = _context.Terminet
-				.FirstOrDefault(x => x.Id == model.TerminiId && !x.IsDeleted);
+				.FirstOrDefault(x => x.Id == model.TerminiId && !x.IsDeleted && x.HasTherapy==false);
 
 			if (termini == null)
 			{
 				return NotFound("Termini not found");
 			}
+            List<int> analizaIds = new List<int>();	
 
-			List<TerapiaAnalizaRezultati> terapiaAnalizaRezultatet = new List<TerapiaAnalizaRezultati>();
+            List<TerapiaAnalizaRezultati> terapiaAnalizaRezultatet = new List<TerapiaAnalizaRezultati>();
 
 			if (!string.IsNullOrEmpty(model.AnalizatECaktuara))
 			{
-				List<int> analizaIds = model.AnalizatECaktuara
+				 analizaIds = model.AnalizatECaktuara
 		.Split(',')
 		.Select(x => int.TryParse(x.Trim(), out int parsedId) ? parsedId : 0)
 		.Where(x => x != 0)
@@ -203,8 +98,16 @@ namespace Pure_Life.APIControllers
 				.Where(s => sherbimetIds.Contains(s.Id))
 				.SumAsync(s => s.Cmimi);
 
+
+			double totalPriceAnalizat =await _context.Analizat
+				.Where(s => analizaIds.Contains(s.Id))
+				.SumAsync(s => s.Cmimi);
+
+			var shuma = totalPrice + (decimal) totalPriceAnalizat;
+
 			var terminiPrice = await _context.Terminet.FirstOrDefaultAsync(x => x.Id == termini.Id);
-			terminiPrice.Price = (double)totalPrice;
+			terminiPrice.Price = (double)shuma;
+			terminiPrice.HasTherapy = true;
 			await _context.SaveChangesAsync();
 
 			var terapiaa = await _context.Terapia

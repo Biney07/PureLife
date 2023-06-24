@@ -1,5 +1,9 @@
 <template>
-  <div v-if="userData" class="profile-container">
+<div>
+  <div v-if="loading" class="loading-spinner">
+    <b-spinner width="200px" variant="primary" label="Spinning"></b-spinner>
+  </div>
+  <div v-if="userData && !loading" class="profile-container">
     <div class="profile-left">
       <div class="profile-image-container">
         <img :src="userData.pictureUrl" alt="User Profile Image" class="profile-image" />
@@ -98,6 +102,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -107,6 +112,7 @@ import {getLemiaById} from "../staff-sdk/lemia.js"
 export default {
   data() {
     return {
+      loading: true,
       userData: null,
       nationalities: null,
       countries: null,
@@ -149,6 +155,7 @@ export default {
         }
     },
     async getCurrentUser(){
+      this.loading = true
       try {
         const response = await fetchCurrentUser(this.$store.state.authenticate.user.data.id)
         // eslint-disable-next-line no-console
@@ -156,6 +163,8 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err)
+      } finally {
+        this.loading = false
       }
     },
     async getSpecializimin() {
@@ -377,5 +386,17 @@ select.form-control option:hover {
   input.form-control {
     font-size: 12px;
   }
+
+}
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 </style>
