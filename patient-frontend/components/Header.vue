@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <header>
+    <header :class="{ 'not-dashboard': isDashboardPath }">
       <div class="logoheader">
         <img src="../assets/purelife.png" loading="lazy" class="logo-header" />
         <NuxtLink to="/" class="logo">Pure<span>Life</span></NuxtLink>
