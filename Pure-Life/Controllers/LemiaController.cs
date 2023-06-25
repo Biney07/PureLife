@@ -70,7 +70,7 @@ namespace Pure_Life.Controllers
 					break;
 			}
 
-			var pageSize = 3;
+			var pageSize = 10;
 			var lemiaListWithSorting = await PaginatedList<Lemia>.CreateAsync(lemiaList.AsNoTracking(), pageNumber ?? 1, pageSize);
 
 			return View(lemiaListWithSorting);
