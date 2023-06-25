@@ -22,5 +22,6 @@
 
 		public string? Reparti { get; set; }
 
+		public bool? HasTherapy { get; set; }
 	}
 }

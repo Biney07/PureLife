@@ -161,7 +161,8 @@ namespace Pure_Life.APIControllers
                 UId = x.Pacienti.UId,
                 Emri = x.Pacienti.Emri,
                 Mbiemri = x.Pacienti.Mbiemri,
-                Email = x.Pacienti.Email
+                Email = x.Pacienti.Email,
+                PictureUrl = x.Pacienti.PictureUrl
 			}).Distinct().ToListAsync();
 
 			return Ok(terminet);

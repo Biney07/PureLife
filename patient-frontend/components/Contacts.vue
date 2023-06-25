@@ -1,7 +1,7 @@
 <template>
   <div v-if="contacts.length" class="contact-list">
       <div @click="selectContact(contact)" v-for="contact in contacts" :key="contact.id" class="contact-row" :class="{ active: selectedContact && selectedContact.id === contact.id }">
-        <img :src="contact.pictureUrl" alt="Contact Image" class="contact-image" />
+        <img :src="contact.imgUrl" alt="Contact Image" class="contact-image" />
         <div class="contact-name">{{ contact.emri }} {{ contact.mbiemri }}</div>
       </div>
     </div>
@@ -46,6 +46,7 @@ export default {
         this.contactSelected.recipientId = contact.id
 
         this.$emit('fetchContactMessages', this.contactSelected)
+        this.$emit('changeContactImage', contact.imgUrl)
     }
   }
 }

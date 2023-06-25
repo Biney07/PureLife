@@ -120,7 +120,85 @@ namespace Pure_Life.APIControllers
             return Ok(results);
 
         }
-        
-			
+
+		[HttpGet("FitimetPerMuaj")]
+
+		public async Task<IActionResult> FitimetPerMuaj()
+		{
+
+			var terminetEStafit = await _context.Terminet.Where(x => x.Price > 0).ToListAsync();
+			var terminetEPerfunduara = await _context.Terminet.CountAsync(x => x.Price > 0);
+
+			List<int> muajt = new List<int>();
+
+			for (var i = 1; i <= 12; i++)
+			{
+				muajt.Add(i);
+			}
+
+
+
+
+			var result = new FitimetMuajiViewModel();
+			List<FitimetMuajiViewModel> results = new List<FitimetMuajiViewModel>();
+
+			foreach (var muaji in muajt)
+			{
+				var monthName = string.Empty;
+				switch (muaji)
+				{
+					case 1:
+						monthName = "Janar";
+						break;
+					case 2:
+						monthName = "Shkurt";
+						break;
+					case 3:
+						monthName = "Mars";
+						break;
+					case 4:
+						monthName = "Prill";
+						break;
+					case 5:
+						monthName = "Maj";
+						break;
+					case 6:
+						monthName = "Qershor";
+						break;
+					case 7:
+						monthName = "Korrik";
+						break;
+					case 8:
+						monthName = "Gusht";
+						break;
+					case 9:
+						monthName = "Shtator";
+						break;
+					case 10:
+						monthName = "Tetor";
+						break;
+					case 11:
+						monthName = "Nëntor";
+						break;
+					case 12:
+						monthName = "Dhjetor";
+						break;
+					default:
+						monthName = "Invalid month number";
+						break;
+				}
+				result = new FitimetMuajiViewModel()
+				{
+					Fitimi = terminetEStafit.Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Month == muaji && x.Price > 0).Sum(x=>x.Price) == 0 ? 0 :   terminetEStafit.Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Month == muaji && x.Price > 0).Sum(x => x.Price),
+					Muaji = monthName
+				};
+
+				results.Add(result);
+			}
+
+			return Ok(results);
+
+		}
+
 	}
 }

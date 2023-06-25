@@ -393,7 +393,7 @@ namespace Pure_Life.APIControllers
 				InsertedFrom = x.InsertedFrom,
 				InsertedDate = x.InsertedDate,
 				ModifiedDate = x.ModifiedDate,
-				ModifiedFrom = x.ModifiedFrom
+				ModifiedFrom = x.ModifiedFrom,
 			});
 			return Ok(result);
 
@@ -453,7 +453,7 @@ namespace Pure_Life.APIControllers
 					.ThenInclude(t => t.Pacienti)
 				.Include(t => t.TerapiaSherbimet)
 					.ThenInclude(t => t.Sherbimet)
-				.Where(t => t.Termini.Stafi.Id == id)
+				.Where(t => t.Termini.Stafi.Id == id && t.IsDeleted == false)
 				.ToListAsync();
 
 			var result = terapite.Select(x => new GetTerapiaViewModel
