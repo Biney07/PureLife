@@ -17,12 +17,10 @@ export default {
         Footer
     },
     computed: {
-        computed: {
-            showHeader() {
-                return !['/register', '/login'].includes(this.$nuxt._route.path)
-            }
+        showHeader() {
+            return !['/register', '/login'].includes(this.$nuxt._route.path)
         }
-    },
+    }
     
 
 }

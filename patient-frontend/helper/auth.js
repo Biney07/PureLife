@@ -4,12 +4,10 @@ export function storeUser(userData){
 
 export function userExists() {
     if (process.client) {
-        // Access localStorage only in the browser
         return localStorage.getItem('patient') ? true : false;
-      } else {
-        // Handle the server-side case
+    } else {
         return false;
-      }
+    }
 }
 
 export function getLocalStorage() {
@@ -24,7 +22,9 @@ export function getUser() {
 }
 
 export function removeUser() {
-    if(userExists()) {
-        return localStorage.removeItem('patient')
+    if(process.client) {
+        if(userExists()) {
+            return localStorage.removeItem('patient')
+        }
     }
 }

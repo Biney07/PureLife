@@ -52,7 +52,9 @@ export default {
         async userLogin() {
             try {
                 const response = await signin(this.userData)
-                storeUser(JSON.stringify(response))
+                if(process.client){
+                    storeUser(JSON.stringify(response))
+                }
             } catch (err) {
                 console.log(err)
             } finally {

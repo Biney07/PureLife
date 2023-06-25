@@ -1,4 +1,13 @@
 <template>
+<div>
+  <div class="wave-form-background-img">
+    <div class="overlay-text">
+      <h1 class="about-Title">STAFI YNE</h1>
+      <p class="about-paragraf">
+        "Spitali PureLife: Kujdes për Shëndetin, Përkrahje për Jetën"
+      </p>
+    </div>
+  </div>
   <div class="stafi" v-if="stafiList">
     <ul class="style-list">
      
@@ -11,6 +20,7 @@
       </li>
     </ul>
   </div>
+</div>
 </template>
 
 <script>

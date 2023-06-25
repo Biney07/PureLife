@@ -294,7 +294,9 @@ export default {
 </script>
 
 <style scoped>
-
+.dashboard{
+    margin-top: 140px;
+}
 .termini {
     padding: 70px 90px;
 }

@@ -44,17 +44,13 @@
               <div :class="{ 'whitecontainer-on': isContainerVisible, 'whitecontainer-off': !isContainerVisible }">
                 <div class="buttons">
                   <NuxtLink class="btn" to="/dashboard/profile">Profile</NuxtLink>
-                  <NuxtLink class="btn" @click="logout" to="/login">Log out</NuxtLink>
+                  <p class="btn" @click="logout" >Log out</p>
 
                 </div>
               </div>
             </div>
           </div>
 
-
-        </li>
-
-        <li v-if="isUserLoggedIn">
 
         </li>
       </ul>
@@ -78,7 +74,8 @@ export default {
     return {
       patientData: {},
       isMenuActive: false,
-      isContainerVisible: false
+      isContainerVisible: false,
+      isUserLoggedIn: false
     };
   },
   mounted() {
@@ -88,15 +85,12 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
-    isUserLoggedIn() {
-      return userExists()
-    },
     isDashboardPath() {
       return this.$route.path.includes("/dashboard")||this.$route.path.includes("/login");
     },
   },
   mounted() {
-
+    this.checkUserLoggedIn()
     const useri = JSON.parse(localStorage.getItem('patient'));
 
 
@@ -138,8 +132,11 @@ export default {
     async logout() {
       try {
         await userSignOut()
-        removeUser();
-        window.location.reload();
+        if(process.client) {
+          removeUser();
+        }
+        this.$router.push({ path: '/' })
+        this.checkUserLoggedIn()
       } catch (err) {
         console.log(err)
       }
@@ -149,16 +146,25 @@ export default {
       console.log(this.isContainerVisible);
       this.isContainerVisible = !this.isContainerVisible;
     },
+    checkUserLoggedIn() {
+      if(process.client){
+        this.isUserLoggedIn = userExists()
+      }
+    }
   },
 };
 </script>
 <style scoped>
+.not-dashboard{
+  background: rgb(250, 250, 250)
+}
 .not-dashboard  .navigation li a{
   color: var(--blue) !important;
 }
 .not-dashboard  .logo{
   color: var(--blue) !important;
 }
+
 .profilinav {
   display: flex;
   position: relative;
@@ -402,7 +408,7 @@ header .navigation li a {
   transition: 0.5s;
 }
 
-header .navigation li a:hover {
+header .navigation li a:hover{
   color: #1c41ea;
 }
 
