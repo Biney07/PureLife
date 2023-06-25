@@ -92,7 +92,7 @@ export default {
       return userExists()
     },
     isDashboardPath() {
-      return this.$route.path.includes("/dashboard");
+      return this.$route.path.includes("/dashboard")||this.$route.path.includes("/login");
     },
   },
   mounted() {
