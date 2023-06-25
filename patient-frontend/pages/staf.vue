@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <ul>
+  <div class="stafi" v-if="stafiList">
+    <ul class="style-list">
      
-      <li v-for="stafi in stafiList" :key="stafi.id">
-        {{ stafi.emri }} {{ stafi.mbiemri }}
-        <pre>{{ stafi }}</pre> <!-- Add this line -->
+      <li class="list-unstyled" v-for="stafi in stafiList" :key="stafi.id">
+        <div :style="'background-image: url(' + stafi.pictureUrl + '); background-repeat: no-repeat;'" class="card card0">
+          <div class="border">
+            <h2>{{ stafi.emri }} {{ stafi.mbiemri }}</h2>
+          </div>
+        </div>
       </li>
     </ul>
-    <div class="container">
-      <div :style="'background-image: url(' + stafi.pictureUrl + ')'" class="card card0">
-        <div class="border">
-          <h2>{{ stafi.emri }}</h2>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -44,6 +40,11 @@ export default {
 </script>
 
 <style scoped>
+.stafi {
+  margin: 8% auto;
+  width: 100%;
+}
+
 .container {
   height: 100vh;
   width: 100vw;
@@ -77,7 +78,7 @@ export default {
   border-radius: 10px;
   transition: background 0.8s;
   overflow: hidden;
-  background: #000;
+  background: #3d3c3c;
   box-shadow: 0 70px 63px -60px #000;
   display: flex;
   justify-content: center;
@@ -125,5 +126,13 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+}
+
+.style-list{
+  gap: 20px;
+  display: flex;
+  margin: auto;
+  flex-wrap: wrap;
+  width: fit-content;
 }
 </style>
