@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="question-input">
-  <input v-model="userMessage" @keyup.enter="submitMessage" type="text" placeholder="Kam therje ne zemer tek cili doktor duhet te shkoj?">
+  <input v-model="userMessage" @keyup.enter="submitMessage" type="text" placeholder="Kam veshtiresi ne frymemarrje tek cili doktor duhet te shkoj?">
   <div class="search-button" @click="submitMessage">
     <img src="@/assets/search.svg" alt="search" />
 
@@ -233,6 +233,10 @@ export default {
   overflow: hidden;
   padding-left: 8px;
 
+}
+
+.question-input input {
+  width: 100%;
 }
 
 .question-text {
