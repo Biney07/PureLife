@@ -1,11 +1,10 @@
 <template>
     <div>
-        <Header v-if="showHeader" />
-
+        <Header />
         <div>
             <slot />
         </div>
-        <Footer v-if="showHeader" />
+        <Footer />
     </div>
 </template>
 
@@ -17,14 +16,8 @@ export default {
         Header,
         Footer
     },
-    computed: {
-        showHeader() {
-            return !['/register', '/login'].includes(this.$nuxt._route.path)
-        }
-    }
+
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

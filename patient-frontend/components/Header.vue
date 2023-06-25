@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <header v-if="!isUserLoggedIn || !isDashboardPath">
+    <header :class="{ 'not-dashboard': isDashboardPath }">
       <div class="logoheader">
         <img src="../assets/purelife.png" loading="lazy" class="logo-header" />
         <NuxtLink to="/" class="logo">Pure<span>Life</span></NuxtLink>
@@ -8,6 +8,7 @@
 
       <div class="menutoggle" @click="toggleMenu"></div>
       <ul class="navigation" :class="{ active: isMenuActive }">
+
         <li>
           <NuxtLink to="/">Home</NuxtLink>
         </li>
@@ -20,22 +21,30 @@
         <li>
           <NuxtLink to="/about">About</NuxtLink>
         </li>
+
+        <li v-if="isUserLoggedIn">
+          <NuxtLink to="/dashboard/chat">Bisedat</NuxtLink>
+        </li>
         <li v-if="!isUserLoggedIn">
           <NuxtLink to="/login">Login</NuxtLink>
         </li>
         <li v-if="!isUserLoggedIn">
           <NuxtLink to="/register">Register</NuxtLink>
         </li>
+        <li v-if="isUserLoggedIn">
+          <NuxtLink to="/dashboard/terminet" class="rezervo"
+            style="background-color: lightblue; color: navy; border-radius: 10px; padding: 6px 14px; white-space: nowrap;">
+            Rezervo terminin</NuxtLink>
+        </li>
         <li class="dropdown" v-if="isUserLoggedIn">
 
           <div class="profilinav">
-            <img src="../assets/Triangle.svg" style="width: 20px;" alt="">
             <div class="dropdown-toggle" role="button" @click="toggleContainer" aria-expanded="false">
-              <img class="profile-image" src="../assets/profile.jpg" alt="Profile Image" />
+              <img class="profile-image" :src="patientData.pictureUrl" alt="Profile Image" />
               <div :class="{ 'whitecontainer-on': isContainerVisible, 'whitecontainer-off': !isContainerVisible }">
                 <div class="buttons">
                   <NuxtLink class="btn" to="/dashboard/profile">Profile</NuxtLink>
-                  <NuxtLink class="btn" @click="logout" to="/login">Logout</NuxtLink>
+                  <NuxtLink class="btn" @click="logout" to="/login">Log out</NuxtLink>
 
                 </div>
               </div>
@@ -51,30 +60,7 @@
       </ul>
     </header>
 
-    <header class="dashboard-header" v-else>
-      <nav class="header__nav">
-        <NuxtLink to="/dashboard"><img src="../assets/purelife color.png" alt="purelife-logo"></NuxtLink>
-        <ul class="header__menu" data-aos="fade-down">
-          <div class="seperated-links">
-            <li>
-              <NuxtLink to="/dashboard/terminet" style="background-color: lightblue; color: navy; border-radius: 10px; padding: 10px; white-space: nowrap;">Rezervo terminin</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/dashboard/chat">Bisedat</NuxtLink>
-            </li>
-          </div>
-          <div class="auth-links">
-            <li>
-              <NuxtLink to="/">Home
-              </NuxtLink>
-            </li>
-          </div>
-        </ul>
-      </nav>
-    </header>
+
   </div>
 </template>
 
@@ -85,9 +71,12 @@
 
 import { userExists, removeUser } from "@/helper/auth"
 import { userSignOut } from "@/patient-sdk/auth"
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      patientData: {},
       isMenuActive: false,
       isContainerVisible: false
     };
@@ -106,7 +95,39 @@ export default {
       return this.$route.path.includes("/dashboard");
     },
   },
+  mounted() {
+
+    const useri = JSON.parse(localStorage.getItem('patient'));
+
+
+    if (useri && useri.user.uid) {
+      const uid = useri.user.uid;
+
+      this.fetchPatientData(uid);
+    }
+  },
   methods: {
+    async fetchPatientData(uid) {
+      try {
+
+        const response = await axios.get(`https://localhost:7292/api/PacientiAPI/GetPacientiByUId/${uid}`);
+        this.patientData = response.data;
+
+        this.calculateAge(); // Call the calculateAge() method after fetching patient data
+        const values = Object.values(this.patientData);
+        const excludedProperties = ['modifiedDate', 'modifiedFrom'];
+
+        this.hasNullValues = values.some((value, index) => {
+          const propertyName = Object.keys(this.patientData)[index];
+          return value === null && !excludedProperties.includes(propertyName);
+        });
+
+        console.log(this.hasNullValues);
+
+      } catch (error) {
+        console.log("Error while fetching patient data:", error);
+      }
+    },
     handleScroll() {
       const header = document.querySelector("header");
       header.classList.toggle("sticky", window.scrollY > 0);
@@ -132,17 +153,29 @@ export default {
 };
 </script>
 <style scoped>
+.not-dashboard  .navigation li a{
+  color: var(--blue) !important;
+}
+.not-dashboard  .logo{
+  color: var(--blue) !important;
+}
 .profilinav {
   display: flex;
   position: relative;
 }
+
 .profile-image:hover {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Apply box shadow on hover */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  /* Apply box shadow on hover */
 }
 
 
 .whitecontainer-off {
   display: none;
+}
+
+.dropdown-toggle::after {
+  color: white;
 }
 
 .whitecontainer-on {
@@ -161,8 +194,12 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
+.rezervo:hover {
+  color: white !important;
+}
 
 .dropdown {
   position: relative !important;
@@ -290,9 +327,9 @@ export default {
 .btn {
 
   font-size: 0.9em !important;
-  color: #fff !important;
-  background: #1c41ea;
-  padding: 10px 30px;
+  color: #1c41ea !important;
+  background: white;
+  padding: 10px 60px !important;
   text-transform: uppercase;
   text-decoration: none;
   transition: 0.5s;

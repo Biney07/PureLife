@@ -116,7 +116,7 @@
 
         </div>
 
-    </div>q
+    </div>
 </template>
   
 
