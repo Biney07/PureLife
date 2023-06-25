@@ -251,7 +251,7 @@ export default {
     },
     async fetchSherbimetDheAnalizat() {
         try {
-            const sherbimetResponse = await getAllServices()
+            const sherbimetResponse = await getAllServices(this.$store.state.authenticate.user.data.id)
             this.sherbimet = sherbimetResponse.data
             const analizatResponse = await getAnalizat()
             this.analizat = analizatResponse.data
