@@ -42,6 +42,33 @@ namespace Pure_Life.APIControllers
 
         }
 
+
+		[HttpGet("DrejtoriStatistikat")]
+
+		public async Task<IActionResult> DrejtoriStatistikat()
+		{
+			var pacientet = await _context.Pacientet.CountAsync();
+			var stafi = await _context.Stafi.CountAsync();
+			var numriTotalITermineve = await _context.Terminet.Where(x => x.Price > 0).CountAsync();
+
+			var fitimi = await _context.Terminet.Where(x => x.Price > 0).Select(x=>x.Price).SumAsync();
+
+			var result = new DrejtoriDashboardViewModel()
+			{
+				NumriTotalIPacienteve = pacientet,
+				NumriIMjekeve = stafi,
+				NumriTermineveTePerfunduara = numriTotalITermineve,
+				FitimiTotal = fitimi,
+			};
+
+
+
+			return Ok(result);
+
+		}
+
+
+
 		[HttpGet("TerminiMuaji/{stafiId}")]
 
 		public async Task<IActionResult> TerminiMuaji (int stafiId) 
