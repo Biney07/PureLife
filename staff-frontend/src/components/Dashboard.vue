@@ -12,7 +12,7 @@
         </h4>
       </mdb-card-body>
     </mdb-card>
-    <section v-if="data && [userRoles.MJETK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId)" class="mt-lg-5">
+    <section v-if="data && [userRoles.MJEK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId)" class="mt-lg-5">
       <mdb-row>
         <mdb-col xl="3" md="6" class="mb-r">
           <mdb-card cascade class="cascading-admin-card">
@@ -132,7 +132,7 @@
               <mdb-card>
                   <mdb-card-body>
                       <div style="display: block">
-                        <mdb-bar-chart :data="[userRoles.MJETK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId) ? barChartData : barChartData2" :options="barChartOptions" :height="500"/>
+                        <mdb-bar-chart :data="[userRoles.MJEK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId) ? barChartData : barChartData2" :options="barChartOptions" :height="500"/>
                       </div>
                   </mdb-card-body>
               </mdb-card>
@@ -206,7 +206,9 @@ export default {
     async fetchStatistikat() {
       this.loading = true
       try {
-        if([this.userRoles.MJETK, this.userRoles.LABORANT].includes(this.$store.state.authenticate.user.data.roletId)) {
+        if([this.userRoles.MJEK, this.userRoles.LABORANT].includes(this.$store.state.authenticate.user.data.roletId)) {
+          // eslint-disable-next-line no-console
+          console.log('sdfsfd')
           const response = await getStatistics(this.currentUser)
           this.data = response.data
   
