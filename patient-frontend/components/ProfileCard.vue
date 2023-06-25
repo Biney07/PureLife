@@ -56,7 +56,7 @@
 
             </div>
         </div>
-        <div class="rightcard">
+        <div class="rightcard text-left">
             <MemberShipStatus :Membership="patientData.membershipStatus" />
             <div class="pacientinfo-right">
                 <h3 class="profile-nameA">ALERGJI</h3>
@@ -198,7 +198,6 @@ export default {
     display: flex;
     justify-content: flex-end;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
-
 }
 
 .part {

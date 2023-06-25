@@ -295,7 +295,7 @@ export default {
 
 <style scoped>
 .dashboard{
-    margin-top: 140px;
+    margin-top: 150px;
 }
 .termini {
     padding: 70px 90px;
@@ -360,13 +360,12 @@ input {
 
 /* CSS */
 .button-35 {
-    margin-left: 18%;
+    margin-left: 23%;
     align-items: center;
     background-color: #fff;
     border-radius: 12px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     width: 175px;
-    margin-bottom: 9px;
     box-sizing: border-box;
     color: #121212;
     cursor: pointer;
@@ -388,6 +387,7 @@ input {
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    margin-bottom: 1%;
 }
 
 .button-35:hover {

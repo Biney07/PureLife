@@ -1,6 +1,6 @@
 <template>
     <div
-        style="position: fixed; top: 150px; right: 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25); display: flex; align-items: flex-end; flex-direction: column; padding:10px 30px">
+        style="position: fixed; top: 150px; right: 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25); display: flex; align-items: flex-end; flex-direction: column; padding:10px 30px; background: white;">
         <h3 class="profile-nameA">Borxhi Total:</h3>
         <h3 class="profile-nameB">{{ calculateTotalDebt }}€</h3>
     </div>
@@ -100,17 +100,17 @@
                         <td>{{ getTime(termin.startTime) }}</td>
                         <td>{{ getTime(termin.endTime) }}</td>
                         <td>{{ termin.reparti }}</td>
-                        <td :class="getStatusClass(termin.statusPaid)">{{ termin.statusPaid }}</td>
+                        <td><span :class="getStatusClass(termin.statusPaid)">{{ termin.statusPaid }}</span></td>
                         <td v-if="isPaidVisible(termin.statusPaid)">
                             <button class="btn " style="background-color: purple; color:white"
-                                @click="openForm(termin.id)">View</button>
+                                @click="openForm(termin.id)">Shiko</button>
                         </td>
                         <td v-if="isUnpaidVisible(termin.statusPaid)">
                             <button class="btn" style="background-color: navy; color:white" @click="payNow(termin.id)"
                                 :disabled="isLoading">
                                 <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status"
                                     aria-hidden="true"></span>
-                                <span v-else>Pay Now</span>
+                                <span v-else>Paguaj</span>
                             </button>
                         </td>
 
@@ -118,7 +118,7 @@
                 </tbody>
             </table>
             <div v-if="termini && termini.length === 0">
-                No termini found.
+                No appointments found.
             </div>
         </div>
     </div>
@@ -261,12 +261,22 @@ export default {
 
 .paid {
     background-color: rgb(159, 240, 159);
-    color: green;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .unpaid {
     background-color: rgb(243, 150, 150);
-    color: rgb(138, 3, 3);
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cmimi {

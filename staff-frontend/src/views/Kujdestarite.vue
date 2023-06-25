@@ -5,8 +5,8 @@
   </div>
   <div v-else class="calendar-container">
     <div class="starter-text">
-        <p>24h Shifts</p>
-        <p>Here you can view yours and your colleagues 24h periodical shifts</p>
+        <p>Kujdestarite</p>
+        <p>Ketu mund te shikoni kujdestarite e juaja dhe te kolegeve tuaj</p>
     </div>
     <v-calendar
     v-if="attributes"
