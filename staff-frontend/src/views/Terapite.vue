@@ -59,7 +59,7 @@
             class="anulo-button"
             @click="deleteTerapine"
         >
-            Anulo
+            Delete
         </p>
       </mdb-modal-footer>
     </mdb-modal>
@@ -90,6 +90,11 @@
                 <label class="form-label font-weight-normal" for="form1Example2">Sherbimi:</label>
                 <v-select required multiple v-model="terapia.sherbimetEKryera" :options="sherbimetOptions" :reduce="sherbimi => sherbimi.id" label="emri" />
             </div>
+
+            <div class="form-outline">
+                <label class="form-label font-weight-normal" for="form1Example2">Analizat:</label>
+                <v-select required multiple v-model="terapia.analizatECaktuara" :options="analizatOptions" :reduce="analiza => analiza.id" label="emri" />
+            </div>
         </form>
       </mdb-modal-body>
       <mdb-modal-footer>
@@ -118,6 +123,7 @@ import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, 
 import { getAllServices } from "../staff-sdk/sherbimet"
 import { getAnalizat } from "../staff-sdk/analizat"
 import { getTerapiaByStaff, editTerapine, deleteTerapia } from "../staff-sdk/terapia"
+import { updateTerminiHasTherapy } from "../staff-sdk/terminet"
 export default {
   name: 'my-component',
   components: {
@@ -154,6 +160,7 @@ export default {
             diagnoza: null, 
             barnat: null,
             sherbimetEKryera: null,
+            analizatECaktuara: null,
         },
         terapite: null
     }
@@ -236,6 +243,7 @@ export default {
     async deleteTerapine() {
         try {
             await deleteTerapia(this.modalData.id)
+            await updateTerminiHasTherapy(this.modalData.terminiId,false)
         } catch (err) {
             // eslint-disable-next-line no-console
             console.log(err)

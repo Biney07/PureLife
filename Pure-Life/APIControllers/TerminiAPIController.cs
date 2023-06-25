@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using Pure_Life.Data;
 using Pure_Life.Models;
 using Pure_Life.Services;
@@ -249,13 +250,13 @@ namespace Pure_Life.APIControllers
 
         [Route("GetTerminiByDateAndId/{date}/{id}")]
         [HttpGet]
-
         public async Task<IActionResult> GetTerminiByDateAndId(string date, int id)
         {
             DateTime parsedDate = DateTime.Parse(date);
             var terminiList = await _context.Terminet.Include(x => x.Pacienti).ToListAsync();
             var termini = terminiList
                 .Where(x => DateTime.TryParse(x.StartTime, out DateTime startTime) && startTime.Date == parsedDate && !x.IsDeleted && x.StafiId == id)
+                .OrderBy(x => DateTime.Parse(x.StartTime))
                 .ToList();
             var result = termini.Select(x => new GetTerminiViewModel
             {
@@ -270,10 +271,11 @@ namespace Pure_Life.APIControllers
                 PacientiNrTel = x.Pacienti != null ? x.Pacienti.NrTel : " ",
                 Doktori = x.Stafi != null ? $"Dr {x.Stafi.Emri} {x.Stafi.Mbiemri}" : " ",
                 Reparti = x.Stafi != null ? x.Stafi.Lemia.Emri : " ",
+                HasTherapy = x.HasTherapy
             });
             return Ok(result);
-
         }
+
 
         [Route("GetTerminiByDate/{date}")]
         [HttpGet]
@@ -307,6 +309,29 @@ namespace Pure_Life.APIControllers
             await _context.SaveChangesAsync();
             return new JsonResult("Deleted successfully!");
         }
+
+        [Route("UpdateHasTherapy/{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateTerminetHasTherapy(int id, [FromBody] JObject payload)
+        {
+            var terminet = await _context.Terminet.FindAsync(id);
+
+            if (terminet == null)
+            {
+                return NotFound();
+            }
+
+            bool hasTherapy = payload.Value<bool>("hasTherapy");
+
+            terminet.HasTherapy = hasTherapy;
+
+            _context.Terminet.Update(terminet);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
 
     }
 }

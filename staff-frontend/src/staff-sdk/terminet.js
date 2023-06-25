@@ -17,4 +17,9 @@ export function deleteTermini(id) {
     return axios.delete(`${API_URL}/api/TerminiAPI/DeleteTermin/${id}`)
 }
 
+export function updateTerminiHasTherapy(id, hasTherapy) {
+    return axios.put(`${API_URL}/api/TerminiAPI/UpdateHasTherapy/${id}`, {hasTherapy})
+}
+
+
 

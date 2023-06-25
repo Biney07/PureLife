@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container">
     <div>
-      <Contacts @fetchContactMessages="fetchMessages" />
+      <Contacts @fetchContactMessages="fetchMessages" @changeContactImage="changeContactImage" />
     </div>
     <div v-if="chatData.recipientId" class="message-container">
       <div
@@ -10,11 +10,13 @@
         v-for="message in reversedMessages"
         :key="message.id"
       >
+        <img v-if="message.senderType === 'patient'" class="avatar-left avatar-receiver" :src="recipientImage" alt="Patient Avatar" />
         {{ message.messageBody }}
+        <img v-if="message.senderType === 'doctor'" class="avatar-right avatar-sender" :src="$store.state.authenticate.user.data.pictureUrl" alt="Doctor Avatar" />
       </div>
     </div>
     <div v-else class="message-container-warning">
-        <h2>Ju lutemi qe ne fillim te klikoni ne pacientin e caktuar</h2>
+      <h2>Ju lutemi qe ne fillim te klikoni ne pacientin e caktuar</h2>
     </div>
     <form v-if="chatData.recipientId" @submit.prevent="sendMessage" class="input-container">
       <input v-model="chatData.messageBody" type="text" placeholder="Send message" />
@@ -42,6 +44,7 @@ export default {
       },
       messages: [], // Array to store messages
       socket: null,
+      recipientImage: null
     };
   },
   computed: {
@@ -88,6 +91,9 @@ export default {
         console.log(err);
       }
     },
+    changeContactImage(image) {
+      this.recipientImage = image
+    }
   },
 };
 </script>
@@ -132,7 +138,10 @@ export default {
   padding: 8px;
   margin-bottom: 8px;
   width: fit-content;
-  align-self: flex-end; /* Align messages to the bottom right */
+  align-self: flex-end;
+  position: relative;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .sender {
@@ -175,5 +184,22 @@ button {
   background-color: #007bff;
   color: white;
   cursor: pointer;
+}
+
+.avatar-sender{
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.avatar-receiver{
+  width: 30px;
+  height: 30px;
+  right: 100%;
+  margin-right: 10px;
+  border-radius: 50%;
+  position: absolute;
 }
 </style>
