@@ -8,6 +8,6 @@
 
         public decimal Cmimi { get; set; }
 
-        public int LemiaId { get; set; }
+        public int? LemiaId { get; set; }
     }
 }

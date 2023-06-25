@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<style>
+    th > a {
+        color: white;
+    }
+</style>
 
 <div class="card card-custom">
     <div class="card-header flex-wrap py-5">
@@ -48,7 +52,7 @@
             <tr>
                 <th>#</th>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["EmriSortParm"]">Emri</a>
+                    <a asp-action="Index"  asp-route-sortOrder="@ViewData["EmriSortParm"]">Emri</a>
                 </th>
                 <th>
                     <a asp-action="Index" asp-route-sortOrder="@ViewData["InsertedFromSortParm"]">Inserted From</a>

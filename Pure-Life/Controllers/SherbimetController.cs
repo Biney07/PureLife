@@ -23,12 +23,7 @@ namespace Pure_Life.Controllers
 			_currentUser = currentUser;
 		}
 
-        // GET: Sherbimet
-        /*		public async Task<IActionResult> Index()
-                {
-                    return View(await _context.Sherbimet.Where(x => x.IsDeleted == false).ToListAsync()); 
-                }
-        */
+  
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -69,7 +64,7 @@ namespace Pure_Life.Controllers
                     break;
             }
 
-            var pageSize = 3;
+            var pageSize = 10;
             var sherbimetListWithSorting = await PaginatedList<Sherbimet>.CreateAsync(sherbimetList.AsNoTracking(), pageNumber ?? 1, pageSize);
 
             return View(sherbimetListWithSorting);
@@ -121,7 +116,7 @@ namespace Pure_Life.Controllers
 				Emri = sherbimet.Emri,
 				Pershkrimi = sherbimet.Pershkrimi,
 				Cmimi = sherbimet.Cmimi,
-				LemiaId = sherbimet.LemiaId,
+				LemiaId = sherbimet.LemiaId ?? null,
 				InsertedFrom = user,
 				InsertedDate = DateTime.Now
 

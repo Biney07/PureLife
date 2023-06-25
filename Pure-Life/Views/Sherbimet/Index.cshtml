@@ -4,7 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-
+<style>
+    th > a {
+        color: white;
+    }
+</style>
 
 <div class="card card-custom">
     <div class="card-header flex-wrap py-5">
@@ -111,7 +115,7 @@
         $(function () {
             $('.delete-button').click(function () {
                 var id = $(this).data('id');
-                $('#delete-form').attr('action', '/Sherbime/Delete/' + id);
+                $('#delete-form').attr('action', '/Sherbimet/Delete/' + id);
             });
         });
     </script>

@@ -16,7 +16,7 @@ namespace Pure_Life.Models
 		public DateTime InsertedDate { get; set; }
 
 		[ForeignKey("LemiaId")]
-		public int LemiaId { get; set; }
+		public int? LemiaId { get; set; }
 		public DateTime? ModifiedDate { get; set; }
 
 		public string? ModifiedFrom { get; set; }

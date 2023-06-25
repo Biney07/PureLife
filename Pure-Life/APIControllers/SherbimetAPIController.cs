@@ -15,11 +15,12 @@ namespace Pure_Life.APIControllers
 			_context= context;
 		}
 
-		[HttpGet("Index")]
-		public IActionResult Index()
+		[HttpGet("Index/{stafiId}")]
+		public IActionResult Index(int stafiId)
 		{
-			var analizat = _context.Sherbimet.ToList();
-			return Ok(analizat);
+			var stafi = _context.Stafi.Where(x=>x.Id== stafiId).FirstOrDefault();	
+			var sherbimet = _context.Sherbimet.Where(x=>x.LemiaId==stafi.LemiaId || x.LemiaId==null).ToList();
+			return Ok(sherbimet);
 		}
 	}
 }

@@ -44,10 +44,16 @@
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Lemia</label>
 				<div class="col-lg-4 col-md-9 col-sm-12">
-					<select asp-for="LemiaId" class="form-control" asp-items="ViewBag.LemiaId"></select>
+					<select asp-for="LemiaId" class="form-control">
+						<option value="">Choose</option>
+						@foreach (var item in ViewBag.LemiaId)
+						{
+							<option value="@item.Value">@item.Text</option>
+						}
+					</select>
 				</div>
 			</div>
-		</div>
+
 		<div class="card-footer">
 			<div class="row">
 				<div class="col-2">

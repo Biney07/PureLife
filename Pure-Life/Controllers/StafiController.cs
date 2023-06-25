@@ -110,7 +110,7 @@ namespace Pure_Life.Controllers
                     stafiList = stafiList.OrderBy(s => s.InsertedDate);
                     break;
             }
-            var pageSize = 3;
+            var pageSize = 10;
             var stafiListWithSorting = await PaginatedList<Stafi>.CreateAsync(stafiList.AsNoTracking(), pageNumber ?? 1, pageSize);
 
             return View(stafiListWithSorting);
