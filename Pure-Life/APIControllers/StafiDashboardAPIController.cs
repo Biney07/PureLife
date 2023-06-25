@@ -121,13 +121,13 @@ namespace Pure_Life.APIControllers
 
         }
 
-		[HttpGet("FitimetPerMuaj/{stafiId}")]
+		[HttpGet("FitimetPerMuaj")]
 
-		public async Task<IActionResult> FitimetPerMuaj(int stafiId)
+		public async Task<IActionResult> FitimetPerMuaj()
 		{
 
-			var terminetEStafit = await _context.Terminet.Where(x => x.Price > 0 && x.StafiId == stafiId).ToListAsync();
-			var terminetEPerfunduara = await _context.Terminet.CountAsync(x => x.Price > 0 && x.StafiId == stafiId);
+			var terminetEStafit = await _context.Terminet.Where(x => x.Price > 0).ToListAsync();
+			var terminetEPerfunduara = await _context.Terminet.CountAsync(x => x.Price > 0);
 
 			List<int> muajt = new List<int>();
 
