@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Header />
+        <Header v-if="!isDashboardPath" />
         <div>
             <slot />
         </div>
-        <Footer />
+        <Footer v-if="!isDashboardPath" />
     </div>
 </template>
 
@@ -16,6 +16,12 @@ export default {
         Header,
         Footer
     },
+    computed: {
+        isDashboardPath() {
+            return this.$route.path.includes("/login") || this.$route.path.includes("/register");
+        },
+    },
+    
 
 }
 </script>
