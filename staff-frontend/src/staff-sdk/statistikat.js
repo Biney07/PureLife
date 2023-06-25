@@ -9,3 +9,11 @@ export function getMonthlyTerminet(staffId) {
     return axios.get(`${API_URL}/api/StafiDashboardAPI/TerminiMuaji/${staffId}`)
 }
 
+export function getStatisticsDrejtor() {
+    return axios.get(`${API_URL}/api/StafiDashboardAPI/DrejtoriStatistikat`)
+}
+
+export function getMonthlyIncome() {
+    return axios.get(`${API_URL}/api/StafiDashboardAPI/FitimetPerMuaj`)
+}
+

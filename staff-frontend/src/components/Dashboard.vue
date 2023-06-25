@@ -12,7 +12,7 @@
         </h4>
       </mdb-card-body>
     </mdb-card>
-    <section v-if="data" class="mt-lg-5">
+    <section v-if="data && [userRoles.MJETK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId)" class="mt-lg-5">
       <mdb-row>
         <mdb-col xl="3" md="6" class="mb-r">
           <mdb-card cascade class="cascading-admin-card">
@@ -32,7 +32,7 @@
             <div class="admin-up">
               <mdb-icon icon="chart-line" class="warning-color"/>
               <div class="data">
-                <p>TERMINET E KRIJUARA</p>
+                <p>TERMINET E PERFUNDUARA</p>
                 <h4>
                   <strong>{{data.totaliTermineveEPerfunduara}}</strong>
                 </h4>
@@ -68,13 +68,71 @@
         </mdb-col>
       </mdb-row>
     </section>
+
+    <section v-else class="mt-lg-5">
+      <mdb-row>
+        <mdb-col xl="3" md="6" class="mb-r">
+          <mdb-card cascade class="cascading-admin-card">
+            <div class="admin-up">
+              <mdb-icon icon="money-bill-alt" far class="primary-color"/>
+              <div class="data">
+                <p>TOTALI I PACIENTEVE</p>
+                <h4>
+                  <strong>{{data.numriTotalIPacienteve}}</strong>
+                </h4>
+              </div>
+            </div>
+          </mdb-card>
+        </mdb-col>
+        <mdb-col xl="3" md="6" class="mb-r">
+          <mdb-card cascade class="cascading-admin-card">
+            <div class="admin-up">
+              <mdb-icon icon="chart-line" class="warning-color"/>
+              <div class="data">
+                <p>FITIMI TOTAL</p>
+                <h4>
+                  <strong>{{data.fitimiTotal}}</strong>
+                </h4>
+              </div>
+            </div>
+          </mdb-card>
+        </mdb-col>
+        <mdb-col xl="3" md="6" class="mb-r">
+          <mdb-card cascade class="cascading-admin-card">
+            <div class="admin-up">
+              <mdb-icon icon="chart-pie" class="light-blue lighten-1"/>
+              <div class="data">
+                <p>NUMRI I MJEKVE</p>
+                <h4>
+                  <strong>{{data.numriIMjekeve}}</strong>
+                </h4>
+              </div>
+            </div>
+          </mdb-card>
+        </mdb-col>
+        <mdb-col xl="3" md="6" class="mb-r">
+          <mdb-card cascade class="cascading-admin-card">
+            <div class="admin-up">
+              <mdb-icon icon="chart-bar" class="red accent-2"/>
+              <div class="data">
+                <p>TERAPITE E PERFUNDUARA</p>
+                <h4>
+                  <strong>{{data.numriTermineveTePerfunduara}}</strong>
+                </h4>
+              </div>
+            </div>
+          </mdb-card>
+        </mdb-col>
+      </mdb-row>
+    </section>
+
     <section>
       <mdb-row class="mt-5">
           <mdb-col md="12" class="mb-4">
               <mdb-card>
                   <mdb-card-body>
                       <div style="display: block">
-                        <mdb-bar-chart :data="barChartData" :options="barChartOptions" :height="500"/>
+                        <mdb-bar-chart :data="[userRoles.MJETK, userRoles.LABORANT].includes($store.state.authenticate.user.data.roletId) ? barChartData : barChartData2" :options="barChartOptions" :height="500"/>
                       </div>
                   </mdb-card-body>
               </mdb-card>
@@ -87,7 +145,8 @@
 
 <script>
 import { mdbRow, mdbCol, mdbCard, mdbCardBody, mdbIcon, mdbBarChart } from 'mdbvue'
-import { getStatistics, getMonthlyTerminet } from "../staff-sdk/statistikat"
+import { getStatistics, getMonthlyTerminet, getStatisticsDrejtor, getMonthlyIncome } from "../staff-sdk/statistikat"
+import { roles } from '../helpers/constants';
 export default {
   name: 'Dashboard',
   components: {
@@ -100,6 +159,7 @@ export default {
   },
   data () {
     return {
+      userRoles: roles,
       loading: true,
       data: null,
       currentUser: this.$store.state.authenticate.user.data.id,
@@ -108,6 +168,17 @@ export default {
         datasets: [
           {
             label: 'Numri I Termineve te Perfunduara',
+            data: [],
+            backgroundColor: 'rgba(245, 74, 85, 0.5)',
+            borderWidth: 1
+          }
+        ]
+      },
+      barChartData2: {
+        labels: ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nentor', 'Dhjetor'],
+        datasets: [
+          {
+            label: 'Fitimet Per Muaj',
             data: [],
             backgroundColor: 'rgba(245, 74, 85, 0.5)',
             borderWidth: 1
@@ -135,12 +206,22 @@ export default {
     async fetchStatistikat() {
       this.loading = true
       try {
-        const response = await getStatistics(this.currentUser)
-        this.data = response.data
-
-        const monthlyDataResponse = await getMonthlyTerminet(this.currentUser)
-        for(let i =0;i<monthlyDataResponse.data.length;i++) {
-          this.barChartData.datasets[0].data.push(monthlyDataResponse.data[i].numriTermineveTePerfunduara)
+        if([this.userRoles.MJETK, this.userRoles.LABORANT].includes(this.$store.state.authenticate.user.data.roletId)) {
+          const response = await getStatistics(this.currentUser)
+          this.data = response.data
+  
+          const monthlyDataResponse = await getMonthlyTerminet(this.currentUser)
+          for(let i =0;i<monthlyDataResponse.data.length;i++) {
+            this.barChartData.datasets[0].data.push(monthlyDataResponse.data[i].numriTermineveTePerfunduara)
+          }
+        } else {
+          const response = await getStatisticsDrejtor()
+          this.data = response.data
+  
+          const monthlyDataResponse = await getMonthlyIncome()
+          for(let i =0;i<monthlyDataResponse.data.length;i++) {
+            this.barChartData2.datasets[0].data.push(monthlyDataResponse.data[i].fitimi)
+          }
         }
         
       } catch (err) {

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Header v-if="!isDashboardPath" />
+        <Header v-if="showHeader" />
         <div>
             <slot />
         </div>
-        <Footer v-if="!isDashboardPath" />
+        <Footer v-if="showHeader" />
     </div>
 </template>
 
@@ -17,9 +17,11 @@ export default {
         Footer
     },
     computed: {
-        isDashboardPath() {
-            return this.$route.path.includes("/login") || this.$route.path.includes("/register");
-        },
+        computed: {
+            showHeader() {
+                return !['/register', '/login'].includes(this.$nuxt._route.path)
+            }
+        }
     },
     
 

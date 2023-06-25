@@ -6,14 +6,14 @@ const routes = [
       name: 'Dashboard',
       icon: 'chart-pie',
       authRequired: false,
-      role: [roles.MJEK, roles.LABORANT]
+      role: [roles.MJEK, roles.LABORANT, roles.DREJTOR]
     },
     {
       path: '/profile',
       name: 'Profile',
       icon: 'user',
       authRequired: false,
-      role: [roles.MJEK, roles.LABORANT]
+      role: [roles.MJEK, roles.LABORANT, roles.DREJTOR]
     },
     {
       path: '/shifts',
