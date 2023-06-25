@@ -1,9 +1,6 @@
 <template>
 <div>
-  <div v-if="loading" class="loading-spinner">
-    <b-spinner variant="primary" label="Spinning"></b-spinner>
-  </div>
-  <div v-else class="chat-container">
+  <div class="chat-container">
     <div>
       <Contacts @fetchContactMessages="fetchMessages" @changeContactImage="changeContactImage" />
     </div>
@@ -90,14 +87,11 @@ export default {
             this.chatData.recipientId = selectedContact.recipientId;
         }
       try {
-        this.loading = true
         const response = await getMessages(this.chatData);
         this.messages = response.data;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
-      } finally {
-        this.loading = false
       }
     },
     changeContactImage(image) {
