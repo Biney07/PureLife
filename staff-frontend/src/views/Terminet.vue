@@ -1,13 +1,14 @@
 <!-- eslint-disable vue/valid-v-bind -->
 <template>
     <div class="terminet-table">
-        <div class="terminet-header">
+        <div v-if="terminet" class="terminet-header">
             <div class="starter-text">
                 <p class="starter-text-title">Terminet</p>
                 <p v-show="!terminet.length && currentDate.getDate() == selectedDate.split('-').at(-1)" @click="createNewTerminet">Krijo Terminet</p>
             </div>
             <input class="date-input" type="date" v-model="selectedDate">
         </div>
+
         <vue-good-table
             :columns="columns"
             :rows="terminet"
@@ -39,7 +40,7 @@
                         </mdb-dropdown-toggle>
                         <mdb-dropdown-menu>
                             <mdb-dropdown-item @click="triggerDeleteModal(props.row)"><mdb-icon icon="trash" class="mr-3" />Delete</mdb-dropdown-item>
-                            <mdb-dropdown-item @click="triggerEditModal(props.row)"><mdb-icon icon="pen" class="mr-3" />Krijo Terapine</mdb-dropdown-item>
+                            <mdb-dropdown-item v-if="props.row.status && !props.row.hasTherapy" @click="triggerEditModal(props.row)"><mdb-icon icon="pen" class="mr-3" />Krijo Terapine</mdb-dropdown-item>
                         </mdb-dropdown-menu>
                     </mdb-dropdown>
                 </span>
@@ -128,7 +129,7 @@
 <script>
 import {mapGetters} from "vuex"
 import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbIcon } from 'mdbvue'
-import {deleteTermini, createTerminet} from "../staff-sdk/terminet"
+import {deleteTermini, createTerminet, updateTerminiHasTherapy} from "../staff-sdk/terminet"
 import { getAllServices } from "../staff-sdk/sherbimet"
 import { getAnalizat } from "../staff-sdk/analizat"
 import {createTerapine} from "../staff-sdk/terapia"
@@ -240,6 +241,7 @@ export default {
     async createNewTerminet() {
         try {
           await createTerminet(this.user.user.data.id)
+          await updateTerminiHasTherapy(this.user.user.data.id, true)
         } catch (err) {
           // eslint-disable-next-line no-console
           console.log(err)

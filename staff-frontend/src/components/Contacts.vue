@@ -39,6 +39,7 @@ export default {
         this.contactSelected.recipientId = contact.uId
 
         this.$emit('fetchContactMessages', this.contactSelected)
+        this.$emit('changeContactImage', contact.pictureUrl)
     }
   }
 }

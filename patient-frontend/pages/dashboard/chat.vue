@@ -1,13 +1,14 @@
 <template>
   <div class="chat-container">
     <div>
-      <Contacts @fetchContactMessages="fetchMessages" />
+      <Contacts @fetchContactMessages="fetchMessages" @changeContactImage="changeContactImage" />
     </div>
     <div v-if="chatData.recipientId" class="message-container">
-      <div :class="{ sender: message.senderType === 'patient', recipient: message.senderType === 'doctor' }" class="message" v-for="message in reversedMessages" :key="message.id">
-        {{ message.messageBody }}
-        <!-- <small>{{message.timeStamp}}</small> -->
-      </div>
+        <div :class="{ sender: message.senderType === 'patient', recipient: message.senderType === 'doctor' }" class="message" v-for="message in reversedMessages" :key="message.id">
+          <img v-if="message.senderType === 'doctor'" class="avatar-left avatar-receiver" :src="recipientImage" alt="Doctor Avatar" />
+          {{ message.messageBody }}
+          <img v-if="message.senderType === 'patient'" class="avatar-right avatar-sender" :src="currentUserImage" alt="Patient Avatar" />
+        </div>
     </div>
     <div v-else class="message-container-warning">
         <h2>Ju lutemi qe ne fillim te klikoni ne stafin e caktuar</h2>    
@@ -23,12 +24,16 @@
 import { sendMessage, getMessages } from "@/patient-sdk/chat";
 import Contacts from "@/components/Contacts.vue";
 
+import {getPacienti} from "@/patient-sdk/auth.js"
+
 export default {
     components: {
         Contacts,
     },
     data() {
         return {
+          recipientImage: null,
+          currentUserImage: null,
             chatData: {
                 senderId: null,
                 recipientId: null, // id is the recipient id
@@ -60,6 +65,8 @@ export default {
                 this.fetchMessages(message)
             });
         });
+
+        this.fetchUserImage()
     },
     methods: {
         async sendMessage() {
@@ -90,6 +97,18 @@ export default {
                 console.log(err);
             }
         },
+        changeContactImage(image) {
+          this.recipientImage = image
+          console.log(image)
+        },
+        async fetchUserImage(){
+          try {
+            const response = await getPacienti(this.user.user.uid)
+            this.currentUserImage = response.data.pictureUrl
+          } catch (err) {
+            console.log(err)
+          }
+        }
     },
 };
 </script>
@@ -136,8 +155,12 @@ export default {
   padding: 8px;
   margin-bottom: 8px;
   width: fit-content;
-  align-self: flex-end; /* Align messages to the bottom right */
+  align-self: flex-end;
+  position: relative;
+  margin-left: 40px;
+  margin-right: 40px;
 }
+
 
 .sender {
   align-self: flex-end;
@@ -179,5 +202,22 @@ button {
   background-color: #007bff;
   color: white;
   cursor: pointer;
+}
+
+.avatar-sender{
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.avatar-receiver{
+  width: 30px;
+  height: 30px;
+  right: 100%;
+  margin-right: 10px;
+  border-radius: 50%;
+  position: absolute;
 }
 </style>

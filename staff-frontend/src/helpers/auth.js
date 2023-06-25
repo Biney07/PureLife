@@ -18,7 +18,9 @@ export function getUser() {
 }
 
 export function removeUser() {
-    if(userExists) {
+    if(userExists()) {  
+        // eslint-disable-next-line no-console
+        console.log('sdfsdf')
         return localStorage.removeItem('user')
     }
 }
