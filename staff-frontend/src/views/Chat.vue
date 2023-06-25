@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       chatData: {
         senderId: this.$store.state.authenticate.user.data.id,
         recipientId: null, // uId is the recipient id
@@ -84,13 +84,13 @@ export default {
       }
     },
     async fetchMessages(selectedContact) {
-      this.loading = true
         if(selectedContact.recipientId === this.$store.state.authenticate.user.data.id) {
             this.chatData.recipientId = selectedContact.senderId
         } else {
             this.chatData.recipientId = selectedContact.recipientId;
         }
       try {
+        this.loading = true
         const response = await getMessages(this.chatData);
         this.messages = response.data;
       } catch (err) {
