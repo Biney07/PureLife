@@ -1,6 +1,10 @@
 <!-- eslint-disable vue/valid-v-bind -->
 <template>
-    <div class="terminet-table">
+<div>
+    <div v-if="loading" class="loading-spinner">
+        <b-spinner variant="primary" label="Spinning"></b-spinner>
+    </div>
+    <div v-else class="terminet-table">
         <div v-if="terminet" class="terminet-header">
             <div class="starter-text">
                 <p class="starter-text-title">Terminet</p>
@@ -124,6 +128,7 @@
       </mdb-modal-footer>
     </mdb-modal>
   </div>
+</div>
 </template>
 
 <script>
@@ -140,6 +145,7 @@ export default {
   },
   data(){
     return {
+        loading: true,
         columns: [
             {
                 label: 'Pacienti',
@@ -215,7 +221,9 @@ export default {
   },
   methods: {
     async fetchTerminet() {
+        this.loading = true
         await this.$store.dispatch('fetchTerminetByDateAndStaff', {date: this.selectedDate, id: this.user.user.data.id})
+        this.loading = false
     },
     triggerDeleteModal(termin) {
         this.showDeleteModal = true;
@@ -395,6 +403,18 @@ input.form-control, textarea.form-control {
   background: #ebedf3;
   box-shadow: none;
   transition: background-color 0.3s;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 
 </style>

@@ -1,6 +1,10 @@
 <!-- eslint-disable vue/valid-v-bind -->
 <template>
-    <div class="terminet-table">
+<div>
+    <div v-if="loading" class="loading-spinner">
+        <b-spinner variant="primary" label="Spinning"></b-spinner>
+    </div>
+    <div v-else class="terminet-table">
         <div class="terminet-header">
             <div class="starter-text">
                 <p class="starter-text-title">Terapite e Pershkruara</p>
@@ -115,6 +119,7 @@
       </mdb-modal-footer>
     </mdb-modal>
   </div>
+</div>
 </template>
 
 <script>
@@ -162,7 +167,8 @@ export default {
             sherbimetEKryera: null,
             analizatECaktuara: null,
         },
-        terapite: null
+        terapite: null,
+        loading: true,
     }
   },
   mounted() {
@@ -191,12 +197,15 @@ export default {
   },
   methods: {
     async fetchTerapite() {
+        this.loading = true
         try {
             const response = await getTerapiaByStaff(this.user.user.data.id)
             this.terapite = response.data
         } catch (err) {
             // eslint-disable-next-line no-console
             console.log(err)
+        } finally {
+            this.loading = false
         }
     },
     triggerDeleteModal(terapi) {
@@ -358,6 +367,18 @@ input.form-control, textarea.form-control {
   background: #ebedf3;
   box-shadow: none;
   transition: background-color 0.3s;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 
 </style>

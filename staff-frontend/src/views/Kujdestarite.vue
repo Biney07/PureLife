@@ -1,5 +1,9 @@
 <template>
-  <div class="calendar-container">
+<div>
+  <div v-if="loading" class="loading-spinner">
+    <b-spinner variant="primary" label="Spinning"></b-spinner>
+  </div>
+  <div v-else class="calendar-container">
     <div class="starter-text">
         <p>24h Shifts</p>
         <p>Here you can view yours and your colleagues 24h periodical shifts</p>
@@ -66,6 +70,7 @@
 
 
   </div>
+</div>
 </template>
 
 <script>
@@ -83,6 +88,7 @@ export default {
     // eslint-disable-next-line no-console
     // console.log(year, month);
     return {
+      loading: true,
       masks: {
         weekdays: 'WWW',
       },
@@ -101,6 +107,7 @@ export default {
   },
   methods: {
     async fetchAllShifts() {
+      this.loading = true
         const response = await getAllShifts();
         const newData = response.data.map(item => {
             const [dateString] = item.data.split('T');
@@ -120,8 +127,7 @@ export default {
             };
         });
         this.attributes.push(...newData);
-        // eslint-disable-next-line no-console
-        console.log(this.attributes);
+        this.loading = false
     },
     showDetails(day) {
       this.showModal = true;
@@ -277,5 +283,17 @@ export default {
     width: 100%;
   }
 
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 </style>

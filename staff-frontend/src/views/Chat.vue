@@ -1,5 +1,9 @@
 <template>
-  <div class="chat-container">
+<div>
+  <div v-if="loading" class="loading-spinner">
+    <b-spinner variant="primary" label="Spinning"></b-spinner>
+  </div>
+  <div v-else class="chat-container">
     <div>
       <Contacts @fetchContactMessages="fetchMessages" @changeContactImage="changeContactImage" />
     </div>
@@ -23,6 +27,7 @@
       <button>Send</button>
     </form>
   </div>
+</div>
 </template>
 
 <script>
@@ -36,6 +41,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       chatData: {
         senderId: this.$store.state.authenticate.user.data.id,
         recipientId: null, // uId is the recipient id
@@ -78,6 +84,7 @@ export default {
       }
     },
     async fetchMessages(selectedContact) {
+      this.loading = true
         if(selectedContact.recipientId === this.$store.state.authenticate.user.data.id) {
             this.chatData.recipientId = selectedContact.senderId
         } else {
@@ -89,6 +96,8 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
+      } finally {
+        this.loading = false
       }
     },
     changeContactImage(image) {
@@ -201,5 +210,17 @@ button {
   margin-right: 10px;
   border-radius: 50%;
   position: absolute;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.loading-spinner span {
+  width: 60px;
+  height: 60px;
 }
 </style>
