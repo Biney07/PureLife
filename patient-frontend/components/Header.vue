@@ -40,7 +40,7 @@
 
           <div class="profilinav">
             <div class="dropdown-toggle" role="button" @click="toggleContainer" aria-expanded="false">
-              <img class="profile-image" :src="patientData.pictureUrl" alt="Profile Image" />
+              <img class="profile-image" :src="patientData.pictureUrl ? patientData.pictureUrl : '../assets/user.png'" alt="Profile Image" />
               <div :class="{ 'whitecontainer-on': isContainerVisible, 'whitecontainer-off': !isContainerVisible }">
                 <div class="buttons">
                   <NuxtLink class="btn" to="/dashboard/profile">Profile</NuxtLink>
